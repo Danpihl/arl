@@ -1,0 +1,24 @@
+
+ - Remove function implementations in Matrix that uses "vec2/3/4"
+ - Add reference (&) to T types for vector and matrix
+    
+ - Matrix manipulations
+    * Assign to index span
+    * Assign from index span
+    * Swap to rows or columns
+    * Remove column/row
+    * hCat, vCat to the matrix itself, with matrix and vector
+    * Insert row
+    * Add vector to rows/cols
+    * Concatenate several matrices horizontally and vertically
+ - Use index span when needed, and not two separate arguments
+ - Add temp vectors (pre allocated) to matrix class for when swapping rows
+
+ - Remove existing implementation of "^" and "|" for vector (and matrix)
+ - Operations that indexes out vectors should return matrices instead of vectors
+ - "switchRows(size_t r0, size_t r1), void switchColumns(size_t c0, size_t c1)" should have const arguments
+ - "getColumnVector, getRowVector" should return matrices
+ - Quaternion needs to be normalized
+
+
+ - Remove all "utilities"/"utils" suffixes from utilities files
