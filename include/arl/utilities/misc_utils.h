@@ -12,17 +12,13 @@ namespace arl
 {
 bool fileExists(std::string path);
 std::string getTimeNow();
-std::vector<std::string> getFileListFromDir(std::string dir);
-std::vector<std::string> getSortedFileListFromDir(std::string dir);
-std::vector<std::string> getSortedFileListFromDirWithZeroPaddedFiles(std::string dir);
 void printStringLines(std::vector<std::string> string_lines);
 
-template <typename T>
-void printVectorOfVectors(std::vector<std::vector<T>> data)
+template <typename T> void printVectorOfVectors(std::vector<std::vector<T>> data)
 {
     for (size_t r = 0; r < data.size(); r++)
     {
-        std::vector<T> &data_row = data[r];
+        std::vector<T>& data_row = data[r];
         for (size_t c = 0; c < data_row.size(); c++)
         {
             std::cout << data_row[c];
@@ -35,6 +31,6 @@ void printVectorOfVectors(std::vector<std::vector<T>> data)
     }
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif
