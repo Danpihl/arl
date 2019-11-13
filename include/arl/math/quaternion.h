@@ -5,12 +5,13 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 
 namespace arl
 {
-template <typename T>
-Quaternion<T>::Quaternion(const T w_, const T x_, const T y_, const T z_)
+template <typename T> Quaternion<T>::Quaternion(const T w_, const T x_, const T y_, const T z_)
 {
     w = w_;
     x = x_;
@@ -18,11 +19,9 @@ Quaternion<T>::Quaternion(const T w_, const T x_, const T y_, const T z_)
     z = z_;
 }
 
-template <typename T>
-Quaternion<T>::Quaternion() {}
+template <typename T> Quaternion<T>::Quaternion() {}
 
-template <typename T>
-RollPitchYaw<T> Quaternion<T>::toRollPitchYaw() const
+template <typename T> RollPitchYaw<T> Quaternion<T>::toRollPitchYaw() const
 {
     RollPitchYaw<T> rpy;
     // Roll (x-axis rotation)
@@ -34,7 +33,7 @@ RollPitchYaw<T> Quaternion<T>::toRollPitchYaw() const
     T sinp = 2.0 * (w * y - z * x);
     if (std::fabs(sinp) >= 1)
     {
-        rpy.pitch = std::copysign(M_PI / 2.0, sinp); // Use 90 degrees if out of range
+        rpy.pitch = std::copysign(M_PI / 2.0, sinp);  // Use 90 degrees if out of range
     }
     else
     {
@@ -48,8 +47,7 @@ RollPitchYaw<T> Quaternion<T>::toRollPitchYaw() const
     return rpy;
 }
 
-template <typename T>
-AxisAngle<T> Quaternion<T>::toAxisAngle() const
+template <typename T> AxisAngle<T> Quaternion<T>::toAxisAngle() const
 {
     AxisAngle<T> axis_angle;
     axis_angle.phi = 2.0 * std::acos(w);
@@ -60,8 +58,7 @@ AxisAngle<T> Quaternion<T>::toAxisAngle() const
     return axis_angle;
 }
 
-template <typename T>
-Matrix<T> Quaternion<T>::toRotationMatrix() const
+template <typename T> Matrix<T> Quaternion<T>::toRotationMatrix() const
 {
     Matrix<T> m(3, 3);
 
@@ -84,20 +81,17 @@ Matrix<T> Quaternion<T>::toRotationMatrix() const
     return m;
 }
 
-template <typename T>
-T Quaternion<T>::norm() const
+template <typename T> T Quaternion<T>::norm() const
 {
-    return sqrt(w * w + x * x + y * y + z * z);
+    return std::sqrt(w * w + x * x + y * y + z * z);
 }
 
-template <typename T>
-T Quaternion<T>::squaredNorm() const
+template <typename T> T Quaternion<T>::squaredNorm() const
 {
     return w * w + x * x + y * y + z * z;
 }
 
-template <typename T>
-Quaternion<T> Quaternion<T>::normalized() const
+template <typename T> Quaternion<T> Quaternion<T>::normalized() const
 {
     const double d = this->norm();
     return Quaternion<T>(w / d, x / d, y / d, z / d);
@@ -105,8 +99,7 @@ Quaternion<T> Quaternion<T>::normalized() const
 
 // Non class methods
 
-template <typename T>
-Quaternion<T> operator*(const Quaternion<T> &q, const Quaternion<T> &p)
+template <typename T> Quaternion<T> operator*(const Quaternion<T>& q, const Quaternion<T>& p)
 {
     Vec3D<T> qv = Vec3D<T>(q.x, q.y, q.z);
     Vec3D<T> pv = Vec3D<T>(p.x, p.y, p.z);
@@ -115,8 +108,7 @@ Quaternion<T> operator*(const Quaternion<T> &q, const Quaternion<T> &p)
         q.w * p.w - pv * qv, intermediate_vector.x, intermediate_vector.y, intermediate_vector.z);
 }
 
-template <typename T>
-Quaternion<T> rotationMatrixToQuaternion(const Matrix<T> &m)
+template <typename T> Quaternion<T> rotationMatrixToQuaternion(const Matrix<T>& m)
 {
     // Reference:
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
@@ -129,6 +121,6 @@ Quaternion<T> rotationMatrixToQuaternion(const Matrix<T> &m)
     return q;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

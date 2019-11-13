@@ -39,18 +39,24 @@ template <typename T> LUMatrixPair<T>::LUMatrixPair(const size_t num_rows, const
 
 template <typename T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 {
+    ASSERT(m.isAllocated()) << "Input matrix not allocated before assignment!";
     if (this != &m)
     {
-        // TODO: Don't reallocate if matrices have the same size
-        // if (is_allocated_ && ((m.rows() != num_rows_) || (m.cols() != num_cols_)))
         if (is_allocated_)
         {
-            delete[] data_;
+            if ((m.rows() != num_rows_) || (m.cols() != num_cols_))
+            {
+                delete[] data_;
+                DATA_ALLOCATION(data_, m.rows() * m.cols(), T, "Matrix");
+            }
+        }
+        else
+        {
+            DATA_ALLOCATION(data_, m.rows() * m.cols(), T, "Matrix");
         }
 
         num_rows_ = m.rows();
         num_cols_ = m.cols();
-        DATA_ALLOCATION(data_, m.rows() * m.cols(), T, "Matrix");
 
         for (size_t r = 0; r < m.rows(); r++)
         {
@@ -59,6 +65,8 @@ template <typename T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
                 data_[r * num_cols_ + c] = m(r, c);
             }
         }
+
+        is_allocated_ = true;
     }
     return *this;
 }
@@ -342,12 +350,12 @@ template <typename T> Matrix<T> hCat(const Matrix<T>& m0, const Matrix<T>& m1)
     return mres;
 }
 
-template <typename T> size_t Matrix<T>::endIdxRows() const
+template <typename T> size_t Matrix<T>::endRowIdx() const
 {
     return num_rows_ - 1;
 }
 
-template <typename T> size_t Matrix<T>::endIdxCols() const
+template <typename T> size_t Matrix<T>::endColIdx() const
 {
     return num_cols_ - 1;
 }
@@ -609,28 +617,6 @@ Matrix<T> Matrix<T>::operator()(const IndexSpan& row_idx_span, const IndexSpan& 
     return mat;
 }
 
-template <typename T>
-Matrix<T> Matrix<T>::operator()(const size_t from_row,
-                                const size_t to_row,
-                                const size_t from_col,
-                                const size_t to_col) const
-{
-    const size_t new_num_rows = to_row - from_row + 1;
-    const size_t new_num_cols = to_col - from_col + 1;
-
-    assert((to_row < num_rows_) && (to_col < num_cols_));
-    Matrix<T> mat(new_num_rows, new_num_cols);
-
-    for (size_t r = 0; r < new_num_rows; r++)
-    {
-        for (size_t c = 0; c < new_num_cols; c++)
-        {
-            mat(r, c) = data_[(from_row + r) * num_cols_ + c + from_col];
-        }
-    }
-    return mat;
-}
-
 template <typename T> Matrix<T> operator*(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     assert(m0.cols() == m1.rows());
@@ -706,6 +692,40 @@ template <typename T> Matrix<T> operator*(const T f, const Matrix<T>& m)
         for (size_t c = 0; c < res.cols(); c++)
         {
             res(r, c) = f * m(r, c);
+        }
+    }
+    return res;
+}
+
+template <typename T> Matrix<T> operator^(const Matrix<T>& m0, const Matrix<T>& m1)
+{
+    ASSERT(m0.rows() == m1.rows());
+    ASSERT(m0.cols() == m1.cols());
+
+    Matrix<T> res(m0.rows(), m0.cols());
+
+    for (size_t r = 0; r < res.rows(); r++)
+    {
+        for (size_t c = 0; c < res.cols(); c++)
+        {
+            res(r, c) = m0(r, c) * m1(r, c);
+        }
+    }
+    return res;
+}
+
+template <typename T> Matrix<T> operator/(const Matrix<T>& m0, const Matrix<T>& m1)
+{
+    ASSERT(m0.rows() == m1.rows());
+    ASSERT(m0.cols() == m1.cols());
+
+    Matrix<T> res(m0.rows(), m0.cols());
+
+    for (size_t r = 0; r < res.rows(); r++)
+    {
+        for (size_t c = 0; c < res.cols(); c++)
+        {
+            res(r, c) = m0(r, c) / m1(r, c);
         }
     }
     return res;
@@ -885,20 +905,19 @@ template <typename T> void Matrix<T>::removeRowAtIndex(const size_t row_idx)
     num_rows_ = num_rows_ - 1;
 }
 
-template <typename T>
-void Matrix<T>::removeRowsAtIndices(const size_t from_row_idx, const size_t to_row_idx)
+template <typename T> void Matrix<T>::removeRowsAtIndices(const IndexSpan& idx_span)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
-    ASSERT(from_row_idx <= to_row_idx) << "To index smaller than from index!";
-    ASSERT(to_row_idx < num_rows_) << "Tried to remove element outside bounds!";
-    if (from_row_idx == to_row_idx)
+    ASSERT(idx_span.from <= idx_span.to) << "To index smaller than from index!";
+    ASSERT(idx_span.to < num_rows_) << "Tried to remove element outside bounds!";
+    if (idx_span.from == idx_span.to)
     {
         LOG_WARNING() << "From and to indices are equal!";
     }
 
     T* temp_data;
 
-    size_t num_rows_to_remove = to_row_idx - from_row_idx + 1;
+    size_t num_rows_to_remove = idx_span.to - idx_span.from + 1;
 
     ASSERT((num_rows_ - num_rows_to_remove) > 0) << "Tried to remove all elements!";
 
@@ -910,7 +929,7 @@ void Matrix<T>::removeRowsAtIndices(const size_t from_row_idx, const size_t to_r
     {
         for (size_t c = 0; c < num_cols_; c++)
         {
-            if (current_row_idx < from_row_idx || current_row_idx > to_row_idx)
+            if (current_row_idx < idx_span.from || current_row_idx > idx_span.to)
             {
                 temp_data[current_row_idx * num_cols_ + c] = data_[r * num_cols_ + c];
                 current_row_idx++;
@@ -951,20 +970,19 @@ template <typename T> void Matrix<T>::removeColAtIndex(const size_t col_idx)
     num_cols_ = num_cols_ - 1;
 }
 
-template <typename T>
-void Matrix<T>::removeColsAtIndices(const size_t from_col_idx, const size_t to_col_idx)
+template <typename T> void Matrix<T>::removeColsAtIndices(const IndexSpan& idx_span)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
-    ASSERT(from_col_idx <= to_col_idx) << "To index smaller than from index!";
-    ASSERT(to_col_idx < num_cols_) << "Tried to remove element outside bounds!";
-    if (from_col_idx == to_col_idx)
+    ASSERT(idx_span.from <= idx_span.to) << "To index smaller than from index!";
+    ASSERT(idx_span.to < num_cols_) << "Tried to remove element outside bounds!";
+    if (idx_span.from == idx_span.to)
     {
         LOG_WARNING() << "From and to indices are equal!";
     }
 
     T* temp_data;
 
-    size_t num_cols_to_remove = to_col_idx - from_col_idx + 1;
+    size_t num_cols_to_remove = idx_span.to - idx_span.from + 1;
 
     ASSERT((num_cols_ - num_cols_to_remove) > 0) << "Tried to remove all elements!";
 
@@ -976,7 +994,7 @@ void Matrix<T>::removeColsAtIndices(const size_t from_col_idx, const size_t to_c
     {
         for (size_t c = 0; c < num_cols_; c++)
         {
-            if (current_col_idx < from_col_idx || current_col_idx > to_col_idx)
+            if (current_col_idx < idx_span.from || current_col_idx > idx_span.to)
             {
                 temp_data[current_col_idx * (num_cols_ - num_cols_to_remove) + c] =
                     data_[r * num_cols_ + c];

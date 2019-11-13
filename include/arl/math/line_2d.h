@@ -5,6 +5,8 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 #include <utility>
 
@@ -15,19 +17,16 @@ HomogeneousLine2D<T>::HomogeneousLine2D(const T a_, const T b_, const T c_) : a(
 {
 }
 
-template <typename T>
-HomogeneousLine2D<T>::HomogeneousLine2D(const ParametricLine2D<T> &pl)
+template <typename T> HomogeneousLine2D<T>::HomogeneousLine2D(const ParametricLine2D<T>& pl)
 {
     a = -pl.v.y;
     b = pl.v.x;
     c = -(a * pl.p.x + b * pl.p.y);
 }
 
-template <typename T>
-HomogeneousLine2D<T>::HomogeneousLine2D() {}
+template <typename T> HomogeneousLine2D<T>::HomogeneousLine2D() {}
 
-template <typename T>
-Vec2D<T> HomogeneousLine2D<T>::normal() const
+template <typename T> Vec2D<T> HomogeneousLine2D<T>::normal() const
 {
     const Vec2D<T> v(a, b);
     if (v.y < 0.0)
@@ -40,8 +39,7 @@ Vec2D<T> HomogeneousLine2D<T>::normal() const
     }
 }
 
-template <typename T>
-Vec2D<T> HomogeneousLine2D<T>::normalizedNormal() const
+template <typename T> Vec2D<T> HomogeneousLine2D<T>::normalizedNormal() const
 {
     const Vec2D<T> v(a, b);
     if (v.y < 0.0)
@@ -54,8 +52,7 @@ Vec2D<T> HomogeneousLine2D<T>::normalizedNormal() const
     }
 }
 
-template <typename T>
-Vec2D<T> HomogeneousLine2D<T>::vectorAlongLine() const
+template <typename T> Vec2D<T> HomogeneousLine2D<T>::vectorAlongLine() const
 {
     const Vec2D<T> v(-b, a);
     if (v.x < 0.0)
@@ -68,54 +65,47 @@ Vec2D<T> HomogeneousLine2D<T>::vectorAlongLine() const
     }
 }
 
-template <typename T>
-T HomogeneousLine2D<T>::evalX(const T x) const
+template <typename T> T HomogeneousLine2D<T>::evalX(const T x) const
 {
     return -(a * x + c) / b;
 }
 
-template <typename T>
-T HomogeneousLine2D<T>::evalY(const T y) const
+template <typename T> T HomogeneousLine2D<T>::evalY(const T y) const
 {
     return -(b * y + c) / a;
 }
 
-template <typename T>
-T HomogeneousLine2D<T>::eval(const Point2D<T> &p) const
+template <typename T> T HomogeneousLine2D<T>::eval(const Point2D<T>& p) const
 {
     return a * p.x + b * p.y + c;
 }
 
-template <typename T>
-HomogeneousLine2D<T> HomogeneousLine2D<T>::normalized() const
+template <typename T> HomogeneousLine2D<T> HomogeneousLine2D<T>::normalized() const
 {
     const double d = std::sqrt(a * a + b * b);
     return HomogeneousLine2D<T>(a / d, b / d, c / d);
 }
 
-template <typename T>
-HomogeneousLine2D<T> HomogeneousLine2D<T>::negated() const
+template <typename T> HomogeneousLine2D<T> HomogeneousLine2D<T>::negated() const
 {
     return HomogeneousLine2D<T>(-a, -b, -c);
 }
 
-template <typename T>
-T HomogeneousLine2D<T>::pointDistanceFromLine(const Point2D<T> &p) const
+template <typename T> T HomogeneousLine2D<T>::pointDistanceFromLine(const Point2D<T>& p) const
 {
     const HomogeneousLine2D<T> normalized_line = this->normalized();
     return std::fabs(normalized_line.eval(p));
 }
 
 template <typename T>
-Point2D<T> HomogeneousLine2D<T>::closestPointOnLineFromPoint(const Point2D<T> &p) const
+Point2D<T> HomogeneousLine2D<T>::closestPointOnLineFromPoint(const Point2D<T>& p) const
 {
     const double x = -(-p.x * b * b + a * p.y * b + a * c) / (a * a + b * b);
 
     return Point2D<T>(x, evalX(x));
 }
 
-template <typename T>
-Point2D<T> HomogeneousLine2D<T>::pointReflection(const Point2D<T> &p) const
+template <typename T> Point2D<T> HomogeneousLine2D<T>::pointReflection(const Point2D<T>& p) const
 {
     Point2D<T> closest_point = this->closestPointOnLineFromPoint(p);
     Vec2D<T> line_normal = closest_point.vectorBetweenPoints(p);
@@ -124,7 +114,7 @@ Point2D<T> HomogeneousLine2D<T>::pointReflection(const Point2D<T> &p) const
 }
 
 template <typename T>
-Point2D<T> HomogeneousLine2D<T>::lineIntersection(const HomogeneousLine2D<T> &line) const
+Point2D<T> HomogeneousLine2D<T>::lineIntersection(const HomogeneousLine2D<T>& line) const
 {
     return Point2D<T>((b * line.c - line.b * c) / (a * line.b - line.a * b),
                       -(a * line.c - line.a * c) / (a * line.b - line.a * b));
@@ -132,7 +122,7 @@ Point2D<T> HomogeneousLine2D<T>::lineIntersection(const HomogeneousLine2D<T> &li
 
 template <typename T>
 Point2D<T> HomogeneousLine2D<T>::lineReflection(
-    const HomogeneousLine2D<T> &line_for_reflection) const
+    const HomogeneousLine2D<T>& line_for_reflection) const
 {
     // Reflects the input line in this line
     Point2D<T> intersection_point = this->lineIntersection(line_for_reflection);
@@ -146,8 +136,7 @@ Point2D<T> HomogeneousLine2D<T>::lineReflection(
     return reflected_line;
 }
 
-template <typename T>
-bool HomogeneousLine2D<T>::isOnNormalVectorSide(const Point2D<T> &p) const
+template <typename T> bool HomogeneousLine2D<T>::isOnNormalVectorSide(const Point2D<T>& p) const
 {
     // Returns true if p is on the same side as the side that the normal
     // vector of the line extends into (i.e. points towards)
@@ -155,7 +144,7 @@ bool HomogeneousLine2D<T>::isOnNormalVectorSide(const Point2D<T> &p) const
 }
 
 template <typename T>
-HomogeneousLine2D<T> HomogeneousLine2D<T>::calculateLineRotatedAroundPoint(const Point2D<T> &p,
+HomogeneousLine2D<T> HomogeneousLine2D<T>::calculateLineRotatedAroundPoint(const Point2D<T>& p,
                                                                            const T angle) const
 {
     ParametricLine2D<T> p_line(*this);
@@ -171,7 +160,7 @@ HomogeneousLine2D<T> HomogeneousLine2D<T>::calculateLineRotatedAroundPoint(const
 }
 
 template <typename T>
-HomogeneousLine2D<T> HomogeneousLine2D<T>::translatedLine(const Vec2D<T> &v) const
+HomogeneousLine2D<T> HomogeneousLine2D<T>::translatedLine(const Vec2D<T>& v) const
 {
     ParametricLine2D<T> p_line(*this);
 
@@ -183,7 +172,7 @@ HomogeneousLine2D<T> HomogeneousLine2D<T>::translatedLine(const Vec2D<T> &v) con
 
 template <typename T>
 std::pair<Point2D<T>, Vec2D<T>> HomogeneousLine2D<T>::projectPointAndVectorOntoLine(
-    const Point2D<T> &p, const Vec2D<T> &v) const
+    const Point2D<T>& p, const Vec2D<T>& v) const
 {
     Point2D<T> p0 = this->closestPointOnLineFromPoint(p);
     Point2D<T> p1 = this->closestPointOnLineFromPoint(p + v);
@@ -193,7 +182,7 @@ std::pair<Point2D<T>, Vec2D<T>> HomogeneousLine2D<T>::projectPointAndVectorOntoL
 }
 
 template <typename T>
-T HomogeneousLine2D<T>::angleBetweenLines(const HomogeneousLine2D<T> &line) const
+T HomogeneousLine2D<T>::angleBetweenLines(const HomogeneousLine2D<T>& line) const
 {
     return this->vectorAlongLine().angleBetweenVectors(line.vectorAlongLine());
 }
@@ -201,7 +190,7 @@ T HomogeneousLine2D<T>::angleBetweenLines(const HomogeneousLine2D<T> &line) cons
 // Non class functions
 
 template <typename T>
-HomogeneousLine2D<T> homogeneousLineFromPointAndVector(const Point2D<T> &p, const Vec2D<T> &v)
+HomogeneousLine2D<T> homogeneousLineFromPointAndVector(const Point2D<T>& p, const Vec2D<T>& v)
 {
     HomogeneousLine2D<T> line;
     line.a = -v.y;
@@ -212,7 +201,7 @@ HomogeneousLine2D<T> homogeneousLineFromPointAndVector(const Point2D<T> &p, cons
 }
 
 template <typename T>
-HomogeneousLine2D<T> homogeneousLineFromPoints(const Point2D<T> &p0, const Point2D<T> &p1)
+HomogeneousLine2D<T> homogeneousLineFromPoints(const Point2D<T>& p0, const Point2D<T>& p1)
 {
     const Vec2D<T> v = p1 - p0;
     const ParametricLine2D<T> line_p(p0, v);
@@ -232,14 +221,13 @@ ParametricLine2D<T>::ParametricLine2D(const T px_, const T py_, const T vx_, con
 }
 
 template <typename T>
-ParametricLine2D<T>::ParametricLine2D(const Point2D<T> &p_, const Vec2D<T> &v_)
+ParametricLine2D<T>::ParametricLine2D(const Point2D<T>& p_, const Vec2D<T>& v_)
 {
     p = p_;
     v = v_;
 }
 
-template <typename T>
-ParametricLine2D<T>::ParametricLine2D(const HomogeneousLine2D<T> &hl)
+template <typename T> ParametricLine2D<T>::ParametricLine2D(const HomogeneousLine2D<T>& hl)
 {
     v.x = -hl.b;
     v.y = hl.a;
@@ -260,29 +248,25 @@ ParametricLine2D<T>::ParametricLine2D(const HomogeneousLine2D<T> &hl)
     }
 }
 
-template <typename T>
-ParametricLine2D<T>::ParametricLine2D() {}
+template <typename T> ParametricLine2D<T>::ParametricLine2D() {}
 
-template <typename T>
-T ParametricLine2D<T>::tFromX(const T x) const
+template <typename T> T ParametricLine2D<T>::tFromX(const T x) const
 {
     return (x - p.x) / v.x;
 }
 
-template <typename T>
-T ParametricLine2D<T>::tFromY(const T y) const
+template <typename T> T ParametricLine2D<T>::tFromY(const T y) const
 {
     return (y - p.y) / v.y;
 }
 
-template <typename T>
-Vec2D<T> ParametricLine2D<T>::eval(const T t) const
+template <typename T> Vec2D<T> ParametricLine2D<T>::eval(const T t) const
 {
     return p + t * v;
 }
 
 template <typename T>
-ParametricLine2D<T> ParametricLine2D<T>::calculateLineRotatedAroundPoint(const Point2D<T> &q,
+ParametricLine2D<T> ParametricLine2D<T>::calculateLineRotatedAroundPoint(const Point2D<T>& q,
                                                                          const T angle) const
 {
     Matrix<T> rot_mat = rotationMatrix2D(angle);
@@ -297,13 +281,13 @@ ParametricLine2D<T> ParametricLine2D<T>::calculateLineRotatedAroundPoint(const P
 }
 
 template <typename T>
-ParametricLine2D<T> parametricLineFromPoints(const Point2D<T> &p0, const Point2D<T> &p1)
+ParametricLine2D<T> parametricLineFromPoints(const Point2D<T>& p0, const Point2D<T>& p1)
 {
     const Vec2D<T> v = p1 - p0;
     v = p1 - p0;
     return ParametricLine2D<T>(p0, v);
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

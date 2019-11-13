@@ -5,6 +5,8 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 
 #include <vector>
@@ -12,13 +14,12 @@
 namespace arl
 {
 template <typename T>
-PoseSE3<T>::PoseSE3(const Matrix<T> &rotation_matrix, const Vec3D<T> &translation_vector)
+PoseSE3<T>::PoseSE3(const Matrix<T>& rotation_matrix, const Vec3D<T>& translation_vector)
     : rotation_matrix(rotation_matrix), translation_vector(translation_vector)
 {
 }
 
-template <typename T>
-PoseSE3<T>::PoseSE3(const Matrix<T> &pose_matrix)
+template <typename T> PoseSE3<T>::PoseSE3(const Matrix<T>& pose_matrix)
 {
     for (int r = 0; r < 3; r++)
     {
@@ -32,35 +33,29 @@ PoseSE3<T>::PoseSE3(const Matrix<T> &pose_matrix)
     translation_vector.z = pose_matrix(2, 3);
 }
 
-template <typename T>
-PoseSE3<T>::PoseSE3() {}
+template <typename T> PoseSE3<T>::PoseSE3() {}
 
-template <typename T>
-Matrix<T> PoseSE3<T>::getRotationMatrix() const
+template <typename T> Matrix<T> PoseSE3<T>::getRotationMatrix() const
 {
     return rotation_matrix;
 }
 
-template <typename T>
-Vec3D<T> PoseSE3<T>::getTranslationVector() const
+template <typename T> Vec3D<T> PoseSE3<T>::getTranslationVector() const
 {
     return translation_vector;
 }
 
-template <typename T>
-Matrix<T> PoseSE3<T>::getPoseMatrix() const
+template <typename T> Matrix<T> PoseSE3<T>::getPoseMatrix() const
 {
     return poseMatrixFromMatrixAndVector(rotation_matrix, translation_vector);
 }
 
-template <typename T>
-PoseSE3<T> operator*(const PoseSE3<T> &p0, const PoseSE3<T> &p1)
+template <typename T> PoseSE3<T> operator*(const PoseSE3<T>& p0, const PoseSE3<T>& p1)
 {
     return PoseSE3<T>(p0.getPoseMatrix() * p1.getPoseMatrix());
 }
 
-template <typename T>
-Matrix<T> PoseSE3<T>::getInversePoseMatrix() const
+template <typename T> Matrix<T> PoseSE3<T>::getInversePoseMatrix() const
 {
     Matrix<T> inverse_rotation_matrix = transpose(rotation_matrix);
     Vec3D<T> inverse_translation_vector = inverse_rotation_matrix * translation_vector;
@@ -71,13 +66,12 @@ Matrix<T> PoseSE3<T>::getInversePoseMatrix() const
     return poseMatrixFromMatrixAndVector(inverse_rotation_matrix, inverse_translation_vector);
 }
 
-template <typename T>
-void PoseSE3<T>::invert() {}
+template <typename T> void PoseSE3<T>::invert() {}
 
 // Non class functions
 template <typename T>
-Matrix<T> poseMatrixFromMatrixAndVector(const Matrix<T> &rotation_matrix,
-                                        const Vec3D<T> &translation_vector)
+Matrix<T> poseMatrixFromMatrixAndVector(const Matrix<T>& rotation_matrix,
+                                        const Vec3D<T>& translation_vector)
 {
     Matrix<T> pose_matrix(4, 4);
     for (int r = 0; r < 3; r++)
@@ -99,6 +93,6 @@ Matrix<T> poseMatrixFromMatrixAndVector(const Matrix<T> &rotation_matrix,
     return pose_matrix;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

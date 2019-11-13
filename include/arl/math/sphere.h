@@ -5,22 +5,21 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 #include <vector>
 
 namespace arl
 {
-template <typename T>
-Sphere<T>::Sphere(const T r_, const Point3D<T> &c_)
+template <typename T> Sphere<T>::Sphere(const T r_, const Point3D<T>& c_)
 {
     r = r_;
     c = c_;
 }
-template <typename T>
-Sphere<T>::Sphere() {}
+template <typename T> Sphere<T>::Sphere() {}
 
-template <typename T>
-bool Sphere<T>::doesLineIntersect(const Line3D<T> &line) const
+template <typename T> bool Sphere<T>::doesLineIntersect(const Line3D<T>& line) const
 {
     const Point3D<T> closest_point = line.closestPointOnLineFromPoint(c);
 
@@ -32,7 +31,7 @@ bool Sphere<T>::doesLineIntersect(const Line3D<T> &line) const
 }
 
 template <typename T>
-std::vector<Point3D<T>> Sphere<T>::lineIntersectionPoint(const Line3D<T> &line) const
+std::vector<Point3D<T>> Sphere<T>::lineIntersectionPoint(const Line3D<T>& line) const
 {
     // There are two intersection points
     std::vector<Point3D<T>> intersection_points = {Point3D<T>(), Point3D<T>()};
@@ -63,6 +62,6 @@ std::vector<Point3D<T>> Sphere<T>::lineIntersectionPoint(const Line3D<T> &line) 
     return intersection_points;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

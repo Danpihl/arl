@@ -5,23 +5,22 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 
 namespace arl
 {
-template <typename T>
-RollPitchYaw<T>::RollPitchYaw(const T roll_, const T pitch_, const T yaw_)
+template <typename T> RollPitchYaw<T>::RollPitchYaw(const T roll_, const T pitch_, const T yaw_)
 {
     roll = roll_;
     pitch = pitch_;
     yaw = yaw_;
 }
 
-template <typename T>
-RollPitchYaw<T>::RollPitchYaw() {}
+template <typename T> RollPitchYaw<T>::RollPitchYaw() {}
 
-template <typename T>
-Quaternion<T> RollPitchYaw<T>::toQuaternion() const
+template <typename T> Quaternion<T> RollPitchYaw<T>::toQuaternion() const
 {
     T cy = std::cos(yaw * 0.5);
     T sy = std::sin(yaw * 0.5);
@@ -40,15 +39,13 @@ Quaternion<T> RollPitchYaw<T>::toQuaternion() const
     return q;
 }
 
-template <typename T>
-AxisAngle<T> RollPitchYaw<T>::toAxisAngle() const
+template <typename T> AxisAngle<T> RollPitchYaw<T>::toAxisAngle() const
 {
     Quaternion<T> q = toQuaternion();
     return q.toAxisAngle();
 }
 
-template <typename T>
-Matrix<T> rotationMatrixFromYaw(const T yaw)
+template <typename T> Matrix<T> rotationMatrixFromYaw(const T yaw)
 {
     Matrix<T> m(3, 3);
     const T ca = std::cos(yaw);
@@ -69,8 +66,7 @@ Matrix<T> rotationMatrixFromYaw(const T yaw)
     return m;
 }
 
-template <typename T>
-Matrix<T> rotationMatrixFromRoll(const T roll)
+template <typename T> Matrix<T> rotationMatrixFromRoll(const T roll)
 {
     Matrix<T> m(3, 3);
     const T ca = std::cos(roll);
@@ -91,8 +87,7 @@ Matrix<T> rotationMatrixFromRoll(const T roll)
     return m;
 }
 
-template <typename T>
-Matrix<T> rotationMatrixFromPitch(const T pitch)
+template <typename T> Matrix<T> rotationMatrixFromPitch(const T pitch)
 {
     Matrix<T> m(3, 3);
     const T ca = std::cos(pitch);
@@ -113,20 +108,18 @@ Matrix<T> rotationMatrixFromPitch(const T pitch)
     return m;
 }
 
-template <typename T>
-Matrix<T> RollPitchYaw<T>::toRotationMatrix() const
+template <typename T> Matrix<T> RollPitchYaw<T>::toRotationMatrix() const
 {
     return rotationMatrixFromYaw(yaw) * rotationMatrixFromPitch(pitch) *
            rotationMatrixFromRoll(roll);
 }
 
-template <typename T>
-RollPitchYaw<T> rotationMatrixToRollPitchYaw(const Matrix<T> &m)
+template <typename T> RollPitchYaw<T> rotationMatrixToRollPitchYaw(const Matrix<T>& m)
 {
     return RollPitchYaw<T>(
         std::atan2(m(2, 1), m(2, 2)), std::asin(-m(2, 0)), std::atan2(m(1, 0), m(0, 0)));
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

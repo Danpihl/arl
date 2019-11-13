@@ -5,8 +5,9 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
-#include <cmath>
+#include "arl/utilities/logging.h"
 
+#include <cmath>
 #include <vector>
 
 namespace arl
@@ -14,27 +15,23 @@ namespace arl
 /* **************************************************************** */
 /* ************************** Section 2D ************************** */
 /* **************************************************************** */
-template <typename T>
-Circle2D<T>::Circle2D(const T r_, const T cx_, const T cy_)
+template <typename T> Circle2D<T>::Circle2D(const T r_, const T cx_, const T cy_)
 {
     r = r_;
     c.x = cx_;
     c.y = cy_;
 }
 
-template <typename T>
-Circle2D<T>::Circle2D(const T r_, const Vec2D<T> &c_)
+template <typename T> Circle2D<T>::Circle2D(const T r_, const Vec2D<T>& c_)
 {
     r = r_;
     c.x = c_.x;
     c.y = c_.y;
 }
 
-template <typename T>
-Circle2D<T>::Circle2D() {}
+template <typename T> Circle2D<T>::Circle2D() {}
 
-template <typename T>
-HomogeneousLine2D<T> Circle2D<T>::tangentLine(const T angle) const
+template <typename T> HomogeneousLine2D<T> Circle2D<T>::tangentLine(const T angle) const
 {
     // Computes the tangent line that touches the point P = [r*cos(angle); r*sin(angle)]
     Point2D<T> perimiter_point = r * Point2D<T>(std::cos(angle), std::sin(angle));
@@ -47,8 +44,7 @@ HomogeneousLine2D<T> Circle2D<T>::tangentLine(const T angle) const
     return line;
 }
 
-template <typename T>
-bool Circle2D<T>::doesLineIntersect(const HomogeneousLine2D<T> &line) const
+template <typename T> bool Circle2D<T>::doesLineIntersect(const HomogeneousLine2D<T>& line) const
 {
     float centerpoint_line_distance = line.pointDistanceFromLine(c);
     if (centerpoint_line_distance < r)
@@ -62,14 +58,14 @@ bool Circle2D<T>::doesLineIntersect(const HomogeneousLine2D<T> &line) const
 }
 
 template <typename T>
-Point2D<T> Circle2D<T>::closestPointOnPerimeterFromPoint(const Point2D<T> &p) const
+Point2D<T> Circle2D<T>::closestPointOnPerimeterFromPoint(const Point2D<T>& p) const
 {
     Vec2D<T> center_to_point_vector = c.normalizedVectorBetweenPoints(p);
     return c + r * center_to_point_vector;
 }
 
 template <typename T>
-std::vector<Point2D<T>> Circle2D<T>::lineIntersectionPoints(const HomogeneousLine2D<T> &line) const
+std::vector<Point2D<T>> Circle2D<T>::lineIntersectionPoints(const HomogeneousLine2D<T>& line) const
 {
     // Derived using
     // E1 = cy - sqrt(r^2 - (x - cx)^2) == -(a*x + c)/b
@@ -128,17 +124,14 @@ std::vector<Point2D<T>> Circle2D<T>::lineIntersectionPoints(const HomogeneousLin
 /* ************************** Section 3D ************************** */
 /* **************************************************************** */
 
-template <typename T>
-Circle3D<T>::Circle3D(const Vec3D<T> &v_, const Vec3D<T> &c_) : v(v_), c(c_)
+template <typename T> Circle3D<T>::Circle3D(const Vec3D<T>& v_, const Vec3D<T>& c_) : v(v_), c(c_)
 {
     calculateOrthogonalVectors();
 }
 
-template <typename T>
-Circle3D<T>::Circle3D() {}
+template <typename T> Circle3D<T>::Circle3D() {}
 
-template <typename T>
-void Circle3D<T>::calculateOrthogonalVectors()
+template <typename T> void Circle3D<T>::calculateOrthogonalVectors()
 {
     assert(v.x != 0.0 || v.y != 0.0 || v.z != 0.0);
 
@@ -160,6 +153,6 @@ void Circle3D<T>::calculateOrthogonalVectors()
     b = a.crossProduct(v);
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

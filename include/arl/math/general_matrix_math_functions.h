@@ -6,6 +6,8 @@
 #include <cstdarg>
 #include "arl/math/math_core.h"
 
+#include "arl/utilities/logging.h"
+
 namespace arl
 {
 // TODO:
@@ -95,9 +97,9 @@ Matrix<T> concatenateHorizontally(const std::initializer_list<Matrix<T>>& init_l
     return mres;
 }
 
-/*template <typename T> T max(const Matrix<T>& min)
+/*template <typename T> T max(const Matrix<T>& m_in)
 {
-    assert(min.size() > 0);
+    assert(m_in.size() > 0);
     T max_val = vin[0];
     for (size_t k = 1; k < vin.size(); k++)
     {
@@ -131,96 +133,112 @@ template <typename T> T min(const Vector<T>& vin)
     return min_val;
 }*/
 
-template <typename T> Matrix<T> log10(const Matrix<T>& min)
+template <typename T> Matrix<T> log10(const Matrix<T>& m_in)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::log10(min(r, c));
+            m(r, c) = std::log10(m_in(r, c));
         }
     }
 
     return m;
 }
 
-template <typename T> Matrix<T> pow(const Matrix<T>& min, const T e)
+template <typename T> Matrix<T> pow(const Matrix<T>& m_in, const T e)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::pow(min(r, c), e);
+            m(r, c) = std::pow(m_in(r, c), e);
         }
     }
 
     return m;
 }
 
-template <typename T> Matrix<T> log(const Matrix<T>& min)
+template <typename T> Matrix<T> log(const Matrix<T>& m_in)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::log(min(r, c));
+            m(r, c) = std::log(m_in(r, c));
         }
     }
 
     return m;
 }
 
-template <typename T> Matrix<T> exp(const Matrix<T>& min)
+template <typename T> Matrix<T> exp(const Matrix<T>& m_in)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::exp(min(r, c));
+            m(r, c) = std::exp(m_in(r, c));
         }
     }
 
     return m;
 }
 
-template <typename T> Matrix<T> cos(const Matrix<T>& min)
+template <typename T> Matrix<T> cos(const Matrix<T>& m_in)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::cos(min(r, c));
+            m(r, c) = std::cos(m_in(r, c));
         }
     }
 
     return m;
 }
 
-template <typename T> Matrix<T> sin(const Matrix<T>& min)
+template <typename T> Matrix<T> sin(const Matrix<T>& m_in)
 {
-    assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
-    Matrix<T> m(min.rows(), min.cols());
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
 
-    for (size_t r = 0; r < min.rows(); r++)
+    for (size_t r = 0; r < m_in.rows(); r++)
     {
-        for (size_t c = 0; c < min.cols(); c++)
+        for (size_t c = 0; c < m_in.cols(); c++)
         {
-            m(r, c) = std::sin(min(r, c));
+            m(r, c) = std::sin(m_in(r, c));
+        }
+    }
+
+    return m;
+}
+
+template <typename T> Matrix<T> sqrt(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            m(r, c) = std::sqrt(m_in(r, c));
         }
     }
 

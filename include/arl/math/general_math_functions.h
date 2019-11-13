@@ -2,9 +2,11 @@
 #ifndef GENERAL_MATH_FUNCTIONS_H_
 #define GENERAL_MATH_FUNCTIONS_H_
 
+#include "arl/utilities/logging.h"
 #include <cmath>
 #include <cstdarg>
 #include <utility>
+
 #include "arl/math/math_core.h"
 
 namespace arl

@@ -15,8 +15,8 @@
 // #include "Eigen/Eigen"
 // #include "Eigen/SVD"
 
-#include <arl/utilities/logging.h>
 #include "arl/math/misc/math_macros.h"
+#include "arl/utilities/logging.h"
 
 namespace arl
 {
@@ -99,17 +99,15 @@ public:
     const T& operator()(const EndIndex& end_idx) const;
 
     template <typename Y> Vector<T> operator()(const Vector<Y>& idx_vector) const;
-    Vector<T> operator()(const size_t idx_lower, const size_t idx_upper) const;
     Vector<T> operator()(const IndexSpan& idx_span) const;
 
     void removeElementAtIndex(const size_t idx);
-    void removeElementsAtIndices(const size_t from_idx, const size_t to_idx);
+    void removeElementsAtIndices(const IndexSpan& idx_span);
     size_t size() const;
     size_t numElements() const;
     bool isAllocated() const;
     void fill(T val);
     void resize(const size_t vector_length);
-    void resize(const size_t vector_length, const T value_all);
     size_t endIndex() const;
     T* getDataPointer() const;
 
@@ -118,8 +116,6 @@ public:
     Vector<T> normalizedVectorBetweenPoints(const Point<T>& end_point) const;
     T squaredNorm() const;
     T norm() const;
-    Vector<T> elementWiseMultiply(const Vector<T>& factor_vector) const;
-    Vector<T> elementWiseDivide(const Vector<T>& numerator_vector) const;
     Matrix<T> outerProduct(const Vector<T>& v) const;
     Point<T> mirrorPointInThis(const Point<T>& point_to_mirror) const;
     T angleBetweenVectors(const Vector<T>& v) const;
@@ -148,21 +144,16 @@ public:
     Vector<T> operator()(const size_t row, const IndexSpan& col_idx_span) const;
     Vector<T> operator()(const IndexSpan& row_idx_span, const size_t col) const;
     Matrix<T> operator()(const IndexSpan& row_idx_span, const IndexSpan& col_idx_span) const;
-    Matrix<T> operator()(const size_t from_row,
-                         const size_t to_row,
-                         const size_t from_col,
-                         const size_t to_col) const;
     T& operator()(const EndIndex& row_end_idx, const size_t c);
     const T& operator()(const EndIndex& row_end_idx, const size_t c) const;
     T& operator()(const size_t r, const EndIndex& col_end_idx);
     const T& operator()(const size_t r, const EndIndex& col_end_idx) const;
-    // const EndIndex& end_idx
     Matrix<T>& operator=(const Matrix<T>& m);
 
     void removeRowAtIndex(const size_t row_idx);
-    void removeRowsAtIndices(const size_t from_row_idx, const size_t to_row_idx);
+    void removeRowsAtIndices(const IndexSpan& idx_span);
     void removeColAtIndex(const size_t col_idx);
-    void removeColsAtIndices(const size_t from_col_idx, const size_t to_col_idx);
+    void removeColsAtIndices(const IndexSpan& idx_span);
     void resize(const size_t num_rows, const size_t num_cols);
     size_t rows() const;
     size_t cols() const;
@@ -180,17 +171,10 @@ public:
     void addVectorToMatrixCols(const Vector<T>& v);
     void addVectorToMatrixRows(const Vector<T>& v);
 
-    void addVectorToMatrixCols(const Vec4D<T>& v);
-    void addVectorToMatrixRows(const Vec4D<T>& v);
-    void addVectorToMatrixCols(const Vec3D<T>& v);
-    void addVectorToMatrixRows(const Vec3D<T>& v);
-    void addVectorToMatrixCols(const Vec2D<T>& v);
-    void addVectorToMatrixRows(const Vec2D<T>& v);
-
     Vector<T> getColumnVector(size_t column_idx) const;
     Vector<T> getRowVector(size_t row_idx) const;
-    size_t endIdxRows() const;
-    size_t endIdxCols() const;
+    size_t endRowIdx() const;
+    size_t endColIdx() const;
     Matrix<T> inverse() const;
     void invert();
     Vector<T> solve(const Vector<T>& b) const;

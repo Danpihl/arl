@@ -1,6 +1,8 @@
 #ifndef MATH_MACROS_H_
 #define MATH_MACROS_H_
 
+#include "arl/utilities/logging.h"
+
 namespace arl
 {
 #define DATA_ALLOCATION(data, data_size, data_type, alloc_type)                                   \

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <arl/utilities/logging.h>
+#include "arl/utilities/logging.h"
 
 namespace arl
 {

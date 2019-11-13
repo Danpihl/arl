@@ -45,16 +45,25 @@ template <typename T> Vector<T>::~Vector()
 
 template <typename T> Vector<T>& Vector<T>::operator=(const Vector<T>& v)
 {
+    ASSERT(v.isAllocated()) << "Input vector not allocated before assignment!";
+
     if (this != &v)
     {
-        ASSERT(v.isAllocated()) << "Input vector not allocated before assignment!";
         if (is_allocated_)
         {
-            delete[] data_;
+            if (v.size() != vector_length_)
+            {
+                delete[] data_;
+                DATA_ALLOCATION(data_, v.size(), T, "Vector");
+            }
+        }
+        else
+        {
+            DATA_ALLOCATION(data_, v.size(), T, "Vector");
         }
         vector_length_ = v.size();
 
-        DATA_ALLOCATION(data_, v.size(), T, "Vector");
+        // DATA_ALLOCATION(data_, v.size(), T, "Vector");
         is_allocated_ = true;
 
         for (size_t k = 0; k < v.size(); k++)
@@ -190,22 +199,6 @@ Vector<T> Vector<T>::operator()(const Vector<Y>& idx_vector) const
     return Vector<T>(std_vec);
 }
 
-template <typename T>
-Vector<T> Vector<T>::operator()(const size_t idx_lower, const size_t idx_upper) const
-{
-    ASSERT(idx_lower < vector_length_) << "Lower index exceeds vector size!";
-    ASSERT(idx_upper < vector_length_) << "Upper index exceeds vector size!";
-    ASSERT(idx_lower <= idx_upper) << "Lower index larger than upper index!";
-    const size_t new_vector_length = idx_upper - idx_lower + 1;
-    Vector<T> vres(new_vector_length);
-
-    for (size_t k = 0; k < new_vector_length; k++)
-    {
-        vres(k) = data_[k + idx_lower];
-    }
-    return vres;
-}
-
 template <typename T> Vector<T> Vector<T>::operator()(const IndexSpan& idx_span) const
 {
     ASSERT(idx_span.from < vector_length_) << "Lower index exceeds vector size!";
@@ -258,21 +251,6 @@ template <typename T> void Vector<T>::resize(const size_t vector_length)
     vector_length_ = vector_length;
 }
 
-template <typename T> void Vector<T>::resize(const size_t vector_length, const T value_all)
-{
-    if (is_allocated_)
-    {
-        delete[] data_;
-    }
-
-    is_allocated_ = true;
-    vector_length_ = vector_length;
-
-    DATA_ALLOCATION(data_, vector_length, T, "Vector");
-
-    fill(value_all);
-}
-
 template <typename T> size_t Vector<T>::countNumNonZeroElements() const
 {
     ASSERT(is_allocated_) << "Vector not allocated!";
@@ -304,7 +282,7 @@ template <typename T> T Vector<T>::norm() const
     {
         d = d + data_[k] * data_[k];
     }
-    return sqrt(d);
+    return std::sqrt(d);
 }
 
 template <typename T> T Vector<T>::squaredNorm() const
@@ -375,6 +353,28 @@ template <typename T> Vector<T> operator*(const Vector<T>& v, const T f)
     for (size_t k = 0; k < v.size(); k++)
     {
         v_res(k) = f * v(k);
+    }
+    return v_res;
+}
+
+template <typename T> Vector<T> operator^(const Vector<T>& v0, const Vector<T>& v1)
+{
+    assert(v0.size() == v1.size());
+    Vector<T> v_res(v0.size());
+    for (size_t k = 0; k < v0.size(); k++)
+    {
+        v_res(k) = v0(k) * v1(k);
+    }
+    return v_res;
+}
+
+template <typename T> Vector<T> operator/(const Vector<T>& v0, const Vector<T>& v1)
+{
+    assert(v0.size() == v1.size());
+    Vector<T> v_res(v0.size());
+    for (size_t k = 0; k < v0.size(); k++)
+    {
+        v_res(k) = v0(k) / v1(k);
     }
     return v_res;
 }
@@ -721,37 +721,6 @@ template <typename T> Vector<T> operator|(const T s, const Vector<T>& v)
     return v_res;
 }
 
-template <typename T> Vector<T> operator^(const Vector<T>& v0, const Vector<T>& v1)
-{
-    assert(v0.size() == v1.size());
-    Vector<T> v_res(v0.size());
-    for (size_t k = 0; k < v0.size(); k++)
-    {
-        v_res(k) = v0(k) ^ v1(k);
-    }
-    return v_res;
-}
-
-template <typename T> Vector<T> operator^(const Vector<T>& v, const T s)
-{
-    Vector<T> v_res(v.size());
-    for (size_t k = 0; k < v.size(); k++)
-    {
-        v_res(k) = v(k) ^ s;
-    }
-    return v_res;
-}
-
-template <typename T> Vector<T> operator^(const T s, const Vector<T>& v)
-{
-    Vector<T> v_res(v.size());
-    for (size_t k = 0; k < v.size(); k++)
-    {
-        v_res(k) = s ^ v(k);
-    }
-    return v_res;
-}
-
 template <typename T> Vector<bool> operator&&(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
@@ -874,19 +843,18 @@ template <typename T> void Vector<T>::removeElementAtIndex(const size_t idx)
     vector_length_ = vector_length_ - 1;
 }
 
-template <typename T>
-void Vector<T>::removeElementsAtIndices(const size_t from_idx, const size_t to_idx)
+template <typename T> void Vector<T>::removeElementsAtIndices(const IndexSpan& idx_span)
 {
     ASSERT(is_allocated_) << "Vector not allocated!";
-    ASSERT(from_idx <= to_idx) << "To index smaller than from index!";
-    ASSERT(to_idx < vector_length_) << "Tried to remove elements outside bounds!";
-    if (from_idx == to_idx)
+    ASSERT(idx_span.from <= idx_span.to) << "To index smaller than from index!";
+    ASSERT(idx_span.to < vector_length_) << "Tried to remove elements outside bounds!";
+    if (idx_span.from == idx_span.to)
     {
         LOG_WARNING() << "From and to indices are equal!";
     }
 
     T* temp_data;
-    size_t num_elements_to_remove = to_idx - from_idx + 1;
+    size_t num_elements_to_remove = idx_span.to - idx_span.from + 1;
     DATA_ALLOCATION(temp_data, vector_length_ - num_elements_to_remove, T, "Vector");
 
     ASSERT((vector_length_ - num_elements_to_remove) > 0) << "Tried to remove all elements!";
@@ -894,7 +862,7 @@ void Vector<T>::removeElementsAtIndices(const size_t from_idx, const size_t to_i
     size_t current_idx = 0;
     for (size_t k = 0; k < vector_length_; k++)
     {
-        if (current_idx < from_idx || to_idx < current_idx)
+        if (current_idx < idx_span.from || idx_span.to < current_idx)
         {
             temp_data[current_idx] = data_[k];
             current_idx++;
@@ -913,34 +881,11 @@ template <typename T> Vector<T> Vector<T>::normalized() const
     {
         d = d + data_[k] * data_[k];
     }
-    d = sqrt(d);
+    d = std::sqrt(d);
 
     for (size_t k = 0; k < vector_length_; k++)
     {
         v_res(k) = data_[k] / d;
-    }
-    return v_res;
-}
-
-template <typename T> Vector<T> Vector<T>::elementWiseMultiply(const Vector<T>& factor_vector) const
-{
-    assert(vector_length_ == factor_vector.size());
-    Vector<T> v_res(vector_length_);
-    for (size_t k = 0; k < vector_length_; k++)
-    {
-        v_res(k) = data_[k] * factor_vector(k);
-    }
-    return v_res;
-}
-
-template <typename T>
-Vector<T> Vector<T>::elementWiseDivide(const Vector<T>& denominator_vector) const
-{
-    assert(vector_length_ == denominator_vector.size());
-    Vector<T> v_res(vector_length_);
-    for (size_t k = 0; k < vector_length_; k++)
-    {
-        v_res(k) = data_[k] / denominator_vector(k);
     }
     return v_res;
 }

@@ -73,7 +73,7 @@ TEST_F(VectorTest, DataPointer)
     Vector<double> v(4);
     v(0) = 0.4;
 
-    double *p = v.getDataPointer();
+    double* p = v.getDataPointer();
 
     ASSERT_NEAR(p[0], 0.4, eps);
 
@@ -475,7 +475,7 @@ TEST_F(VectorTest, ExtractSubVector)
     {
         size_t min_idx = k;
         size_t max_idx = std::min(v.size() - 1, k + 3);
-        Vectord vsub = v(min_idx, max_idx);
+        Vectord vsub = v({min_idx, max_idx});
         ASSERT_EQ(vsub.size(), max_idx - min_idx + 1);
         for (size_t i = min_idx; i < max_idx + 1; i++)
         {
@@ -528,33 +528,6 @@ TEST_F(VectorTest, ResizeVector)
     }
 }
 
-TEST_F(VectorTest, ResizeAndFillVector)
-{
-    const double eps = 1e-8;
-
-    Vectord v_initialized(10);
-    v_initialized.fill(0.3);
-
-    ASSERT_EQ(v_initialized.size(), static_cast<size_t>(10));
-    ASSERT_TRUE(v_initialized.isAllocated());
-    ASSERT_VECTOR_NEAR_SCALAR(v_initialized, 0.3, eps);
-
-    for (size_t k = 0; k < 5; k++)
-    {
-        v_initialized.resize((k + 2) * 5, 0.5);
-        ASSERT_VECTOR_NEAR_SCALAR(v_initialized, 0.5, eps);
-        ASSERT_TRUE(v_initialized.isAllocated());
-        ASSERT_EQ(v_initialized.size(), static_cast<size_t>((k + 2) * 5));
-
-        Vectord v_uninitialized;
-        ASSERT_FALSE(v_uninitialized.isAllocated());
-        v_uninitialized.resize((k + 2) * 5, 0.5);
-        ASSERT_TRUE(v_uninitialized.isAllocated());
-        ASSERT_EQ(v_uninitialized.size(), static_cast<size_t>((k + 2) * 5));
-        ASSERT_VECTOR_NEAR_SCALAR(v_uninitialized, 0.5, eps);
-    }
-}
-
 TEST_F(VectorTest, EndIndexAndSize)
 {
     for (size_t k = 0; k < 20; k++)
@@ -587,8 +560,8 @@ TEST_F(VectorTest, ElementWiseMultiplyAndDivide)
         std_resvec_div.push_back(v0(k) / v1(k));
     }
 
-    Vectord vres_mul = v0.elementWiseMultiply(v1);
-    Vectord vres_div = v0.elementWiseDivide(v1);
+    Vectord vres_mul = v0 ^ v1;
+    Vectord vres_div = v0 / v1;
 
     for (size_t k = 0; k < 10; k++)
     {
@@ -678,5 +651,5 @@ TEST_F(VectorTest, InitializerListEqual)
     }
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

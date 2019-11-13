@@ -118,8 +118,8 @@ TEST_F(MatrixTest, ExtractArbitraryMatrixTest)
             {
                 for (size_t num_cols = 1; num_cols < 3; num_cols++)
                 {
-                    // const size_t rows = std::min(m.endIdxRows(), row_idx + num_rows);
-                    // const size_t cols = std::min(m.endIdxCols(), col_idx + num_cols);
+                    // const size_t rows = std::min(m.endRowIdx(), row_idx + num_rows);
+                    // const size_t cols = std::min(m.endColIdx(), col_idx + num_cols);
                     // Matrixd msub = m.extractArbitraryMatrix(row_idx, col_idx, rows, cols);
                 }
             }
@@ -135,7 +135,7 @@ TEST_F(MatrixTest, GetDataPointer)
     m(2, 2) = 0.3;
     ASSERT_NEAR(m(2, 2), 0.3, eps);
 
-    double *p = m.getDataPointer();
+    double* p = m.getDataPointer();
 
     ASSERT_NEAR(p[8], 0.3, eps);
     p[8] = 1.2;
@@ -256,10 +256,10 @@ TEST_F(MatrixTest, InitializerListInitialization)
 TEST_F(MatrixTest, MatrixScalarOperations)
 {
     const double m_array[20] = {0.5507979026, 0.8962930889, 0.02987621088, 0.5908628174,
-                                0.7081478226, 0.1255853105, 0.4568332244, 0.02398188238,
-                                0.2909047389, 0.2072428781, 0.6491440476, 0.558854088,
-                                0.5108276052, 0.0514672033, 0.2784872826, 0.2592524469,
-                                0.8929469543, 0.4408098437, 0.676254902, 0.415101197};
+                                0.7081478226, 0.1255853105, 0.4568332244,  0.02398188238,
+                                0.2909047389, 0.2072428781, 0.6491440476,  0.558854088,
+                                0.5108276052, 0.0514672033, 0.2784872826,  0.2592524469,
+                                0.8929469543, 0.4408098437, 0.676254902,   0.415101197};
 
     Matrixd m0(4, 5);
     Matrixd m1(5, 4);
@@ -414,10 +414,10 @@ TEST_F(MatrixTest, MatrixMultiplicationWithMatrix)
                                  0.0514672033,
                                  0.4568332244};
     const double m1_array[20] = {0.6491440476, 0.02398188238, 0.2835250818, 0.544649018,
-                                 0.3879712576, 0.2784872826, 0.558854088, 0.6931379183,
-                                 0.7803147645, 0.9363836499, 0.676254902, 0.2592524469,
-                                 0.4404537177, 0.3063635324, 0.9759954225, 0.5908628174,
-                                 0.415101197, 0.1568677385, 0.2219578839, 0.6723836759};
+                                 0.3879712576, 0.2784872826,  0.558854088,  0.6931379183,
+                                 0.7803147645, 0.9363836499,  0.676254902,  0.2592524469,
+                                 0.4404537177, 0.3063635324,  0.9759954225, 0.5908628174,
+                                 0.415101197,  0.1568677385,  0.2219578839, 0.6723836759};
     const double mres_array[15] = {0.8451919996,
                                    0.5142262587,
                                    0.6347023634,
@@ -718,7 +718,7 @@ TEST_F(MatrixTest, MatrixVectorVerticalCat)
 
         for (size_t c = 0; c < cols; c++)
         {
-            ASSERT_NEAR(v(c), mres(mres.endIdxRows(), c), eps);
+            ASSERT_NEAR(v(c), mres(mres.endRowIdx(), c), eps);
         }
     }
 }
@@ -760,7 +760,7 @@ TEST_F(MatrixTest, MatrixVectorHorizontalCat)
 
         for (size_t r = 0; r < rows; r++)
         {
-            ASSERT_NEAR(v(r), mres(r, mres.endIdxCols()), eps);
+            ASSERT_NEAR(v(r), mres(r, mres.endColIdx()), eps);
         }
     }
 }
@@ -800,10 +800,10 @@ TEST_F(MatrixTest, MatrixVec4DHorizontalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(0, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.y, mres(1, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.z, mres(2, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.w, mres(3, mres.endIdxCols()), eps);
+        ASSERT_NEAR(v.x, mres(0, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.y, mres(1, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.z, mres(2, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.w, mres(3, mres.endColIdx()), eps);
     }
 }
 
@@ -842,10 +842,10 @@ TEST_F(MatrixTest, MatrixVec4DVerticalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(mres.endIdxRows(), 0), eps);
-        ASSERT_NEAR(v.y, mres(mres.endIdxRows(), 1), eps);
-        ASSERT_NEAR(v.z, mres(mres.endIdxRows(), 2), eps);
-        ASSERT_NEAR(v.w, mres(mres.endIdxRows(), 3), eps);
+        ASSERT_NEAR(v.x, mres(mres.endRowIdx(), 0), eps);
+        ASSERT_NEAR(v.y, mres(mres.endRowIdx(), 1), eps);
+        ASSERT_NEAR(v.z, mres(mres.endRowIdx(), 2), eps);
+        ASSERT_NEAR(v.w, mres(mres.endRowIdx(), 3), eps);
     }
 }
 
@@ -883,9 +883,9 @@ TEST_F(MatrixTest, MatrixVec3DHorizontalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(0, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.y, mres(1, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.z, mres(2, mres.endIdxCols()), eps);
+        ASSERT_NEAR(v.x, mres(0, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.y, mres(1, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.z, mres(2, mres.endColIdx()), eps);
     }
 }
 
@@ -923,9 +923,9 @@ TEST_F(MatrixTest, MatrixVec3DVerticalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(mres.endIdxRows(), 0), eps);
-        ASSERT_NEAR(v.y, mres(mres.endIdxRows(), 1), eps);
-        ASSERT_NEAR(v.z, mres(mres.endIdxRows(), 2), eps);
+        ASSERT_NEAR(v.x, mres(mres.endRowIdx(), 0), eps);
+        ASSERT_NEAR(v.y, mres(mres.endRowIdx(), 1), eps);
+        ASSERT_NEAR(v.z, mres(mres.endRowIdx(), 2), eps);
     }
 }
 
@@ -962,8 +962,8 @@ TEST_F(MatrixTest, MatrixVec2DHorizontalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(0, mres.endIdxCols()), eps);
-        ASSERT_NEAR(v.y, mres(1, mres.endIdxCols()), eps);
+        ASSERT_NEAR(v.x, mres(0, mres.endColIdx()), eps);
+        ASSERT_NEAR(v.y, mres(1, mres.endColIdx()), eps);
     }
 }
 
@@ -1000,8 +1000,8 @@ TEST_F(MatrixTest, MatrixVec2DVerticalCat)
             }
         }
 
-        ASSERT_NEAR(v.x, mres(mres.endIdxRows(), 0), eps);
-        ASSERT_NEAR(v.y, mres(mres.endIdxRows(), 1), eps);
+        ASSERT_NEAR(v.x, mres(mres.endRowIdx(), 0), eps);
+        ASSERT_NEAR(v.y, mres(mres.endRowIdx(), 1), eps);
     }
 }
 
@@ -1192,5 +1192,5 @@ TEST_F(MatrixTest, MatrixSVDecomposition)
     }
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

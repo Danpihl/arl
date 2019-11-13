@@ -5,13 +5,14 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 #include <utility>
 
 namespace arl
 {
-template <typename T>
-Plane<T>::Plane(const T a_, const T b_, const T c_, const T d_)
+template <typename T> Plane<T>::Plane(const T a_, const T b_, const T c_, const T d_)
 {
     a = a_;
     b = b_;
@@ -19,8 +20,7 @@ Plane<T>::Plane(const T a_, const T b_, const T c_, const T d_)
     d = d_;
 }
 
-template <typename T>
-Plane<T>::Plane(const Point3D<T> &point, const Vec3D<T> &normal_vector)
+template <typename T> Plane<T>::Plane(const Point3D<T>& point, const Vec3D<T>& normal_vector)
 {
     a = normal_vector.x;
     b = normal_vector.y;
@@ -28,63 +28,53 @@ Plane<T>::Plane(const Point3D<T> &point, const Vec3D<T> &normal_vector)
     d = -(a * point.x + b * point.y + c * point.z);
 }
 
-template <typename T>
-Plane<T>::Plane() {}
+template <typename T> Plane<T>::Plane() {}
 
-template <typename T>
-Plane<T> Plane<T>::normalized() const
+template <typename T> Plane<T> Plane<T>::normalized() const
 {
     Vec3D<T> normal_vec = this->normal();
     T nvl = normal_vec.norm();
     return Plane<T>(a / nvl, b / nvl, c / nvl, d / nvl);
 }
 
-template <typename T>
-T Plane<T>::eval(const Point3D<T> &p)
+template <typename T> T Plane<T>::eval(const Point3D<T>& p)
 {
     return a * p.x + b * p.y + c * p.z + d;
 }
 
-template <typename T>
-T Plane<T>::evalXY(const T x, const T y)
+template <typename T> T Plane<T>::evalXY(const T x, const T y)
 {
     return -(a * x + b * y + d) / c;
 }
 
-template <typename T>
-T Plane<T>::evalXZ(const T x, const T z)
+template <typename T> T Plane<T>::evalXZ(const T x, const T z)
 {
     return -(a * x + c * z + d) / b;
 }
 
-template <typename T>
-T Plane<T>::evalYZ(const T y, const T z)
+template <typename T> T Plane<T>::evalYZ(const T y, const T z)
 {
     return -(b * y + c * z + d) / a;
 }
 
-template <typename T>
-Vec3D<T> Plane<T>::normal() const
+template <typename T> Vec3D<T> Plane<T>::normal() const
 {
     return Vec3D<T>(a, b, c);
 }
 
-template <typename T>
-Vec3D<T> Plane<T>::normalizedNormal() const
+template <typename T> Vec3D<T> Plane<T>::normalizedNormal() const
 {
     return Vec3D<T>(a, b, c).normalized();
 }
 
-template <typename T>
-Point3D<T> Plane<T>::lineIntersection(const Line3D<T> &line) const
+template <typename T> Point3D<T> Plane<T>::lineIntersection(const Line3D<T>& line) const
 {
     const T t =
         -(d + a * line.px + b * line.py + c * line.pz) / (a * line.vx + b * line.vy + c * line.vz);
     return line.eval(t);
 }
 
-template <typename T>
-Point3D<T> Plane<T>::closestPointOnPlaneFromPoint(const Point3D<T> &p) const
+template <typename T> Point3D<T> Plane<T>::closestPointOnPlaneFromPoint(const Point3D<T>& p) const
 {
     T distance_from_plane = pointDistanceFromPlane(p);
 
@@ -112,8 +102,7 @@ Point3D<T> Plane<T>::closestPointOnPlaneFromPoint(const Point3D<T> &p) const
     return Point2D<T>(sol.x, sol.y, this->evalXY(sol.x, sol.y));
 }
 
-template <typename T>
-T Plane<T>::pointDistanceFromPlane(const Point3D<T> &p) const
+template <typename T> T Plane<T>::pointDistanceFromPlane(const Point3D<T>& p) const
 {
     Plane<T> normalized_plane = this->normalized();
     return normalized_plane.eval(p);
@@ -129,8 +118,7 @@ T Plane<T>::pointDistanceFromPlane(const Point3D<T> &p) const
 // Plane<T>::projectPointAndVectorOntoPlane(const Point3D<T>& point, const Vec3D<T>& vec) const {}
 // template <typename T> Line3D<T> Plane<T>::projectLineOntoPlane(const Line3D<T> line) const {}
 // template <typename T> Plane<T> Plane<T>::planeIntersection(const Plane<T>& plane) const {}
-template <typename T>
-Plane<T> Plane<T>::translatePlane(const Vec3D<T> &vec) const
+template <typename T> Plane<T> Plane<T>::translatePlane(const Vec3D<T>& vec) const
 {
     Plane<T> plane;
 
@@ -142,7 +130,7 @@ Plane<T> Plane<T>::translatePlane(const Vec3D<T> &vec) const
 }
 
 template <typename T>
-Plane<T> planeFromThreePoints(const Point3D<T> &p0, const Point3D<T> &p1, const Point3D<T> &p2)
+Plane<T> planeFromThreePoints(const Point3D<T>& p0, const Point3D<T>& p1, const Point3D<T>& p2)
 {
     Vec3D<T> v10 = p1.normalizedVectorBetweenPoints(p0);
     Vec3D<T> v12 = p1.normalizedVectorBetweenPoints(p2);
@@ -151,6 +139,6 @@ Plane<T> planeFromThreePoints(const Point3D<T> &p0, const Point3D<T> &p1, const 
     return Plane<T>(p0, normal_vector);
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

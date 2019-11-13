@@ -5,6 +5,8 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 #include <cmath>
 #include <vector>
 
@@ -12,79 +14,66 @@
 
 namespace arl
 {
-template <typename T>
-Complex<T>::Complex() {}
-template <typename T>
-Complex<T>::Complex(const T real_, const T imag_)
+template <typename T> Complex<T>::Complex() {}
+template <typename T> Complex<T>::Complex(const T real_, const T imag_)
 {
     real = real_;
     imag = imag_;
 }
 
-template <typename T>
-PolarVec<T> Complex<T>::toPolar() const
+template <typename T> PolarVec<T> Complex<T>::toPolar() const
 {
     return PolarVec<T>(abs(), std::atan2(imag, real));
 }
 
-template <typename T>
-T Complex<T>::abs() const
+template <typename T> T Complex<T>::abs() const
 {
     return std::sqrt(real * real + imag * imag);
 }
 
-template <typename T>
-Complex<T> Complex<T>::conjugate() const
+template <typename T> Complex<T> Complex<T>::conjugate() const
 {
     return Complex<T>(real, -imag);
 }
 
-template <typename T>
-Vec2D<T> Complex<T>::toVec2D() const
+template <typename T> Vec2D<T> Complex<T>::toVec2D() const
 {
     return Vec2D<T>(real, imag);
 }
 
-template <typename T>
-Complex<T> Complex<T>::inv() const
+template <typename T> Complex<T> Complex<T>::inv() const
 {
     return Complex<T>(real / (real * real + imag * imag), -imag / (real * real + imag * imag));
 }
 
 // Non class methods
 
-template <typename T>
-Complex<T> operator*(const Complex<T> &c, const T f)
+template <typename T> Complex<T> operator*(const Complex<T>& c, const T f)
 {
     return Complex<T>(f * c.real, f * c.imag);
 }
 
-template <typename T>
-Complex<T> operator*(const T f, const Complex<T> &c)
+template <typename T> Complex<T> operator*(const T f, const Complex<T>& c)
 {
     return Complex<T>(f * c.real, f * c.imag);
 }
 
-template <typename T>
-Complex<T> operator*(const Complex<T> &c0, const Complex<T> &c1)
+template <typename T> Complex<T> operator*(const Complex<T>& c0, const Complex<T>& c1)
 {
     return Complex<T>(c0.real * c1.real - c0.imag * c1.imag, c0.real * c1.imag + c0.imag * c1.real);
 }
 
-template <typename T>
-Complex<T> operator+(const Complex<T> &c0, const Complex<T> &c1)
+template <typename T> Complex<T> operator+(const Complex<T>& c0, const Complex<T>& c1)
 {
     return Complex<T>(c0.real + c1.real, c0.imag + c1.imag);
 }
 
-template <typename T>
-Complex<T> operator-(const Complex<T> &c0, const Complex<T> &c1)
+template <typename T> Complex<T> operator-(const Complex<T>& c0, const Complex<T>& c1)
 {
     return Complex<T>(c0.real - c1.real, c0.imag - c1.imag);
 }
 
-template <typename T>
-T pow(const Complex<T> &c, int n)
+template <typename T> T pow(const Complex<T>& c, int n)
 {
     if (n == 0)
     {
@@ -104,24 +93,21 @@ T pow(const Complex<T> &c, int n)
     }
 }
 
-template <typename T>
-Complex<T> operator/(const Complex<T> &c0, const Complex<T> &c1)
+template <typename T> Complex<T> operator/(const Complex<T>& c0, const Complex<T>& c1)
 {
     return c0 * c1.inv();
 }
 
-template <typename T>
-Complex<T> operator/(const Complex<T> &c, const T f)
+template <typename T> Complex<T> operator/(const Complex<T>& c, const T f)
 {
     return Complex<T>(c.real / f, c.imag / f);
 }
 
-template <typename T>
-Complex<T> operator/(const T f, const Complex<T> &c)
+template <typename T> Complex<T> operator/(const T f, const Complex<T>& c)
 {
     return f * c.inv();
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

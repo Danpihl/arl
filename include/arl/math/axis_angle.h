@@ -5,11 +5,12 @@
 #include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/utilities/logging.h"
+
 namespace arl
 {
 // TODO: Axis needs to be normalized
-template <typename T>
-AxisAngle<T>::AxisAngle(const T phi_, const T x_, const T y_, const T z_)
+template <typename T> AxisAngle<T>::AxisAngle(const T phi_, const T x_, const T y_, const T z_)
 {
     phi = phi_;
     x = x_;
@@ -17,8 +18,7 @@ AxisAngle<T>::AxisAngle(const T phi_, const T x_, const T y_, const T z_)
     z = z_;
 }
 
-template <typename T>
-AxisAngle<T>::AxisAngle(const T x_, const T y_, const T z_)
+template <typename T> AxisAngle<T>::AxisAngle(const T x_, const T y_, const T z_)
 {
     phi = std::sqrt(x_ * x_ + y_ * y_ + z_ * z_);
     if (phi == 0.0)
@@ -35,8 +35,7 @@ AxisAngle<T>::AxisAngle(const T x_, const T y_, const T z_)
     }
 }
 
-template <typename T>
-AxisAngle<T>::AxisAngle(const Vec3D<T> &v)
+template <typename T> AxisAngle<T>::AxisAngle(const Vec3D<T>& v)
 {
     phi = v.norm();
     if (phi == 0.0)
@@ -53,11 +52,9 @@ AxisAngle<T>::AxisAngle(const Vec3D<T> &v)
     }
 }
 
-template <typename T>
-AxisAngle<T>::AxisAngle() {}
+template <typename T> AxisAngle<T>::AxisAngle() {}
 
-template <typename T>
-AxisAngle<T> AxisAngle<T>::normalized() const
+template <typename T> AxisAngle<T> AxisAngle<T>::normalized() const
 {
     AxisAngle<T> normalized_axis_angle;
     T d = std::sqrt(x * x + y * y + z * z);
@@ -77,8 +74,7 @@ AxisAngle<T> AxisAngle<T>::normalized() const
     return normalized_axis_angle;
 }
 
-template <typename T>
-Matrix<T> AxisAngle<T>::toRotationMatrix() const
+template <typename T> Matrix<T> AxisAngle<T>::toRotationMatrix() const
 {
     AxisAngle<T> normalized_axis_angle = normalized();
 
@@ -95,8 +91,7 @@ Matrix<T> AxisAngle<T>::toRotationMatrix() const
     return rotation_matrix;
 }
 
-template <typename T>
-Quaternion<T> AxisAngle<T>::toQuaternion() const
+template <typename T> Quaternion<T> AxisAngle<T>::toQuaternion() const
 {
     Vec3D<T> v = Vec3D<T>(x, y, z).normalized();
     Quaternion<T> q;
@@ -107,8 +102,7 @@ Quaternion<T> AxisAngle<T>::toQuaternion() const
     return q;
 }
 
-template <typename T>
-RollPitchYaw<T> AxisAngle<T>::toRollPitchYaw() const
+template <typename T> RollPitchYaw<T> AxisAngle<T>::toRollPitchYaw() const
 {
     const Quaternion<T> q = toQuaternion();
     return q.toRollPitchYaw();
@@ -116,8 +110,7 @@ RollPitchYaw<T> AxisAngle<T>::toRollPitchYaw() const
 
 // Non class methods
 
-template <typename T>
-AxisAngle<T> rotationMatrixToAxisAngle(const Matrix<T> &m)
+template <typename T> AxisAngle<T> rotationMatrixToAxisAngle(const Matrix<T>& m)
 {
     // Reference: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/
     AxisAngle<T> axis_angle;
@@ -143,6 +136,6 @@ AxisAngle<T> rotationMatrixToAxisAngle(const Matrix<T> &m)
     return axis_angle;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

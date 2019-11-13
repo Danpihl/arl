@@ -9,8 +9,7 @@
 
 namespace arl
 {
-template <typename T>
-Vec4D<T>::Vec4D(const T x_, const T y_, const T z_, const T w_)
+template <typename T> Vec4D<T>::Vec4D(const T x_, const T y_, const T z_, const T w_)
 {
     x = x_;
     y = y_;
@@ -18,11 +17,9 @@ Vec4D<T>::Vec4D(const T x_, const T y_, const T z_, const T w_)
     w = w_;
 }
 
-template <typename T>
-Vec4D<T>::Vec4D() {}
+template <typename T> Vec4D<T>::Vec4D() {}
 
-template <typename T>
-Vec4D<T>::Vec4D(const T v_array[4])
+template <typename T> Vec4D<T>::Vec4D(const T v_array[4])
 {
     x = v_array[0];
     y = v_array[1];
@@ -30,33 +27,28 @@ Vec4D<T>::Vec4D(const T v_array[4])
     w = v_array[3];
 }
 
-template <typename T>
-Vec4D<T> Vec4D<T>::normalized() const
+template <typename T> Vec4D<T> Vec4D<T>::normalized() const
 {
     return Vec4D<T>(x, y, z, w) / std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-template <typename T>
-T Vec4D<T>::squaredNorm() const
+template <typename T> T Vec4D<T>::squaredNorm() const
 {
     return x * x + y * y + z * z + w * w;
 }
 
-template <typename T>
-T Vec4D<T>::norm() const
+template <typename T> T Vec4D<T>::norm() const
 {
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-template <typename T>
-Vec4D<T> Vec4D<T>::elementWiseMultiply(const Vec4D<T> &factor_vector) const
+template <typename T> Vec4D<T> Vec4D<T>::elementWiseMultiply(const Vec4D<T>& factor_vector) const
 {
     return Vec4D<T>(
         x * factor_vector.x, y * factor_vector.y, z * factor_vector.z, w * factor_vector.w);
 }
 
-template <typename T>
-Vec4D<T> Vec4D<T>::elementWiseDivide(const Vec4D<T> &denominator_vector) const
+template <typename T> Vec4D<T> Vec4D<T>::elementWiseDivide(const Vec4D<T>& denominator_vector) const
 {
     return Vec4D<T>(x / denominator_vector.x,
                     y / denominator_vector.y,
@@ -64,29 +56,27 @@ Vec4D<T> Vec4D<T>::elementWiseDivide(const Vec4D<T> &denominator_vector) const
                     w / denominator_vector.w);
 }
 
-template <typename T>
-Vec4D<T> Vec4D<T>::vectorBetweenPoints(const Point4D<T> &end_point) const
+template <typename T> Vec4D<T> Vec4D<T>::vectorBetweenPoints(const Point4D<T>& end_point) const
 {
     // "This" is start point
     return end_point - *this;
 }
 
 template <typename T>
-Vec4D<T> Vec4D<T>::normalizedVectorBetweenPoints(const Point4D<T> &end_point) const
+Vec4D<T> Vec4D<T>::normalizedVectorBetweenPoints(const Point4D<T>& end_point) const
 {
     // "This" is start point
     return (end_point - *this).normalized();
 }
 
 template <typename T>
-Point4D<T> Vec4D<T>::mirrorPointInThis(const Point4D<T> &point_to_mirror) const
+Point4D<T> Vec4D<T>::mirrorPointInThis(const Point4D<T>& point_to_mirror) const
 {
     // Mirrors "point_to_mirror" in "this"
     return *this - this->vectorBetweenPoints(point_to_mirror);
 }
 
-template <typename T>
-T Vec4D<T>::angleBetweenVectors(const Vec4D<T> &v) const
+template <typename T> T Vec4D<T>::angleBetweenVectors(const Vec4D<T>& v) const
 {
     T dot_product = (*this) * v;
     return std::acos(dot_product / ((this->norm()) * (v.norm())));
@@ -94,44 +84,37 @@ T Vec4D<T>::angleBetweenVectors(const Vec4D<T> &v) const
 
 // Non class functions
 
-template <typename T>
-Vec4D<T> operator*(const T f, const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator*(const T f, const Vec4D<T>& v)
 {
     return Vec4D<T>(f * v.x, f * v.y, f * v.z, f * v.w);
 }
 
-template <typename T>
-Vec4D<T> operator*(const Vec4D<T> &v, const T f)
+template <typename T> Vec4D<T> operator*(const Vec4D<T>& v, const T f)
 {
     return Vec4D<T>(f * v.x, f * v.y, f * v.z, f * v.w);
 }
 
-template <typename T>
-T operator*(const Vec4D<T> &v0, const Vec4D<T> &v1)
+template <typename T> T operator*(const Vec4D<T>& v0, const Vec4D<T>& v1)
 {
     return v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w;
 }
 
-template <typename T>
-Vec4D<T> operator/(const Vec4D<T> &v, const T f)
+template <typename T> Vec4D<T> operator/(const Vec4D<T>& v, const T f)
 {
     return Vec4D<T>(v.x / f, v.y / f, v.z / f, v.w / f);
 }
 
-template <typename T>
-Vec4D<T> operator+(const Vec4D<T> &v0, const Vec4D<T> &v1)
+template <typename T> Vec4D<T> operator+(const Vec4D<T>& v0, const Vec4D<T>& v1)
 {
     return Vec4D<T>(v0.x + v1.x, v0.y + v1.y, v0.z + v1.z, v0.w + v1.w);
 }
 
-template <typename T>
-Vec4D<T> operator-(const Vec4D<T> &v0, const Vec4D<T> &v1)
+template <typename T> Vec4D<T> operator-(const Vec4D<T>& v0, const Vec4D<T>& v1)
 {
     return Vec4D<T>(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z, v0.w - v1.w);
 }
 
-template <typename T>
-Vec4D<T> operator*(const Matrix<T> &m, const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator*(const Matrix<T>& m, const Vec4D<T>& v)
 {
     ASSERT(m.isAllocated()) << "Matrix not allocated!";
     ASSERT(m.rows() == 4) << "Matrix dimension mismatch!";
@@ -144,8 +127,7 @@ Vec4D<T> operator*(const Matrix<T> &m, const Vec4D<T> &v)
     return res;
 }
 
-template <typename T>
-Vec4D<T> operator*(const Vec4D<T> &v, const Matrix<T> &m)
+template <typename T> Vec4D<T> operator*(const Vec4D<T>& v, const Matrix<T>& m)
 {
     ASSERT(m.isAllocated()) << "Matrix not allocated!";
     ASSERT(m.rows() == 4) << "Matrix dimension mismatch!";
@@ -158,44 +140,37 @@ Vec4D<T> operator*(const Vec4D<T> &v, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Vec4D<T> operator+(const Vec4D<T> &v, const T f)
+template <typename T> Vec4D<T> operator+(const Vec4D<T>& v, const T f)
 {
     return Vec4D<T>(v.x + f, v.y + f, v.z + f, v.w + f);
 }
 
-template <typename T>
-Vec4D<T> operator+(const T f, const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator+(const T f, const Vec4D<T>& v)
 {
     return Vec4D<T>(v.x + f, v.y + f, v.z + f, v.w + f);
 }
 
-template <typename T>
-Vec4D<T> operator-(const Vec4D<T> &v, const T f)
+template <typename T> Vec4D<T> operator-(const Vec4D<T>& v, const T f)
 {
     return Vec4D<T>(v.x - f, v.y - f, v.z - f, v.w - f);
 }
 
-template <typename T>
-Vec4D<T> operator-(const T f, const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator-(const T f, const Vec4D<T>& v)
 {
     return Vec4D<T>(f - v.x, f - v.y, f - v.z, f - v.w);
 }
 
-template <typename T>
-Vec4D<T> operator/(const T f, const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator/(const T f, const Vec4D<T>& v)
 {
     return Vec4D<T>(f / v.x, f / v.y, f / v.z, f / v.w);
 }
 
-template <typename T>
-Vec4D<T> operator-(const Vec4D<T> &v)
+template <typename T> Vec4D<T> operator-(const Vec4D<T>& v)
 {
     return Vec4D<T>(-v.x, -v.y, -v.z, -v.w);
 }
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const Vec4D<T> &v)
+template <typename T> std::ostream& operator<<(std::ostream& os, const Vec4D<T>& v)
 {
     std::string s = "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + ", " +
                     std::to_string(v.z) + ", " + std::to_string(v.w) + " ]";
@@ -203,6 +178,6 @@ std::ostream &operator<<(std::ostream &os, const Vec4D<T> &v)
     return os;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif
