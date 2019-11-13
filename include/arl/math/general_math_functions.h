@@ -4,12 +4,12 @@
 
 #include <cmath>
 #include <cstdarg>
+#include <utility>
 #include "arl/math/math_core.h"
 
 namespace arl
 {
-template <typename T>
-bool any(const Vector<T> &v)
+template <typename T> bool any(const Vector<T>& v)
 {
     bool b = false;
     for (size_t k = 0; k < v.size(); k++)
@@ -19,8 +19,7 @@ bool any(const Vector<T> &v)
     return b;
 }
 
-template <typename T>
-bool all(const Vector<T> &v)
+template <typename T> bool all(const Vector<T>& v)
 {
     bool b = true;
     for (size_t k = 0; k < v.size(); k++)
@@ -30,8 +29,7 @@ bool all(const Vector<T> &v)
     return b;
 }
 
-template <typename T>
-Vector<size_t> find(const Vector<T> &v)
+template <typename T> Vector<size_t> find(const Vector<T>& v)
 {
     std::vector<size_t> std_vec;
     for (size_t k = 0; k < v.size(); k++)
@@ -45,8 +43,7 @@ Vector<size_t> find(const Vector<T> &v)
     return vres;
 }
 
-template <typename T>
-Vector<T> concatenate(const std::initializer_list<Vector<T>> &init_list)
+template <typename T> Vector<T> concatenate(const std::initializer_list<Vector<T>>& init_list)
 {
     size_t new_length = 0;
 
@@ -69,8 +66,7 @@ Vector<T> concatenate(const std::initializer_list<Vector<T>> &init_list)
     return vres;
 }
 
-template <typename T>
-Vector<T> round(const Vector<T> &vin)
+template <typename T> Vector<T> round(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -82,8 +78,7 @@ Vector<T> round(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-T max(const Vector<T> &vin)
+template <typename T> T max(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     T max_val = vin(0);
@@ -95,8 +90,7 @@ T max(const Vector<T> &vin)
     return max_val;
 }
 
-template <typename T>
-T min(const Vector<T> &vin)
+template <typename T> T min(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     T min_val = vin(0);
@@ -108,8 +102,7 @@ T min(const Vector<T> &vin)
     return min_val;
 }
 
-template <typename T>
-Vector<T> log10(const Vector<T> &vin)
+template <typename T> Vector<T> log10(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -121,8 +114,7 @@ Vector<T> log10(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-Vector<T> pow(const Vector<T> &vin, const T e)
+template <typename T> Vector<T> pow(const Vector<T>& vin, const T e)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -134,8 +126,7 @@ Vector<T> pow(const Vector<T> &vin, const T e)
     return v;
 }
 
-template <typename T>
-Vector<T> log(const Vector<T> &vin)
+template <typename T> Vector<T> log(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -147,8 +138,7 @@ Vector<T> log(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-Vector<T> exp(const Vector<T> &vin)
+template <typename T> Vector<T> exp(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -160,8 +150,7 @@ Vector<T> exp(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-Vector<T> cos(const Vector<T> &vin)
+template <typename T> Vector<T> cos(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -173,8 +162,7 @@ Vector<T> cos(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-Vector<T> sin(const Vector<T> &vin)
+template <typename T> Vector<T> sin(const Vector<T>& vin)
 {
     assert(vin.size() > 0);
     Vector<T> v(vin.size());
@@ -186,8 +174,7 @@ Vector<T> sin(const Vector<T> &vin)
     return v;
 }
 
-template <typename T>
-Vector<T> linspace0(const T x0, const T x1, const size_t num_values)
+template <typename T> Vector<T> linspace0(const T x0, const T x1, const size_t num_values)
 {
     assert(num_values > 0);
     Vector<T> v(num_values);
@@ -203,8 +190,7 @@ Vector<T> linspace0(const T x0, const T x1, const size_t num_values)
     return v;
 }
 
-template <typename T>
-Vector<T> linspace1(const T x0, const T dx, const size_t num_values)
+template <typename T> Vector<T> linspace1(const T x0, const T dx, const size_t num_values)
 {
     assert(num_values > 0);
     Vector<T> v(num_values);
@@ -219,8 +205,7 @@ Vector<T> linspace1(const T x0, const T dx, const size_t num_values)
     return v;
 }
 
-template <typename T>
-Vector<T> linspace2(const T x0, const T x1, const T dx)
+template <typename T> Vector<T> linspace2(const T x0, const T x1, const T dx)
 {
     assert(dx > 0);
     assert(x1 > x0);
@@ -230,6 +215,6 @@ Vector<T> linspace2(const T x0, const T x1, const T dx)
     return linspace0(x0, x1, num_values);
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

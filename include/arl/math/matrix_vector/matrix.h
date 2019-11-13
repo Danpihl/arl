@@ -2,9 +2,9 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include "arl/utilities/logging.h"
 #include "arl/math/math_core.h"
 #include "arl/math/misc/math_macros.h"
+#include "arl/utilities/logging.h"
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -25,22 +25,19 @@ SVDMatrixTriplet<T>::SVDMatrixTriplet(const size_t num_rows, const size_t num_co
     v.resize(num_cols, num_cols);
 }
 
-template <typename T>
-QRMatrixPair<T>::QRMatrixPair(const size_t num_rows, const size_t num_cols)
+template <typename T> QRMatrixPair<T>::QRMatrixPair(const size_t num_rows, const size_t num_cols)
 {
     q.resize(num_rows, num_cols);
     r.resize(num_rows, num_cols);
 }
 
-template <typename T>
-LUMatrixPair<T>::LUMatrixPair(const size_t num_rows, const size_t num_cols)
+template <typename T> LUMatrixPair<T>::LUMatrixPair(const size_t num_rows, const size_t num_cols)
 {
     l.resize(num_rows, num_cols);
     u.resize(num_rows, num_cols);
 }
 
-template <typename T>
-Matrix<T> &Matrix<T>::operator=(const Matrix<T> &m)
+template <typename T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
 {
     if (this != &m)
     {
@@ -66,8 +63,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T> &m)
     return *this;
 }
 
-template <typename T>
-Matrix<T> rotationMatrixX(const T angle)
+template <typename T> Matrix<T> rotationMatrixX(const T angle)
 {
     const T ca = std::cos(angle);
     const T sa = std::sin(angle);
@@ -88,8 +84,7 @@ Matrix<T> rotationMatrixX(const T angle)
     return rotation_matrix;
 }
 
-template <typename T>
-Matrix<T> rotationMatrixY(const T angle)
+template <typename T> Matrix<T> rotationMatrixY(const T angle)
 {
     const T ca = std::cos(angle);
     const T sa = std::sin(angle);
@@ -110,8 +105,7 @@ Matrix<T> rotationMatrixY(const T angle)
     return rotation_matrix;
 }
 
-template <typename T>
-Matrix<T> rotationMatrixZ(const T angle)
+template <typename T> Matrix<T> rotationMatrixZ(const T angle)
 {
     const T ca = std::cos(angle);
     const T sa = std::sin(angle);
@@ -132,8 +126,7 @@ Matrix<T> rotationMatrixZ(const T angle)
     return rotation_matrix;
 }
 
-template <typename T>
-Matrix<T> rotationMatrix2D(const T angle)
+template <typename T> Matrix<T> rotationMatrix2D(const T angle)
 {
     const T ca = std::cos(angle);
     const T sa = std::sin(angle);
@@ -162,8 +155,7 @@ Matrix<T>::Matrix(const size_t num_rows, const size_t num_cols) : is_allocated_(
     DATA_ALLOCATION(data_, num_rows_ * num_cols_, T, "Matrix");
 }
 
-template <typename T>
-Matrix<T>::Matrix(const Matrix<T> &m) : is_allocated_(true)
+template <typename T> Matrix<T>::Matrix(const Matrix<T>& m) : is_allocated_(true)
 {
     num_rows_ = m.rows();
     num_cols_ = m.cols();
@@ -178,8 +170,7 @@ Matrix<T>::Matrix(const Matrix<T> &m) : is_allocated_(true)
     }
 }
 
-template <typename T>
-Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> &il)
+template <typename T> Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>>& il)
 {
     ASSERT(il.size() > 0) << "Tried to initialize with empty vector matrix!";
     ASSERT(il.begin()[0].size() > 0) << "Tried to initialize with empty vector matrix!";
@@ -205,8 +196,7 @@ Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> &il)
     }
 }
 
-template <typename T>
-Matrix<T>::Matrix(const std::vector<std::vector<T>> &vm)
+template <typename T> Matrix<T>::Matrix(const std::vector<std::vector<T>>& vm)
 {
     ASSERT(vm.size() > 0) << "Tried to initialize with empty vector matrix!";
     ASSERT(vm[0].size() > 0) << "Tried to initialize with empty vector matrix!";
@@ -232,8 +222,7 @@ Matrix<T>::Matrix(const std::vector<std::vector<T>> &vm)
     }
 }
 
-template <typename T>
-Matrix<T>::~Matrix()
+template <typename T> Matrix<T>::~Matrix()
 {
     if (is_allocated_)
     {
@@ -242,8 +231,7 @@ Matrix<T>::~Matrix()
     }
 }
 
-template <typename T>
-void Matrix<T>::resize(const size_t num_rows, const size_t num_cols)
+template <typename T> void Matrix<T>::resize(const size_t num_rows, const size_t num_cols)
 {
     if (is_allocated_)
     {
@@ -258,8 +246,7 @@ void Matrix<T>::resize(const size_t num_rows, const size_t num_cols)
     is_allocated_ = true;
 }
 
-template <typename T>
-void Matrix<T>::switchRows(size_t r0, size_t r1)
+template <typename T> void Matrix<T>::switchRows(size_t r0, size_t r1)
 {
     assert(r0 < num_rows_ && r1 < num_rows_);
     if (r0 == r1)
@@ -277,8 +264,7 @@ void Matrix<T>::switchRows(size_t r0, size_t r1)
     }
 }
 
-template <typename T>
-void Matrix<T>::switchColumns(size_t c0, size_t c1)
+template <typename T> void Matrix<T>::switchColumns(size_t c0, size_t c1)
 {
     assert(c0 < num_cols_ && c1 < num_cols_);
     if (c0 == c1)
@@ -297,14 +283,12 @@ void Matrix<T>::switchColumns(size_t c0, size_t c1)
     }
 }
 
-template <typename T>
-T *Matrix<T>::getDataPointer() const
+template <typename T> T* Matrix<T>::getDataPointer() const
 {
     return data_;
 }
 
-template <typename T>
-Matrix<T> vCat(const Matrix<T> &m0, const Matrix<T> &m1)
+template <typename T> Matrix<T> vCat(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     ASSERT(m0.isAllocated()) << "m0 is not allocated!";
     ASSERT(m1.isAllocated()) << "m1 is not allocated!";
@@ -331,8 +315,7 @@ Matrix<T> vCat(const Matrix<T> &m0, const Matrix<T> &m1)
     return mres;
 }
 
-template <typename T>
-Matrix<T> hCat(const Matrix<T> &m0, const Matrix<T> &m1)
+template <typename T> Matrix<T> hCat(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     ASSERT(m0.isAllocated()) << "m0 is not allocated!";
     ASSERT(m1.isAllocated()) << "m1 is not allocated!";
@@ -359,45 +342,38 @@ Matrix<T> hCat(const Matrix<T> &m0, const Matrix<T> &m1)
     return mres;
 }
 
-template <typename T>
-size_t Matrix<T>::endIdxRows() const
+template <typename T> size_t Matrix<T>::endIdxRows() const
 {
     return num_rows_ - 1;
 }
 
-template <typename T>
-size_t Matrix<T>::endIdxCols() const
+template <typename T> size_t Matrix<T>::endIdxCols() const
 {
     return num_cols_ - 1;
 }
 
-template <typename T>
-size_t Matrix<T>::rows() const
+template <typename T> size_t Matrix<T>::rows() const
 {
     return num_rows_;
 }
 
-template <typename T>
-size_t Matrix<T>::cols() const
+template <typename T> size_t Matrix<T>::cols() const
 {
     return num_cols_;
 }
 
-template <typename T>
-size_t Matrix<T>::size() const
+template <typename T> size_t Matrix<T>::numElements() const
 {
     // Returns totalt number of elements in matrix
     return num_rows_ * num_cols_;
 }
 
-template <typename T>
-bool Matrix<T>::isAllocated() const
+template <typename T> bool Matrix<T>::isAllocated() const
 {
     return is_allocated_;
 }
 
-template <typename T>
-void Matrix<T>::fill(T val)
+template <typename T> void Matrix<T>::fill(T val)
 {
     assert(is_allocated_ && "Tried to fill un allocated vector!");
     for (size_t k = 0; k < num_rows_ * num_cols_; k++)
@@ -406,8 +382,7 @@ void Matrix<T>::fill(T val)
     }
 }
 
-template <typename T>
-Vector<T> Matrix<T>::solve(const Vector<T> &b) const
+template <typename T> Vector<T> Matrix<T>::solve(const Vector<T>& b) const
 {
     assert(is_allocated_ && "Matrix is not allocated!");
     assert(num_rows_ == b.size() && "Matrix vector dimension mismatch!");
@@ -434,8 +409,7 @@ Vector<T> Matrix<T>::solve(const Vector<T> &b) const
     return sol_vec;
 }
 
-template <typename T>
-Matrix<T> Matrix<T>::inverse() const
+template <typename T> Matrix<T> Matrix<T>::inverse() const
 {
     assert(is_allocated_ && "Matrix is not allocated!");
     assert(num_rows_ == num_cols_ && "Matrix is not square!");
@@ -452,8 +426,7 @@ Matrix<T> Matrix<T>::inverse() const
     return minv;
 }
 
-template <typename T>
-void Matrix<T>::invert()
+template <typename T> void Matrix<T>::invert()
 {
     assert(is_allocated_ && "Matrix is not allocated!");
     assert(num_rows_ == num_cols_ && "Matrix is not square!");
@@ -468,8 +441,7 @@ void Matrix<T>::invert()
     EIGENMAT_TO_AGLMAT(eminv, (*this));
 }
 
-template <typename T>
-T Matrix<T>::det() const
+template <typename T> T Matrix<T>::det() const
 {
     assert(is_allocated_ && "Matrix is not allocated!");
     assert(num_rows_ == num_cols_ && "Matrix is not square!");
@@ -481,8 +453,7 @@ T Matrix<T>::det() const
     return em.determinant();
 }
 
-template <typename T>
-T Matrix<T>::norm() const
+template <typename T> T Matrix<T>::norm() const
 {
     assert(is_allocated_ && "Matrix is not allocated!");
 
@@ -493,8 +464,7 @@ T Matrix<T>::norm() const
     return em.norm();
 }
 
-template <typename T>
-LUMatrixPair<T> Matrix<T>::lu() const
+template <typename T> LUMatrixPair<T> Matrix<T>::lu() const
 {
     // Not working
     Eigen::MatrixXd em(num_rows_, num_cols_);
@@ -514,8 +484,7 @@ LUMatrixPair<T> Matrix<T>::lu() const
     return lu_pair;
 }
 
-template <typename T>
-QRMatrixPair<T> Matrix<T>::qr() const
+template <typename T> QRMatrixPair<T> Matrix<T>::qr() const
 {
     // Not working
     Eigen::MatrixXd em(num_rows_, num_cols_);
@@ -536,8 +505,7 @@ QRMatrixPair<T> Matrix<T>::qr() const
     return qr_pair;
 }
 
-template <typename T>
-SVDMatrixTriplet<T> Matrix<T>::svd() const
+template <typename T> SVDMatrixTriplet<T> Matrix<T>::svd() const
 {
     SVDMatrixTriplet<T> svd_triplet(num_rows_, num_cols_);
 
@@ -573,8 +541,7 @@ SVDMatrixTriplet<T> Matrix<T>::svd() const
     return svd_triplet;
 }
 
-template <typename T>
-T &Matrix<T>::operator()(const size_t r, const size_t c)
+template <typename T> T& Matrix<T>::operator()(const size_t r, const size_t c)
 {
     assert(r < num_rows_ && "Row index is larger than num_rows_-1!");
     assert(c < num_cols_ && "Column index is larger than num_cols_-1!");
@@ -582,8 +549,7 @@ T &Matrix<T>::operator()(const size_t r, const size_t c)
     return data_[r * num_cols_ + c];
 }
 
-template <typename T>
-const T &Matrix<T>::operator()(const size_t r, const size_t c) const
+template <typename T> const T& Matrix<T>::operator()(const size_t r, const size_t c) const
 {
     assert(r < num_rows_ && "Row index is larger than num_rows_-1!");
     assert(c < num_cols_ && "Column index is larger than num_cols_-1!");
@@ -591,8 +557,7 @@ const T &Matrix<T>::operator()(const size_t r, const size_t c) const
     return data_[r * num_cols_ + c];
 }
 
-template <typename T>
-T &Matrix<T>::operator()(const EndIndex &row_end_idx, const size_t c)
+template <typename T> T& Matrix<T>::operator()(const EndIndex& row_end_idx, const size_t c)
 {
     const size_t row_idx =
         static_cast<size_t>(static_cast<int>(num_rows_) - 1 + row_end_idx.offset);
@@ -601,7 +566,7 @@ T &Matrix<T>::operator()(const EndIndex &row_end_idx, const size_t c)
 }
 
 template <typename T>
-const T &Matrix<T>::operator()(const EndIndex &row_end_idx, const size_t c) const
+const T& Matrix<T>::operator()(const EndIndex& row_end_idx, const size_t c) const
 {
     const size_t row_idx =
         static_cast<size_t>(static_cast<int>(num_rows_) - 1 + row_end_idx.offset);
@@ -609,8 +574,7 @@ const T &Matrix<T>::operator()(const EndIndex &row_end_idx, const size_t c) cons
     return data_[row_idx * num_cols_ + c];
 }
 
-template <typename T>
-T &Matrix<T>::operator()(const size_t r, const EndIndex &col_end_idx)
+template <typename T> T& Matrix<T>::operator()(const size_t r, const EndIndex& col_end_idx)
 {
     const size_t col_idx =
         static_cast<size_t>(static_cast<int>(num_cols_) - 1 + col_end_idx.offset);
@@ -619,7 +583,7 @@ T &Matrix<T>::operator()(const size_t r, const EndIndex &col_end_idx)
 }
 
 template <typename T>
-const T &Matrix<T>::operator()(const size_t r, const EndIndex &col_end_idx) const
+const T& Matrix<T>::operator()(const size_t r, const EndIndex& col_end_idx) const
 {
     const size_t col_idx =
         static_cast<size_t>(static_cast<int>(num_cols_) - 1 + col_end_idx.offset);
@@ -628,7 +592,7 @@ const T &Matrix<T>::operator()(const size_t r, const EndIndex &col_end_idx) cons
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::operator()(const IndexSpan &row_idx_span, const IndexSpan &col_idx_span) const
+Matrix<T> Matrix<T>::operator()(const IndexSpan& row_idx_span, const IndexSpan& col_idx_span) const
 {
     const size_t new_num_rows = row_idx_span.to - row_idx_span.from + 1;
     const size_t new_num_cols = col_idx_span.to - col_idx_span.from + 1;
@@ -667,8 +631,7 @@ Matrix<T> Matrix<T>::operator()(const size_t from_row,
     return mat;
 }
 
-template <typename T>
-Matrix<T> operator*(const Matrix<T> &m0, const Matrix<T> &m1)
+template <typename T> Matrix<T> operator*(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     assert(m0.cols() == m1.rows());
     Matrix<T> res(m0.rows(), m1.cols());
@@ -688,8 +651,7 @@ Matrix<T> operator*(const Matrix<T> &m0, const Matrix<T> &m1)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator+(const Matrix<T> &m0, const Matrix<T> &m1)
+template <typename T> Matrix<T> operator+(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     assert(m0.cols() == m1.cols());
     assert(m0.rows() == m1.rows());
@@ -705,8 +667,7 @@ Matrix<T> operator+(const Matrix<T> &m0, const Matrix<T> &m1)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator-(const Matrix<T> &m0, const Matrix<T> &m1)
+template <typename T> Matrix<T> operator-(const Matrix<T>& m0, const Matrix<T>& m1)
 {
     assert(m0.cols() == m1.cols());
     assert(m0.rows() == m1.rows());
@@ -722,8 +683,7 @@ Matrix<T> operator-(const Matrix<T> &m0, const Matrix<T> &m1)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator*(const Matrix<T> &m, const T f)
+template <typename T> Matrix<T> operator*(const Matrix<T>& m, const T f)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -737,8 +697,7 @@ Matrix<T> operator*(const Matrix<T> &m, const T f)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator*(const T f, const Matrix<T> &m)
+template <typename T> Matrix<T> operator*(const T f, const Matrix<T>& m)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -752,8 +711,7 @@ Matrix<T> operator*(const T f, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator/(const Matrix<T> &m, const T f)
+template <typename T> Matrix<T> operator/(const Matrix<T>& m, const T f)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -767,8 +725,7 @@ Matrix<T> operator/(const Matrix<T> &m, const T f)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator/(const T f, const Matrix<T> &m)
+template <typename T> Matrix<T> operator/(const T f, const Matrix<T>& m)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -782,8 +739,7 @@ Matrix<T> operator/(const T f, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator-(const Matrix<T> &m, const T f)
+template <typename T> Matrix<T> operator-(const Matrix<T>& m, const T f)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -797,8 +753,7 @@ Matrix<T> operator-(const Matrix<T> &m, const T f)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator-(const T f, const Matrix<T> &m)
+template <typename T> Matrix<T> operator-(const T f, const Matrix<T>& m)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -812,8 +767,7 @@ Matrix<T> operator-(const T f, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator+(const Matrix<T> &m, const T f)
+template <typename T> Matrix<T> operator+(const Matrix<T>& m, const T f)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -827,8 +781,7 @@ Matrix<T> operator+(const Matrix<T> &m, const T f)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator+(const T f, const Matrix<T> &m)
+template <typename T> Matrix<T> operator+(const T f, const Matrix<T>& m)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -842,8 +795,7 @@ Matrix<T> operator+(const T f, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Matrix<T> operator-(const Matrix<T> &m)
+template <typename T> Matrix<T> operator-(const Matrix<T>& m)
 {
     Matrix<T> res(m.rows(), m.cols());
 
@@ -857,8 +809,7 @@ Matrix<T> operator-(const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Vector<T> operator*(const Matrix<T> &m, const Vector<T> &v)
+template <typename T> Vector<T> operator*(const Matrix<T>& m, const Vector<T>& v)
 {
     assert(m.cols() == v.size());
     Vector<T> res(m.rows());
@@ -875,8 +826,7 @@ Vector<T> operator*(const Matrix<T> &m, const Vector<T> &v)
     return res;
 }
 
-template <typename T>
-Vector<T> operator*(const Vector<T> &v, const Matrix<T> &m)
+template <typename T> Vector<T> operator*(const Vector<T>& v, const Matrix<T>& m)
 {
     assert(m.rows() == v.size());
     Vector<T> res(m.cols());
@@ -893,8 +843,7 @@ Vector<T> operator*(const Vector<T> &v, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Matrix<T> Matrix<T>::transposed() const
+template <typename T> Matrix<T> Matrix<T>::transposed() const
 {
     Matrix<T> res(num_cols_, num_rows_);
 
@@ -908,13 +857,12 @@ Matrix<T> Matrix<T>::transposed() const
     return res;
 }
 
-template <typename T>
-void Matrix<T>::removeRowAtIndex(const size_t row_idx)
+template <typename T> void Matrix<T>::removeRowAtIndex(const size_t row_idx)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
     ASSERT(row_idx < num_rows_) << "Tried to remove element outside bounds!";
 
-    T *temp_data;
+    T* temp_data;
 
     DATA_ALLOCATION(temp_data, (num_rows_ - 1) * num_cols_, T, "Matrix");
 
@@ -948,7 +896,7 @@ void Matrix<T>::removeRowsAtIndices(const size_t from_row_idx, const size_t to_r
         LOG_WARNING() << "From and to indices are equal!";
     }
 
-    T *temp_data;
+    T* temp_data;
 
     size_t num_rows_to_remove = to_row_idx - from_row_idx + 1;
 
@@ -975,13 +923,12 @@ void Matrix<T>::removeRowsAtIndices(const size_t from_row_idx, const size_t to_r
     num_rows_ = num_rows_ - num_rows_to_remove;
 }
 
-template <typename T>
-void Matrix<T>::removeColAtIndex(const size_t col_idx)
+template <typename T> void Matrix<T>::removeColAtIndex(const size_t col_idx)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
     ASSERT(col_idx < num_cols_) << "Tried to remove element outside bounds!";
 
-    T *temp_data;
+    T* temp_data;
 
     DATA_ALLOCATION(temp_data, num_rows_ * (num_cols_ - 1), T, "Matrix");
 
@@ -1015,7 +962,7 @@ void Matrix<T>::removeColsAtIndices(const size_t from_col_idx, const size_t to_c
         LOG_WARNING() << "From and to indices are equal!";
     }
 
-    T *temp_data;
+    T* temp_data;
 
     size_t num_cols_to_remove = to_col_idx - from_col_idx + 1;
 
@@ -1043,8 +990,7 @@ void Matrix<T>::removeColsAtIndices(const size_t from_col_idx, const size_t to_c
     num_cols_ = num_cols_ - num_cols_to_remove;
 }
 
-template <typename T>
-Matrix<T> unitMatrix(const size_t rows, const size_t cols)
+template <typename T> Matrix<T> unitMatrix(const size_t rows, const size_t cols)
 {
     Matrix<T> unit_matrix(rows, cols);
     for (size_t r = 0; r < rows; r++)
@@ -1064,8 +1010,7 @@ Matrix<T> unitMatrix(const size_t rows, const size_t cols)
     return unit_matrix;
 }
 
-template <typename T>
-Matrix<T> zerosMatrix(const size_t rows, const size_t cols)
+template <typename T> Matrix<T> zerosMatrix(const size_t rows, const size_t cols)
 {
     Matrix<T> zero_matrix(rows, cols);
     for (size_t r = 0; r < rows; r++)
@@ -1078,8 +1023,7 @@ Matrix<T> zerosMatrix(const size_t rows, const size_t cols)
     return zero_matrix;
 }
 
-template <typename T>
-Matrix<T> onesMatrix(const size_t rows, const size_t cols)
+template <typename T> Matrix<T> onesMatrix(const size_t rows, const size_t cols)
 {
     Matrix<T> ones_matrix(rows, cols);
     for (size_t r = 0; r < rows; r++)
@@ -1092,8 +1036,7 @@ Matrix<T> onesMatrix(const size_t rows, const size_t cols)
     return ones_matrix;
 }
 
-template <typename T>
-Matrix<T> filledMatrix(const size_t rows, const size_t cols, T val)
+template <typename T> Matrix<T> filledMatrix(const size_t rows, const size_t cols, T val)
 {
     Matrix<T> filled_matrix(rows, cols);
     for (size_t r = 0; r < rows; r++)
@@ -1106,8 +1049,7 @@ Matrix<T> filledMatrix(const size_t rows, const size_t cols, T val)
     return filled_matrix;
 }
 
-template <typename T>
-void fillMatrixWithArrayRowMajor(arl::Matrix<T> &m, const T *a)
+template <typename T> void fillMatrixWithArrayRowMajor(arl::Matrix<T>& m, const T* a)
 {
     assert(m.isAllocated() && "You must allocate your matrix before filling it!");
     for (size_t r = 0; r < m.rows(); r++)
@@ -1119,8 +1061,7 @@ void fillMatrixWithArrayRowMajor(arl::Matrix<T> &m, const T *a)
     }
 }
 
-template <typename T>
-void fillMatrixWithArrayColMajor(arl::Matrix<T> &m, const T *a)
+template <typename T> void fillMatrixWithArrayColMajor(arl::Matrix<T>& m, const T* a)
 {
     assert(m.isAllocated() && "You must allocate your matrix before filling it!");
     for (size_t r = 0; r < m.rows(); r++)
@@ -1132,8 +1073,7 @@ void fillMatrixWithArrayColMajor(arl::Matrix<T> &m, const T *a)
     }
 }
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const Matrix<T> &m)
+template <typename T> std::ostream& operator<<(std::ostream& os, const Matrix<T>& m)
 {
     std::string s = "";
 
@@ -1156,6 +1096,6 @@ std::ostream &operator<<(std::ostream &os, const Matrix<T> &m)
     return os;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

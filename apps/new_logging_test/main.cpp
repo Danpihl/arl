@@ -1,11 +1,11 @@
+#include <unistd.h>
 #include <cstdlib>
 #include <iostream>
-#include <string>
 #include <sstream>
-#include <unistd.h>
+#include <string>
 
-#include "arl/utilities/logging.h"
 #include "apps/new_logging_test/some_functions.h"
+#include "arl/utilities/logging.h"
 
 void threadFunction0()
 {
@@ -52,8 +52,7 @@ int main()
     arl::logging::showLineNumber(true);
     arl::logging::showThreadId(true);
 
-    std::cout << std::endl
-              << std::endl;
+    std::cout << std::endl << std::endl;
 
     std::cout << "Before" << std::endl;
 
@@ -75,8 +74,7 @@ int main()
           << "Some str and num: " << 3.2;
     std::cout << "After";
 
-    std::cout << std::endl
-              << std::endl;
+    std::cout << std::endl << std::endl;
 
     ASSERT(true) << "Assertion message";
     // EXIT() << "Exit message";
@@ -86,14 +84,13 @@ int main()
     TIC();
 
     usleep(523);
-    TOC_MS();
+    TOC_MS("Elapsed time: ");
 
     TIC();
 
     usleep(437);
-    TOC_US();
-    std::cout << std::endl
-              << std::endl;
+    TOC_US("Elapsed time: ");
+    std::cout << std::endl << std::endl;
 
     return 0;
 }

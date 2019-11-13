@@ -2,30 +2,27 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include "arl/utilities/logging.h"
 #include "arl/math/math_core.h"
 #include "arl/math/misc/math_macros.h"
+#include "arl/utilities/logging.h"
 
 #include <cmath>
 #include <utility>
 
 namespace arl
 {
-template <typename T>
-Vector<T>::Vector() : data_(nullptr), vector_length_(0), is_allocated_(false)
+template <typename T> Vector<T>::Vector() : data_(nullptr), vector_length_(0), is_allocated_(false)
 {
 }
 
-template <typename T>
-Vector<T>::Vector(const size_t vector_length) : is_allocated_(true)
+template <typename T> Vector<T>::Vector(const size_t vector_length) : is_allocated_(true)
 {
     vector_length_ = vector_length;
 
     DATA_ALLOCATION(data_, vector_length, T, "Vector");
 }
 
-template <typename T>
-Vector<T>::Vector(const Vector<T> &v) : is_allocated_(true)
+template <typename T> Vector<T>::Vector(const Vector<T>& v) : is_allocated_(true)
 {
     vector_length_ = v.size();
 
@@ -37,8 +34,7 @@ Vector<T>::Vector(const Vector<T> &v) : is_allocated_(true)
     }
 }
 
-template <typename T>
-Vector<T>::~Vector()
+template <typename T> Vector<T>::~Vector()
 {
     if (is_allocated_)
     {
@@ -47,8 +43,7 @@ Vector<T>::~Vector()
     }
 }
 
-template <typename T>
-Vector<T> &Vector<T>::operator=(const Vector<T> &v)
+template <typename T> Vector<T>& Vector<T>::operator=(const Vector<T>& v)
 {
     if (this != &v)
     {
@@ -71,8 +66,7 @@ Vector<T> &Vector<T>::operator=(const Vector<T> &v)
     return *this;
 }
 
-template <typename T>
-Vector<T>::Vector(const std::initializer_list<T> &il)
+template <typename T> Vector<T>::Vector(const std::initializer_list<T>& il)
 {
     ASSERT(il.size() > 0) << "Tried to initialize with empty vector!";
 
@@ -89,8 +83,7 @@ Vector<T>::Vector(const std::initializer_list<T> &il)
     }
 }
 
-template <typename T>
-Vector<T>::Vector(const std::vector<T> &v)
+template <typename T> Vector<T>::Vector(const std::vector<T>& v)
 {
     ASSERT(v.size() > 0) << "Tried to initialize with empty vector!";
 
@@ -117,30 +110,26 @@ Vector<T>::Vector(const std::vector<T> &v)
 
 // Vector functions
 
-template <typename T>
-T &Vector<T>::operator()(const size_t idx)
+template <typename T> T& Vector<T>::operator()(const size_t idx)
 {
     assert(idx < vector_length_ && is_allocated_);
     return data_[idx];
 }
 
-template <typename T>
-const T &Vector<T>::operator()(const size_t idx) const
+template <typename T> const T& Vector<T>::operator()(const size_t idx) const
 {
     assert(idx < vector_length_ && is_allocated_);
     return data_[idx];
 }
 
-template <typename T>
-T &Vector<T>::operator()(const EndIndex &end_idx)
+template <typename T> T& Vector<T>::operator()(const EndIndex& end_idx)
 {
     const size_t idx = static_cast<size_t>(static_cast<int>(vector_length_) - 1 + end_idx.offset);
     assert((idx < vector_length_) && is_allocated_);
     return data_[idx];
 }
 
-template <typename T>
-const T &Vector<T>::operator()(const EndIndex &end_idx) const
+template <typename T> const T& Vector<T>::operator()(const EndIndex& end_idx) const
 {
     const size_t idx = static_cast<size_t>(static_cast<int>(vector_length_) - 1 + end_idx.offset);
     assert((idx < vector_length_) && is_allocated_);
@@ -149,7 +138,7 @@ const T &Vector<T>::operator()(const EndIndex &end_idx) const
 
 template <typename T>
 template <typename Y>
-Vector<T> Vector<T>::operator()(const Vector<Y> &idx_vector) const
+Vector<T> Vector<T>::operator()(const Vector<Y>& idx_vector) const
 {
     static_assert(std::is_same<Y, bool>::value || std::is_same<Y, size_t>::value ||
                       std::is_same<Y, int>::value,
@@ -217,8 +206,7 @@ Vector<T> Vector<T>::operator()(const size_t idx_lower, const size_t idx_upper) 
     return vres;
 }
 
-template <typename T>
-Vector<T> Vector<T>::operator()(const IndexSpan &idx_span) const
+template <typename T> Vector<T> Vector<T>::operator()(const IndexSpan& idx_span) const
 {
     ASSERT(idx_span.from < vector_length_) << "Lower index exceeds vector size!";
     ASSERT(idx_span.from < vector_length_) << "Upper index exceeds vector size!";
@@ -233,20 +221,22 @@ Vector<T> Vector<T>::operator()(const IndexSpan &idx_span) const
     return vres;
 }
 
-template <typename T>
-size_t Vector<T>::size() const
+template <typename T> size_t Vector<T>::size() const
 {
     return vector_length_;
 }
 
-template <typename T>
-bool Vector<T>::isAllocated() const
+template <typename T> size_t Vector<T>::numElements() const
+{
+    return vector_length_;
+}
+
+template <typename T> bool Vector<T>::isAllocated() const
 {
     return is_allocated_;
 }
 
-template <typename T>
-void Vector<T>::fill(T val)
+template <typename T> void Vector<T>::fill(T val)
 {
     assert(is_allocated_ && "Tried to fill un allocated vector!");
     for (size_t k = 0; k < vector_length_; k++)
@@ -255,8 +245,7 @@ void Vector<T>::fill(T val)
     }
 }
 
-template <typename T>
-void Vector<T>::resize(const size_t vector_length)
+template <typename T> void Vector<T>::resize(const size_t vector_length)
 {
     if (is_allocated_)
     {
@@ -269,8 +258,7 @@ void Vector<T>::resize(const size_t vector_length)
     vector_length_ = vector_length;
 }
 
-template <typename T>
-void Vector<T>::resize(const size_t vector_length, const T value_all)
+template <typename T> void Vector<T>::resize(const size_t vector_length, const T value_all)
 {
     if (is_allocated_)
     {
@@ -285,8 +273,7 @@ void Vector<T>::resize(const size_t vector_length, const T value_all)
     fill(value_all);
 }
 
-template <typename T>
-size_t Vector<T>::countNumNonZeroElements() const
+template <typename T> size_t Vector<T>::countNumNonZeroElements() const
 {
     ASSERT(is_allocated_) << "Vector not allocated!";
     size_t cnt = 0;
@@ -300,20 +287,17 @@ size_t Vector<T>::countNumNonZeroElements() const
     return cnt;
 }
 
-template <typename T>
-size_t Vector<T>::endIndex() const
+template <typename T> size_t Vector<T>::endIndex() const
 {
     return vector_length_ - 1;
 }
 
-template <typename T>
-T *Vector<T>::getDataPointer() const
+template <typename T> T* Vector<T>::getDataPointer() const
 {
     return data_;
 }
 
-template <typename T>
-T Vector<T>::norm() const
+template <typename T> T Vector<T>::norm() const
 {
     T d = 0.0f;
     for (size_t k = 0; k < vector_length_; k++)
@@ -323,8 +307,7 @@ T Vector<T>::norm() const
     return sqrt(d);
 }
 
-template <typename T>
-T Vector<T>::squaredNorm() const
+template <typename T> T Vector<T>::squaredNorm() const
 {
     T d = 0.0f;
     for (size_t k = 0; k < vector_length_; k++)
@@ -334,15 +317,13 @@ T Vector<T>::squaredNorm() const
     return d;
 }
 
-template <typename T>
-Point<T> Vector<T>::mirrorPointInThis(const Point<T> &point_to_mirror) const
+template <typename T> Point<T> Vector<T>::mirrorPointInThis(const Point<T>& point_to_mirror) const
 {
     // Mirrors "point_to_mirror" in "this"
     return *this - this->vectorBetweenPoints(point_to_mirror);
 }
 
-template <typename T>
-T Vector<T>::angleBetweenVectors(const Vector<T> &v) const
+template <typename T> T Vector<T>::angleBetweenVectors(const Vector<T>& v) const
 {
     const T dot_product = (*this) * v;
     return std::acos(dot_product / ((this->norm()) * (v.norm())));
@@ -350,8 +331,7 @@ T Vector<T>::angleBetweenVectors(const Vector<T> &v) const
 
 // Non class methods
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const Vector<T> &v)
+template <typename T> std::ostream& operator<<(std::ostream& os, const Vector<T>& v)
 {
     std::string s = "[ ";
     for (size_t k = 0; k < v.size(); k++)
@@ -368,8 +348,7 @@ std::ostream &operator<<(std::ostream &os, const Vector<T> &v)
     return os;
 }
 
-template <typename T>
-T operator*(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> T operator*(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     T d = 0.0;
@@ -380,8 +359,7 @@ T operator*(const Vector<T> &v0, const Vector<T> &v1)
     return d;
 }
 
-template <typename T>
-Vector<T> operator*(const T f, const Vector<T> &v)
+template <typename T> Vector<T> operator*(const T f, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -391,8 +369,7 @@ Vector<T> operator*(const T f, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator*(const Vector<T> &v, const T f)
+template <typename T> Vector<T> operator*(const Vector<T>& v, const T f)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -402,8 +379,7 @@ Vector<T> operator*(const Vector<T> &v, const T f)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator/(const Vector<T> &v, const T f)
+template <typename T> Vector<T> operator/(const Vector<T>& v, const T f)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -413,8 +389,7 @@ Vector<T> operator/(const Vector<T> &v, const T f)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator/(const T f, const Vector<T> &v)
+template <typename T> Vector<T> operator/(const T f, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -424,8 +399,7 @@ Vector<T> operator/(const T f, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator+(const Vector<T> &v, const T f)
+template <typename T> Vector<T> operator+(const Vector<T>& v, const T f)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -435,8 +409,7 @@ Vector<T> operator+(const Vector<T> &v, const T f)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator+(const T f, const Vector<T> &v)
+template <typename T> Vector<T> operator+(const T f, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -446,8 +419,7 @@ Vector<T> operator+(const T f, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator-(const Vector<T> &v, const T f)
+template <typename T> Vector<T> operator-(const Vector<T>& v, const T f)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -457,8 +429,7 @@ Vector<T> operator-(const Vector<T> &v, const T f)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator-(const T f, const Vector<T> &v)
+template <typename T> Vector<T> operator-(const T f, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -468,8 +439,7 @@ Vector<T> operator-(const T f, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator-(const Vector<T> &v)
+template <typename T> Vector<T> operator-(const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -479,8 +449,7 @@ Vector<T> operator-(const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator+(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> operator+(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<T> v_res(v0.size());
@@ -491,8 +460,7 @@ Vector<T> operator+(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator-(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> operator-(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<T> v_res(v0.size());
@@ -503,8 +471,7 @@ Vector<T> operator-(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator==(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator==(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -515,8 +482,7 @@ Vector<bool> operator==(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator==(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator==(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -526,8 +492,7 @@ Vector<bool> operator==(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator==(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator==(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -537,8 +502,7 @@ Vector<bool> operator==(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator!=(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator!=(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -549,8 +513,7 @@ Vector<bool> operator!=(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator!=(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator!=(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -560,8 +523,7 @@ Vector<bool> operator!=(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator!=(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator!=(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -571,8 +533,7 @@ Vector<bool> operator!=(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator<(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -583,8 +544,7 @@ Vector<bool> operator<(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator<(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -594,8 +554,7 @@ Vector<bool> operator<(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator<(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -605,8 +564,7 @@ Vector<bool> operator<(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator>(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -617,8 +575,7 @@ Vector<bool> operator>(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator>(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -628,8 +585,7 @@ Vector<bool> operator>(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator>(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -639,8 +595,7 @@ Vector<bool> operator>(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<=(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator<=(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -651,8 +606,7 @@ Vector<bool> operator<=(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<=(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator<=(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -662,8 +616,7 @@ Vector<bool> operator<=(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator<=(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator<=(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -673,8 +626,7 @@ Vector<bool> operator<=(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>=(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator>=(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -685,8 +637,7 @@ Vector<bool> operator>=(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>=(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator>=(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -696,8 +647,7 @@ Vector<bool> operator>=(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator>=(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator>=(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -709,8 +659,7 @@ Vector<bool> operator>=(const T s, const Vector<T> &v)
 
 //
 
-template <typename T>
-Vector<T> operator&(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> operator&(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<T> v_res(v0.size());
@@ -721,8 +670,7 @@ Vector<T> operator&(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator&(const Vector<T> &v, const T s)
+template <typename T> Vector<T> operator&(const Vector<T>& v, const T s)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -732,8 +680,7 @@ Vector<T> operator&(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator&(const T s, const Vector<T> &v)
+template <typename T> Vector<T> operator&(const T s, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -743,8 +690,7 @@ Vector<T> operator&(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator|(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> operator|(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<T> v_res(v0.size());
@@ -755,8 +701,7 @@ Vector<T> operator|(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator|(const Vector<T> &v, const T s)
+template <typename T> Vector<T> operator|(const Vector<T>& v, const T s)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -766,8 +711,7 @@ Vector<T> operator|(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator|(const T s, const Vector<T> &v)
+template <typename T> Vector<T> operator|(const T s, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -777,8 +721,7 @@ Vector<T> operator|(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator^(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> operator^(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<T> v_res(v0.size());
@@ -789,8 +732,7 @@ Vector<T> operator^(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator^(const Vector<T> &v, const T s)
+template <typename T> Vector<T> operator^(const Vector<T>& v, const T s)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -800,8 +742,7 @@ Vector<T> operator^(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<T> operator^(const T s, const Vector<T> &v)
+template <typename T> Vector<T> operator^(const T s, const Vector<T>& v)
 {
     Vector<T> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -811,8 +752,7 @@ Vector<T> operator^(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator&&(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator&&(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -823,8 +763,7 @@ Vector<bool> operator&&(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator&&(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator&&(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -834,8 +773,7 @@ Vector<bool> operator&&(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator&&(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator&&(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -845,8 +783,7 @@ Vector<bool> operator&&(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator||(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<bool> operator||(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
     Vector<bool> v_res(v0.size());
@@ -857,8 +794,7 @@ Vector<bool> operator||(const Vector<T> &v0, const Vector<T> &v1)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator||(const Vector<T> &v, const T s)
+template <typename T> Vector<bool> operator||(const Vector<T>& v, const T s)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -868,8 +804,7 @@ Vector<bool> operator||(const Vector<T> &v, const T s)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator||(const T s, const Vector<T> &v)
+template <typename T> Vector<bool> operator||(const T s, const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -879,8 +814,7 @@ Vector<bool> operator||(const T s, const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-Vector<bool> operator!(const Vector<T> &v)
+template <typename T> Vector<bool> operator!(const Vector<T>& v)
 {
     Vector<bool> v_res(v.size());
     for (size_t k = 0; k < v.size(); k++)
@@ -890,8 +824,7 @@ Vector<bool> operator!(const Vector<T> &v)
     return v_res;
 }
 
-template <typename T>
-void fillVectorWithArray(arl::Vector<T> &v, const T *a)
+template <typename T> void fillVectorWithArray(arl::Vector<T>& v, const T* a)
 {
     assert(v.isAllocated() && "You must allocate your vector before filling it!");
     for (size_t k = 0; k < v.size(); k++)
@@ -900,8 +833,7 @@ void fillVectorWithArray(arl::Vector<T> &v, const T *a)
     }
 }
 
-template <typename T>
-Vector<T> vectorCat(const Vector<T> &v0, const Vector<T> &v1)
+template <typename T> Vector<T> vectorCat(const Vector<T>& v0, const Vector<T>& v1)
 {
     ASSERT(v0.isAllocated() && v1.isAllocated()) << "Input vectors not allocated!";
     Vector<T> vres(v0.size() + v1.size());
@@ -919,13 +851,12 @@ Vector<T> vectorCat(const Vector<T> &v0, const Vector<T> &v1)
     return vres;
 }
 
-template <typename T>
-void Vector<T>::removeElementAtIndex(const size_t idx)
+template <typename T> void Vector<T>::removeElementAtIndex(const size_t idx)
 {
     ASSERT(is_allocated_) << "Vector not allocated!";
     ASSERT(idx < vector_length_) << "Tried to remove element outside bounds!";
 
-    T *temp_data;
+    T* temp_data;
 
     DATA_ALLOCATION(temp_data, vector_length_ - 1, T, "Vector");
 
@@ -954,7 +885,7 @@ void Vector<T>::removeElementsAtIndices(const size_t from_idx, const size_t to_i
         LOG_WARNING() << "From and to indices are equal!";
     }
 
-    T *temp_data;
+    T* temp_data;
     size_t num_elements_to_remove = to_idx - from_idx + 1;
     DATA_ALLOCATION(temp_data, vector_length_ - num_elements_to_remove, T, "Vector");
 
@@ -974,8 +905,7 @@ void Vector<T>::removeElementsAtIndices(const size_t from_idx, const size_t to_i
     vector_length_ = vector_length_ - num_elements_to_remove;
 }
 
-template <typename T>
-Vector<T> Vector<T>::normalized() const
+template <typename T> Vector<T> Vector<T>::normalized() const
 {
     Vector<T> v_res(vector_length_);
     T d = 0.0f;
@@ -992,8 +922,7 @@ Vector<T> Vector<T>::normalized() const
     return v_res;
 }
 
-template <typename T>
-Vector<T> Vector<T>::elementWiseMultiply(const Vector<T> &factor_vector) const
+template <typename T> Vector<T> Vector<T>::elementWiseMultiply(const Vector<T>& factor_vector) const
 {
     assert(vector_length_ == factor_vector.size());
     Vector<T> v_res(vector_length_);
@@ -1005,7 +934,7 @@ Vector<T> Vector<T>::elementWiseMultiply(const Vector<T> &factor_vector) const
 }
 
 template <typename T>
-Vector<T> Vector<T>::elementWiseDivide(const Vector<T> &denominator_vector) const
+Vector<T> Vector<T>::elementWiseDivide(const Vector<T>& denominator_vector) const
 {
     assert(vector_length_ == denominator_vector.size());
     Vector<T> v_res(vector_length_);
@@ -1016,20 +945,19 @@ Vector<T> Vector<T>::elementWiseDivide(const Vector<T> &denominator_vector) cons
     return v_res;
 }
 
-template <typename T>
-Vector<T> Vector<T>::vectorBetweenPoints(const Point<T> &end_point) const
+template <typename T> Vector<T> Vector<T>::vectorBetweenPoints(const Point<T>& end_point) const
 {
     // "This" is start point
     return end_point - *this;
 }
 
 template <typename T>
-Vector<T> Vector<T>::normalizedVectorBetweenPoints(const Point<T> &end_point) const
+Vector<T> Vector<T>::normalizedVectorBetweenPoints(const Point<T>& end_point) const
 {
     // "This" is start point
     return (end_point - *this).normalized();
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

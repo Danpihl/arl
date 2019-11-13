@@ -12,8 +12,47 @@ namespace arl
 // - Concatenate matrices horizontally
 // - Math functions for matrices
 
+template <typename T> Vector<T> linspace0(const T x0, const T x1, const size_t num_values);
+
 template <typename T>
-Matrix<T> concatenateHorizontally(const std::initializer_list<Matrix<T>> &init_list)
+std::pair<Matrix<T>, Matrix<T>> meshGrid(
+    const T x0, const T x1, const T y0, const T y1, const size_t xn, const size_t yn)
+{
+    const Vector<T> x_vec = linspace0(x0, x1, xn);
+    const Vector<T> y_vec = linspace0(y0, y1, yn);
+
+    Matrix<T> x_mat(yn, xn), y_mat(yn, xn);
+    for (size_t r = 0; r < yn; r++)
+    {
+        for (size_t c = 0; c < xn; c++)
+        {
+            x_mat(r, c) = x_vec(c);
+            y_mat(r, c) = y_vec(r);
+        }
+    }
+
+    return std::pair<Matrix<T>, Matrix<T>>(x_mat, y_mat);
+}
+
+template <typename T>
+std::pair<Matrix<T>, Matrix<T>> meshgrid(const Vector<T>& x_vec, const Vector<T>& y_vec)
+{
+    Matrix<T> x_mat(y_vec.size(), x_vec.size()), y_mat(y_vec.size(), x_vec.size());
+
+    for (size_t r = 0; r < y_vec.size(); r++)
+    {
+        for (size_t c = 0; c < x_vec.size(); c++)
+        {
+            x_mat(r, c) = x_vec(c);
+            y_mat(r, c) = y_vec(r);
+        }
+    }
+
+    return std::pair<Matrix<T>, Matrix<T>>(x_mat, y_mat);
+}
+
+template <typename T>
+Matrix<T> concatenateHorizontally(const std::initializer_list<Matrix<T>>& init_list)
 {
     size_t num_rows;
     size_t idx = 0;
@@ -92,8 +131,7 @@ template <typename T> T min(const Vector<T>& vin)
     return min_val;
 }*/
 
-template <typename T>
-Matrix<T> log10(const Matrix<T> &min)
+template <typename T> Matrix<T> log10(const Matrix<T>& min)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -109,8 +147,7 @@ Matrix<T> log10(const Matrix<T> &min)
     return m;
 }
 
-template <typename T>
-Matrix<T> pow(const Matrix<T> &min, const T e)
+template <typename T> Matrix<T> pow(const Matrix<T>& min, const T e)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -126,8 +163,7 @@ Matrix<T> pow(const Matrix<T> &min, const T e)
     return m;
 }
 
-template <typename T>
-Matrix<T> log(const Matrix<T> &min)
+template <typename T> Matrix<T> log(const Matrix<T>& min)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -143,8 +179,7 @@ Matrix<T> log(const Matrix<T> &min)
     return m;
 }
 
-template <typename T>
-Matrix<T> exp(const Matrix<T> &min)
+template <typename T> Matrix<T> exp(const Matrix<T>& min)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -160,8 +195,7 @@ Matrix<T> exp(const Matrix<T> &min)
     return m;
 }
 
-template <typename T>
-Matrix<T> cos(const Matrix<T> &min)
+template <typename T> Matrix<T> cos(const Matrix<T>& min)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -177,8 +211,7 @@ Matrix<T> cos(const Matrix<T> &min)
     return m;
 }
 
-template <typename T>
-Matrix<T> sin(const Matrix<T> &min)
+template <typename T> Matrix<T> sin(const Matrix<T>& min)
 {
     assert((min.rows() > 0) && (min.cols() > 0) && (min.isAllocated()));
     Matrix<T> m(min.rows(), min.cols());
@@ -194,8 +227,7 @@ Matrix<T> sin(const Matrix<T> &min)
     return m;
 }
 
-template <typename T>
-Matrix<T> linspace0ColMat(const T x0, const T x1, const size_t num_values)
+template <typename T> Matrix<T> linspace0ColMat(const T x0, const T x1, const size_t num_values)
 {
     assert(num_values > 0);
     Matrix<T> m(num_values, 1);
@@ -211,8 +243,7 @@ Matrix<T> linspace0ColMat(const T x0, const T x1, const size_t num_values)
     return m;
 }
 
-template <typename T>
-Matrix<T> linspace1ColMat(const T x0, const T dx, const size_t num_values)
+template <typename T> Matrix<T> linspace1ColMat(const T x0, const T dx, const size_t num_values)
 {
     assert(num_values > 0);
     Matrix<T> m(num_values, 1);
@@ -227,8 +258,7 @@ Matrix<T> linspace1ColMat(const T x0, const T dx, const size_t num_values)
     return m;
 }
 
-template <typename T>
-Matrix<T> linspace2ColMat(const T x0, const T x1, const T dx)
+template <typename T> Matrix<T> linspace2ColMat(const T x0, const T x1, const T dx)
 {
     assert(dx > 0);
     assert(x1 > x0);
@@ -238,6 +268,6 @@ Matrix<T> linspace2ColMat(const T x0, const T x1, const T dx)
     return linspace0ColMat(x0, x1, num_values);
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

@@ -6,18 +6,17 @@
 
 #include <iostream>
 
-#include "arl/utilities/logging.h"
 #include "arl/math/math.h"
+#include "arl/utilities/logging.h"
 
 namespace arl
 {
 /* **** Data structures declarations **** */
 
-template <typename T>
-class ImageC1
+template <typename T> class ImageC1
 {
 private:
-    T *data;
+    T* data;
     size_t width;
     size_t height;
     size_t num_rows;
@@ -29,8 +28,8 @@ public:
     ImageC1(const size_t num_rows_, const size_t num_cols_);
     ~ImageC1();
 
-    T &operator()(const size_t r, const size_t c);
-    const T &operator()(const size_t r, const size_t c) const;
+    T& operator()(const size_t r, const size_t c);
+    const T& operator()(const size_t r, const size_t c) const;
 
     bool isAllocated() const;
     T min() const;
@@ -48,17 +47,16 @@ public:
     arl::Vector<size_t> getHistogram() const;
     arl::Vector<T> getImageCol(const size_t col) const;
     arl::Vector<T> getImageRow(const size_t row) const;
-    void getSubImage(ImageC1<T> &sub_image,
+    void getSubImage(ImageC1<T>& sub_image,
                      const size_t from_row,
                      const size_t from_col,
                      const size_t width,
                      const size_t height) const;
-    size_t size() const;
-    T *getDataPointer() const;
+    size_t numElements() const;
+    T* getDataPointer() const;
 };
 
-template <typename T>
-ImageC1<T>::~ImageC1()
+template <typename T> ImageC1<T>::~ImageC1()
 {
     if (is_allocated)
     {
@@ -69,11 +67,9 @@ ImageC1<T>::~ImageC1()
     }
 }
 
-template <typename T>
-ImageC1<T>::ImageC1() : num_rows(0), num_cols(0), is_allocated(false) {}
+template <typename T> ImageC1<T>::ImageC1() : num_rows(0), num_cols(0), is_allocated(false) {}
 
-template <typename T>
-ImageC1<T>::ImageC1(const size_t num_rows_, const size_t num_cols_)
+template <typename T> ImageC1<T>::ImageC1(const size_t num_rows_, const size_t num_cols_)
 {
     data = new T[num_rows_ * num_cols_];
     num_rows = num_rows_;
@@ -81,8 +77,7 @@ ImageC1<T>::ImageC1(const size_t num_rows_, const size_t num_cols_)
     is_allocated = true;
 }
 
-template <typename T>
-void ImageC1<T>::reallocate(const size_t num_rows_, const size_t num_cols_)
+template <typename T> void ImageC1<T>::reallocate(const size_t num_rows_, const size_t num_cols_)
 {
     if (is_allocated)
     {
@@ -108,32 +103,27 @@ void ImageC1<T>::mapBetween(T image_min, T image_max, T min_value, T max_value)
     }
 }
 
-template <typename T>
-size_t ImageC1<T>::rows() const
+template <typename T> size_t ImageC1<T>::rows() const
 {
     return num_rows;
 }
 
-template <typename T>
-size_t ImageC1<T>::cols() const
+template <typename T> size_t ImageC1<T>::cols() const
 {
     return num_cols;
 }
 
-template <typename T>
-size_t ImageC1<T>::size() const
+template <typename T> size_t ImageC1<T>::numElements() const
 {
     return num_rows * num_cols;
 }
 
-template <typename T>
-T *ImageC1<T>::getDataPointer() const
+template <typename T> T* ImageC1<T>::getDataPointer() const
 {
     return data;
 }
 
-template <typename T>
-arl::Vector<T> ImageC1<T>::getImageCol(const size_t col) const
+template <typename T> arl::Vector<T> ImageC1<T>::getImageCol(const size_t col) const
 {
     arl::Vector<T> image_col(num_rows);
     for (size_t r = 0; r < num_rows; r++)
@@ -144,8 +134,7 @@ arl::Vector<T> ImageC1<T>::getImageCol(const size_t col) const
     return image_col;
 }
 
-template <typename T>
-arl::Vector<T> ImageC1<T>::getImageRow(const size_t row) const
+template <typename T> arl::Vector<T> ImageC1<T>::getImageRow(const size_t row) const
 {
     arl::Vector<T> image_row(num_cols);
     for (size_t c = 0; c < num_cols; c++)
@@ -156,8 +145,7 @@ arl::Vector<T> ImageC1<T>::getImageRow(const size_t row) const
     return image_row;
 }
 
-template <typename T>
-arl::Vector<size_t> ImageC1<T>::getHistogram() const
+template <typename T> arl::Vector<size_t> ImageC1<T>::getHistogram() const
 {
     arl::Vector<size_t> histogram(255);
 
@@ -177,7 +165,7 @@ arl::Vector<size_t> ImageC1<T>::getHistogram() const
 }
 
 template <typename T>
-void ImageC1<T>::getSubImage(ImageC1<T> &sub_image,
+void ImageC1<T>::getSubImage(ImageC1<T>& sub_image,
                              const size_t from_row,
                              const size_t from_col,
                              const size_t width,
@@ -196,8 +184,7 @@ void ImageC1<T>::getSubImage(ImageC1<T> &sub_image,
     }
 }
 
-template <typename T>
-void ImageC1<T>::multiply(T factor)
+template <typename T> void ImageC1<T>::multiply(T factor)
 {
     for (size_t idx = 0; idx < num_rows * num_cols; idx++)
     {
@@ -205,8 +192,7 @@ void ImageC1<T>::multiply(T factor)
     }
 }
 
-template <typename T>
-void ImageC1<T>::fill(T fill_val)
+template <typename T> void ImageC1<T>::fill(T fill_val)
 {
     for (size_t idx = 0; idx < num_rows * num_cols; idx++)
     {
@@ -214,8 +200,7 @@ void ImageC1<T>::fill(T fill_val)
     }
 }
 
-template <typename T>
-void ImageC1<T>::divide(T divisor)
+template <typename T> void ImageC1<T>::divide(T divisor)
 {
     const T division_factor = 1.0 / divisor;
     for (size_t idx = 0; idx < num_rows * num_cols; idx++)
@@ -224,8 +209,7 @@ void ImageC1<T>::divide(T divisor)
     }
 }
 
-template <typename T>
-void ImageC1<T>::add(T term)
+template <typename T> void ImageC1<T>::add(T term)
 {
     for (size_t idx = 0; idx < num_rows * num_cols; idx++)
     {
@@ -233,8 +217,7 @@ void ImageC1<T>::add(T term)
     }
 }
 
-template <typename T>
-T &ImageC1<T>::operator()(const size_t r, const size_t c)
+template <typename T> T& ImageC1<T>::operator()(const size_t r, const size_t c)
 {
     assert(r < num_rows && "Row index is larger than num_rows-1!");
     assert(c < num_cols && "Column index is larger than num_cols-1!");
@@ -242,8 +225,7 @@ T &ImageC1<T>::operator()(const size_t r, const size_t c)
     return data[r * num_cols + c];
 }
 
-template <typename T>
-const T &ImageC1<T>::operator()(const size_t r, const size_t c) const
+template <typename T> const T& ImageC1<T>::operator()(const size_t r, const size_t c) const
 {
     assert(r < num_rows && "Row index is larger than num_rows-1!");
     assert(c < num_cols && "Column index is larger than num_cols-1!");
@@ -251,14 +233,12 @@ const T &ImageC1<T>::operator()(const size_t r, const size_t c) const
     return data[r * num_cols + c];
 }
 
-template <typename T>
-bool ImageC1<T>::isAllocated() const
+template <typename T> bool ImageC1<T>::isAllocated() const
 {
     return is_allocated;
 }
 
-template <typename T>
-T ImageC1<T>::min() const
+template <typename T> T ImageC1<T>::min() const
 {
     assert(is_allocated && "Image not allocated!");
     T min_value = data[0];
@@ -272,8 +252,7 @@ T ImageC1<T>::min() const
     return min_value;
 }
 
-template <typename T>
-T ImageC1<T>::max() const
+template <typename T> T ImageC1<T>::max() const
 {
     // TODO: Crashes without "-1" in less than condition
     assert(is_allocated && "Image not allocated!");
@@ -287,7 +266,7 @@ T ImageC1<T>::max() const
 }
 
 template <typename T0, typename T1>
-void convertBetweenTypes(const ImageC1<T0> &src, ImageC1<T1> &dst)
+void convertBetweenTypes(const ImageC1<T0>& src, ImageC1<T1>& dst)
 {
     if (!dst.isAllocated() || src.rows() != dst.rows() || src.cols() != dst.cols())
     {
@@ -305,6 +284,6 @@ void convertBetweenTypes(const ImageC1<T0> &src, ImageC1<T1> &dst)
 
 /* **** Function declarations **** */
 
-} // namespace arl
+}  // namespace arl
 
 #endif
