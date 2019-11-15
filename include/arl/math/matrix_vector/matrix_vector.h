@@ -45,30 +45,6 @@ template <typename T> void Matrix<T>::addVectorToMatrixRows(const Vector<T>& v)
     }
 }
 
-template <typename T> Vector<T> Matrix<T>::getColumnVector(size_t column_idx) const
-{
-    ASSERT(column_idx < num_cols_) << "Tried to access column outside of matrix bounds!";
-    Vector<T> column_vector(num_rows_);
-
-    for (size_t k = 0; k < num_rows_; k++)
-    {
-        column_vector(k) = data_[num_cols_ * k + column_idx];
-    }
-    return column_vector;
-}
-
-template <typename T> Vector<T> Matrix<T>::getRowVector(size_t row_idx) const
-{
-    ASSERT(row_idx < num_rows_) << "Tried to access row outside of matrix bounds!";
-    Vector<T> row_vector(num_cols_);
-
-    for (size_t k = 0; k < num_cols_; k++)
-    {
-        row_vector(k) = data_[num_cols_ * row_idx + k];
-    }
-    return row_vector;
-}
-
 template <typename T> void Matrix<T>::hCat(const Vector<T>& v)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
@@ -144,7 +120,7 @@ template <typename T> Matrix<T> hCat(const Matrix<T>& m, const Vector<T>& v)
 
     for (size_t r = 0; r < m.rows(); r++)
     {
-        mres(r, mres.endColIdx()) = v(r);
+        mres(r, mres.lastColIdx()) = v(r);
     }
 
     return mres;
@@ -169,7 +145,7 @@ template <typename T> Matrix<T> vCat(const Matrix<T>& m, const Vector<T>& v)
 
     for (size_t c = 0; c < m.cols(); c++)
     {
-        mres(mres.endRowIdx(), c) = v(c);
+        mres(mres.lastRowIdx(), c) = v(c);
     }
 
     return mres;
@@ -257,40 +233,6 @@ template <typename T> Matrix<T> vCat(const Vec2D<T>& v, const Matrix<T>& m)
 {
     Vector<T> vg = v.toVector();
     return vCat(vg, m);
-}
-
-template <typename T>
-Vector<T> Matrix<T>::operator()(const size_t row, const IndexSpan& col_idx_span) const
-{
-    const size_t new_vec_length = col_idx_span.to - col_idx_span.from + 1;
-
-    assert((row < num_rows_) && (col_idx_span.to < num_cols_));
-
-    Vector<T> vec(new_vec_length);
-
-    for (size_t c = 0; c < new_vec_length; c++)
-    {
-        vec(c) = data_[row * num_cols_ + c + col_idx_span.from];
-    }
-
-    return vec;
-}
-
-template <typename T>
-Vector<T> Matrix<T>::operator()(const IndexSpan& row_idx_span, const size_t col) const
-{
-    const size_t new_vec_length = row_idx_span.to - row_idx_span.from + 1;
-
-    assert((row_idx_span.to < num_rows_) && (col < num_cols_));
-
-    Vector<T> vec(new_vec_length);
-
-    for (size_t r = 0; r < new_vec_length; r++)
-    {
-        vec(r) = data_[(r + row_idx_span.from) * num_cols_ + col];
-    }
-
-    return vec;
 }
 
 template <typename T> Matrix<T> Vector<T>::outerProduct(const Vector<T>& v) const

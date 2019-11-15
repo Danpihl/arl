@@ -350,12 +350,12 @@ template <typename T> Matrix<T> hCat(const Matrix<T>& m0, const Matrix<T>& m1)
     return mres;
 }
 
-template <typename T> size_t Matrix<T>::endRowIdx() const
+template <typename T> size_t Matrix<T>::lastRowIdx() const
 {
     return num_rows_ - 1;
 }
 
-template <typename T> size_t Matrix<T>::endColIdx() const
+template <typename T> size_t Matrix<T>::lastColIdx() const
 {
     return num_cols_ - 1;
 }
@@ -614,6 +614,40 @@ Matrix<T> Matrix<T>::operator()(const IndexSpan& row_idx_span, const IndexSpan& 
             mat(r, c) = data_[(row_idx_span.from + r) * num_cols_ + c + col_idx_span.from];
         }
     }
+    return mat;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator()(const size_t row, const IndexSpan& col_idx_span) const
+{
+    const size_t new_vec_length = col_idx_span.to - col_idx_span.from + 1;
+
+    assert((row < num_rows_) && (col_idx_span.to < num_cols_));
+
+    Matrix<T> mat(1, new_vec_length);
+
+    for (size_t c = 0; c < new_vec_length; c++)
+    {
+        mat(0, c) = data_[row * num_cols_ + c + col_idx_span.from];
+    }
+
+    return mat;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator()(const IndexSpan& row_idx_span, const size_t col) const
+{
+    const size_t new_vec_length = row_idx_span.to - row_idx_span.from + 1;
+
+    assert((row_idx_span.to < num_rows_) && (col < num_cols_));
+
+    Matrix<T> mat(new_vec_length, 1);
+
+    for (size_t r = 0; r < new_vec_length; r++)
+    {
+        mat(r, 0) = data_[(r + row_idx_span.from) * num_cols_ + col];
+    }
+
     return mat;
 }
 
@@ -1112,6 +1146,54 @@ template <typename T> std::ostream& operator<<(std::ostream& os, const Matrix<T>
     os << s;
 
     return os;
+}
+
+template <typename T> Vector<T> Matrix<T>::getColumnAsVector(size_t column_idx) const
+{
+    ASSERT(column_idx < num_cols_) << "Tried to access column outside of matrix bounds!";
+    Vector<T> column_vec(num_rows_);
+
+    for (size_t k = 0; k < num_rows_; k++)
+    {
+        column_vec(k) = data_[num_cols_ * k + column_idx];
+    }
+    return column_vec;
+}
+
+template <typename T> Vector<T> Matrix<T>::getRowAsVector(size_t row_idx) const
+{
+    ASSERT(row_idx < num_rows_) << "Tried to access row outside of matrix bounds!";
+    Vector<T> row_vec(num_cols_);
+
+    for (size_t k = 0; k < num_cols_; k++)
+    {
+        row_vec(k) = data_[num_cols_ * row_idx + k];
+    }
+    return row_vec;
+}
+
+template <typename T> Matrix<T> Matrix<T>::getColumn(size_t column_idx) const
+{
+    ASSERT(column_idx < num_cols_) << "Tried to access column outside of matrix bounds!";
+    Matrix<T> column_mat(num_rows_, 1);
+
+    for (size_t k = 0; k < num_rows_; k++)
+    {
+        column_mat(k, 0) = data_[num_cols_ * k + column_idx];
+    }
+    return column_mat;
+}
+
+template <typename T> Matrix<T> Matrix<T>::getRow(size_t row_idx) const
+{
+    ASSERT(row_idx < num_rows_) << "Tried to access row outside of matrix bounds!";
+    Matrix<T> row_mat(1, num_cols_);
+
+    for (size_t k = 0; k < num_cols_; k++)
+    {
+        row_mat(0, k) = data_[num_cols_ * row_idx + k];
+    }
+    return row_mat;
 }
 
 }  // namespace arl

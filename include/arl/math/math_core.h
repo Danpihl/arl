@@ -141,9 +141,11 @@ public:
     ~Matrix();
     T& operator()(const size_t r, const size_t c);
     const T& operator()(const size_t r, const size_t c) const;
-    Vector<T> operator()(const size_t row, const IndexSpan& col_idx_span) const;
-    Vector<T> operator()(const IndexSpan& row_idx_span, const size_t col) const;
+
+    Matrix<T> operator()(const size_t row, const IndexSpan& col_idx_span) const;
+    Matrix<T> operator()(const IndexSpan& row_idx_span, const size_t col) const;
     Matrix<T> operator()(const IndexSpan& row_idx_span, const IndexSpan& col_idx_span) const;
+
     T& operator()(const EndIndex& row_end_idx, const size_t c);
     const T& operator()(const EndIndex& row_end_idx, const size_t c) const;
     T& operator()(const size_t r, const EndIndex& col_end_idx);
@@ -171,10 +173,12 @@ public:
     void addVectorToMatrixCols(const Vector<T>& v);
     void addVectorToMatrixRows(const Vector<T>& v);
 
-    Vector<T> getColumnVector(size_t column_idx) const;
-    Vector<T> getRowVector(size_t row_idx) const;
-    size_t endRowIdx() const;
-    size_t endColIdx() const;
+    Vector<T> getColumnAsVector(size_t column_idx) const;
+    Vector<T> getRowAsVector(size_t row_idx) const;
+    Matrix<T> getColumn(size_t column_idx) const;
+    Matrix<T> getRow(size_t row_idx) const;
+    size_t lastRowIdx() const;
+    size_t lastColIdx() const;
     Matrix<T> inverse() const;
     void invert();
     Vector<T> solve(const Vector<T>& b) const;
