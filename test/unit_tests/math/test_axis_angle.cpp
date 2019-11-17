@@ -5,7 +5,7 @@
 
 #include <gtest/gtest.h>
 
-#include "arl/math/matrix_vector/matrix_vector_headers.h"
+#include "arl/math/lin_alg.h"
 
 #include "arl/math/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
@@ -137,5 +137,5 @@ TEST_F(AxisAngleTest, QuaternionToAxisAngle)
     }
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

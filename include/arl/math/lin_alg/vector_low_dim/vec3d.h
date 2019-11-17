@@ -2,8 +2,9 @@
 #ifndef VEC3D_H_
 #define VEC3D_H_
 
-#include "arl/utilities/logging.h"
 #include "arl/math/math_core.h"
+
+#include "arl/utilities/logging.h"
 
 #include <cmath>
 
@@ -14,27 +15,23 @@
 
 namespace arl
 {
-template <typename T>
-Vec3D<T>::Vec3D(const T x_, const T y_, const T z_)
+template <typename T> Vec3D<T>::Vec3D(const T x_, const T y_, const T z_)
 {
     x = x_;
     y = y_;
     z = z_;
 }
 
-template <typename T>
-Vec3D<T>::Vec3D() {}
+template <typename T> Vec3D<T>::Vec3D() {}
 
-template <typename T>
-Vec3D<T>::Vec3D(const T v_array[3])
+template <typename T> Vec3D<T>::Vec3D(const T v_array[3])
 {
     x = v_array[0];
     y = v_array[1];
     z = v_array[2];
 }
 
-template <typename T>
-CylindricalVec<T> Vec3D<T>::toCylindricalVec() const
+template <typename T> CylindricalVec<T> Vec3D<T>::toCylindricalVec() const
 {
     T phi;
     if (x == 0.0 && y == 0.0)
@@ -49,8 +46,7 @@ CylindricalVec<T> Vec3D<T>::toCylindricalVec() const
     return CylindricalVec<T>(std::sqrt(x * x + y * y), z, phi);
 }
 
-template <typename T>
-SphericalVec<T> Vec3D<T>::toSphericalVec() const
+template <typename T> SphericalVec<T> Vec3D<T>::toSphericalVec() const
 {
     SphericalVec<T> sv;
     sv.r = std::sqrt(x * x + y * y + z * z);
@@ -61,52 +57,45 @@ SphericalVec<T> Vec3D<T>::toSphericalVec() const
 
 ///////////////////////////
 
-template <typename T>
-Vec3D<T> Vec3D<T>::normalized() const
+template <typename T> Vec3D<T> Vec3D<T>::normalized() const
 {
     return Vec3D<T>(x, y, z) / std::sqrt(x * x + y * y + z * z);
 }
 
-template <typename T>
-Vec3D<T> Vec3D<T>::vectorBetweenPoints(const Point3D<T> &end_point) const
+template <typename T> Vec3D<T> Vec3D<T>::vectorBetweenPoints(const Point3D<T>& end_point) const
 {
     // "This" is start point
     return end_point - *this;
 }
 
 template <typename T>
-Vec3D<T> Vec3D<T>::normalizedVectorBetweenPoints(const Point3D<T> &end_point) const
+Vec3D<T> Vec3D<T>::normalizedVectorBetweenPoints(const Point3D<T>& end_point) const
 {
     // "This" is start point
     return (end_point - *this).normalized();
 }
 
-template <typename T>
-T Vec3D<T>::squaredNorm() const
+template <typename T> T Vec3D<T>::squaredNorm() const
 {
     return x * x + y * y + z * z;
 }
 
-template <typename T>
-T Vec3D<T>::norm() const
+template <typename T> T Vec3D<T>::norm() const
 {
     return std::sqrt(x * x + y * y + z * z);
 }
 
-template <typename T>
-Vec3D<T> Vec3D<T>::elementWiseMultiply(const Vec3D<T> &factor_vector) const
+template <typename T> Vec3D<T> Vec3D<T>::elementWiseMultiply(const Vec3D<T>& factor_vector) const
 {
     return Vec3D<T>(x * factor_vector.x, y * factor_vector.y, z * factor_vector.z);
 }
 
-template <typename T>
-Vec3D<T> Vec3D<T>::elementWiseDivide(const Vec3D<T> &denominator_vector) const
+template <typename T> Vec3D<T> Vec3D<T>::elementWiseDivide(const Vec3D<T>& denominator_vector) const
 {
     return Vec3D<T>(x / denominator_vector.x, y / denominator_vector.y, z / denominator_vector.z);
 }
 
-template <typename T>
-Vec3D<T> Vec3D<T>::crossProduct(const Vec3D<T> &right_vector) const
+template <typename T> Vec3D<T> Vec3D<T>::crossProduct(const Vec3D<T>& right_vector) const
 {
     return Vec3D<T>(y * right_vector.z - z * right_vector.y,
                     z * right_vector.x - x * right_vector.z,
@@ -114,14 +103,13 @@ Vec3D<T> Vec3D<T>::crossProduct(const Vec3D<T> &right_vector) const
 }
 
 template <typename T>
-Point3D<T> Vec3D<T>::mirrorPointInThis(const Point3D<T> &point_to_mirror) const
+Point3D<T> Vec3D<T>::mirrorPointInThis(const Point3D<T>& point_to_mirror) const
 {
     // Mirrors "point_to_mirror" in "this"
     return *this - this->vectorBetweenPoints(point_to_mirror);
 }
 
-template <typename T>
-T Vec3D<T>::angleBetweenVectors(const Vec3D<T> &v) const
+template <typename T> T Vec3D<T>::angleBetweenVectors(const Vec3D<T>& v) const
 {
     T dot_product = (*this) * v;
     return std::acos(dot_product / ((this->norm()) * (v.norm())));
@@ -129,50 +117,42 @@ T Vec3D<T>::angleBetweenVectors(const Vec3D<T> &v) const
 
 // Non class functions
 
-template <typename T>
-Vec3D<T> operator*(const T f, const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator*(const T f, const Vec3D<T>& v)
 {
     return Vec3D<T>(f * v.x, f * v.y, f * v.z);
 }
 
-template <typename T>
-Vec3D<T> operator*(const Vec3D<T> &v, const T f)
+template <typename T> Vec3D<T> operator*(const Vec3D<T>& v, const T f)
 {
     return Vec3D<T>(f * v.x, f * v.y, f * v.z);
 }
 
-template <typename T>
-T operator*(const Vec3D<T> &v0, const Vec3D<T> &v1)
+template <typename T> T operator*(const Vec3D<T>& v0, const Vec3D<T>& v1)
 {
     return v0.x * v1.x + v0.y * v1.y + v0.z * v1.z;
 }
 
-template <typename T>
-Vec3D<T> operator/(const Vec3D<T> &v, const T f)
+template <typename T> Vec3D<T> operator/(const Vec3D<T>& v, const T f)
 {
     return Vec3D<T>(v.x / f, v.y / f, v.z / f);
 }
 
-template <typename T>
-Vec3D<T> operator/(const Vec3D<T> &v0, const Vec3D<T> &v1)
+template <typename T> Vec3D<T> operator/(const Vec3D<T>& v0, const Vec3D<T>& v1)
 {
     return Vec3D<T>(v0.x / v1.x, v0.y / v1.y, v0.z / v1.z);
 }
 
-template <typename T>
-Vec3D<T> operator+(const Vec3D<T> &v0, const Vec3D<T> &v1)
+template <typename T> Vec3D<T> operator+(const Vec3D<T>& v0, const Vec3D<T>& v1)
 {
     return Vec3D<T>(v0.x + v1.x, v0.y + v1.y, v0.z + v1.z);
 }
 
-template <typename T>
-Vec3D<T> operator-(const Vec3D<T> &v0, const Vec3D<T> &v1)
+template <typename T> Vec3D<T> operator-(const Vec3D<T>& v0, const Vec3D<T>& v1)
 {
     return Vec3D<T>(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
 }
 
-template <typename T>
-Vec3D<T> operator*(const Matrix<T> &m, const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator*(const Matrix<T>& m, const Vec3D<T>& v)
 {
     ASSERT(m.isAllocated()) << "Matrix not allocated!";
     ASSERT(m.rows() == 3) << "Matrix dimension mismatch!";
@@ -184,8 +164,7 @@ Vec3D<T> operator*(const Matrix<T> &m, const Vec3D<T> &v)
     return res;
 }
 
-template <typename T>
-Vec3D<T> operator*(const Vec3D<T> &v, const Matrix<T> &m)
+template <typename T> Vec3D<T> operator*(const Vec3D<T>& v, const Matrix<T>& m)
 {
     ASSERT(m.isAllocated()) << "Matrix not allocated!";
     ASSERT(m.rows() == 3) << "Matrix dimension mismatch!";
@@ -197,44 +176,37 @@ Vec3D<T> operator*(const Vec3D<T> &v, const Matrix<T> &m)
     return res;
 }
 
-template <typename T>
-Vec3D<T> operator+(const Vec3D<T> &v, const T f)
+template <typename T> Vec3D<T> operator+(const Vec3D<T>& v, const T f)
 {
     return Vec3D<T>(v.x + f, v.y + f, v.z + f);
 }
 
-template <typename T>
-Vec3D<T> operator+(const T f, const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator+(const T f, const Vec3D<T>& v)
 {
     return Vec3D<T>(v.x + f, v.y + f, v.z + f);
 }
 
-template <typename T>
-Vec3D<T> operator-(const Vec3D<T> &v, const T f)
+template <typename T> Vec3D<T> operator-(const Vec3D<T>& v, const T f)
 {
     return Vec3D<T>(v.x - f, v.y - f, v.z - f);
 }
 
-template <typename T>
-Vec3D<T> operator-(const T f, const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator-(const T f, const Vec3D<T>& v)
 {
     return Vec3D<T>(f - v.x, f - v.y, f - v.z);
 }
 
-template <typename T>
-Vec3D<T> operator/(const T f, const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator/(const T f, const Vec3D<T>& v)
 {
     return Vec3D<T>(f / v.x, f / v.y, f / v.z);
 }
 
-template <typename T>
-Vec3D<T> operator-(const Vec3D<T> &v)
+template <typename T> Vec3D<T> operator-(const Vec3D<T>& v)
 {
     return Vec3D<T>(-v.x, -v.y, -v.z);
 }
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const Vec3D<T> &v)
+template <typename T> std::ostream& operator<<(std::ostream& os, const Vec3D<T>& v)
 {
     std::string s =
         "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + ", " + std::to_string(v.z) + " ]";
@@ -242,6 +214,6 @@ std::ostream &operator<<(std::ostream &os, const Vec3D<T> &v)
     return os;
 }
 
-} // namespace arl
+}  // namespace arl
 
 #endif

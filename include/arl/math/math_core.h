@@ -2,8 +2,7 @@
 #ifndef MATH_CORE_H_
 #define MATH_CORE_H_
 
-#include <assert.h>
-
+#include <cassert>
 #include <cmath>
 #include <initializer_list>
 #include <iostream>
@@ -433,7 +432,7 @@ template <typename T> struct PolarVec
 
 template <typename T> struct SphericalVec
 {
-    // phi for azimuth, theta for inclination
+    // phi for azimut, theta for inclination
     T r;
     T phi;
     T theta;

@@ -1,8 +1,9 @@
 // Copyright 2019 Arrowtwig
-#ifndef VECTOR_H_
-#define VECTOR_H_
+#ifndef VECTOR_DYNAMIC_H_
+#define VECTOR_DYNAMIC_H_
 
 #include "arl/math/math_core.h"
+
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 

@@ -1,8 +1,9 @@
 // Copyright 2019 Arrowtwig
-#ifndef MATRIX_H_
-#define MATRIX_H_
+#ifndef MATRIX_DYNAMIC_H_
+#define MATRIX_DYNAMIC_H_
 
 #include "arl/math/math_core.h"
+
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 

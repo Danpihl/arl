@@ -1,13 +1,14 @@
 // Copyright 2019 Arrowtwig
-#ifndef VECTOR_MATRIX_H_
-#define VECTOR_MATRIX_H_
+#ifndef VECTOR_MATRIX_DYNAMIC_H_
+#define VECTOR_MATRIX_DYNAMIC_H_
 
 #include "arl/math/math_core.h"
-#include "arl/math/matrix_vector/matrix.h"
-#include "arl/math/matrix_vector/vec2d.h"
-#include "arl/math/matrix_vector/vec3d.h"
-#include "arl/math/matrix_vector/vec4d.h"
-#include "arl/math/matrix_vector/vector.h"
+
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_dynamic/vector_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/vec2d.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
+#include "arl/math/lin_alg/vector_low_dim/vec4d.h"
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 

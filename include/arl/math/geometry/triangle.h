@@ -3,8 +3,8 @@
 #define TRIANGLE_H_
 
 #include "arl/math/math_core.h"
-#include "arl/math/matrix_vector/matrix_vector_headers.h"
 
+#include "arl/math/lin_alg.h"
 #include "arl/utilities/logging.h"
 
 #include <cmath>

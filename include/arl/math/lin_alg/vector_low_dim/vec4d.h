@@ -2,8 +2,9 @@
 #ifndef VEC4D_H_
 #define VEC4D_H_
 
-#include "arl/utilities/logging.h"
 #include "arl/math/math_core.h"
+
+#include "arl/utilities/logging.h"
 
 #include <cmath>
 
