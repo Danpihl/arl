@@ -264,18 +264,14 @@ TEST_F(Vec3DTest, MatrixVectorMultiplication)
 {
     const double eps = 1e-8;
     const double ar[3] = {0.02398188238, 0.558854088, 0.2592524469};
-    // clang-format off
-    const double m_ar[3][3] = {{0.5507979026, 0.8929469543, 0.0514672033},
-                               {0.7081478226, 0.8962930889, 0.4408098437},
-                               {0.2909047389, 0.1255853105, 0.02987621088}};
-    // clang-format on
-    const double ar_res_right[3] = {0.5255792247, 0.6321608052, 0.08490578817};
-    const double ar_res_left[3] = {0.4843782415, 0.5548699046, 0.2553281444};
 
-    const Matrixd m = array3x3ToMatrix<double>(m_ar);
+    const Matrixd m = {{0.5507979026, 0.8929469543, 0.0514672033},
+                       {0.7081478226, 0.8962930889, 0.4408098437},
+                       {0.2909047389, 0.1255853105, 0.02987621088}};
+
     const Vec3Dd v(ar);
-    const Vec3Dd vres_right_expected(ar_res_right);
-    const Vec3Dd vres_left_expected(ar_res_left);
+    const Vec3Dd vres_right_expected(0.5255792247, 0.6321608052, 0.08490578817);
+    const Vec3Dd vres_left_expected(0.4843782415, 0.5548699046, 0.2553281444);
 
     const Vec3Dd vres_right_actual = m * v;
     const Vec3Dd vres_left_actual = v * m;
@@ -419,5 +415,5 @@ TEST_F(Vec3DTest, NormalizedVectorBetweenPoints)
     ASSERT_NEAR(vres_expected.z, vres_actual.z, eps);
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

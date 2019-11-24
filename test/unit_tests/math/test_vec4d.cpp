@@ -233,19 +233,15 @@ TEST_F(Vec4DTest, MatrixVectorMultiplication)
 {
     const double eps = 1e-8;
     const double ar[4] = {0.02398188238, 0.558854088, 0.2592524469, 0.415101197};
-    // clang-format off
-    const double m_ar[4][4] = {{0.5507979026, 0.8929469543,  0.0514672033, 0.6491440476},
-                               {0.7081478226, 0.8962930889,  0.4408098437, 0.2784872826},
-                               {0.2909047389, 0.1255853105, 0.02987621088,  0.676254902},
-                               {0.5108276052, 0.2072428781,  0.4568332244, 0.5908628174}};
-    // clang-format on
-    const double ar_res_right[4] = {0.7950396959, 0.7477612095, 0.3656200074, 0.4917721312};
-    const double ar_res_left[4] = {0.6964233918, 0.6408966714, 0.4449601626, 0.5917900534};
 
-    const Matrixd m = array4x4ToMatrix<double>(m_ar);
+    const Matrixd m = {{0.5507979026, 0.8929469543, 0.0514672033, 0.6491440476},
+                       {0.7081478226, 0.8962930889, 0.4408098437, 0.2784872826},
+                       {0.2909047389, 0.1255853105, 0.02987621088, 0.676254902},
+                       {0.5108276052, 0.2072428781, 0.4568332244, 0.5908628174}};
+
     const Vec4Dd v(ar);
-    const Vec4Dd vres_right_expected(ar_res_right);
-    const Vec4Dd vres_left_expected(ar_res_left);
+    const Vec4Dd vres_right_expected(0.7950396959, 0.7477612095, 0.3656200074, 0.4917721312);
+    const Vec4Dd vres_left_expected(0.6964233918, 0.6408966714, 0.4449601626, 0.5917900534);
 
     const Vec4Dd vres_right_actual = m * v;
     const Vec4Dd vres_left_actual = v * m;
@@ -342,18 +338,13 @@ TEST_F(Vec4DTest, VectorVectorElementwiseDivide)
 TEST_F(Vec4DTest, OuterProduct)
 {
     const double eps = 1e-8;
-    const double ar0[4] = {0.5507979026, 0.7081478226, 0.2909047389, 0.5108276052};
-    const double ar1[4] = {0.8929469543, 0.8962930889, 0.1255853105, 0.2072428781};
-    // clang-format off
-    const double m_ar[4][4] = {{0.4918333096, 0.4936763535, 0.0691721256, 0.1141489426},
-                               {0.6323384414, 0.6347079994, 0.08893296416, 0.1467585929},
-                               {0.2597625006, 0.260735907, 0.03653336195, 0.06028793536},
-                               {0.4561419543, 0.4578512522, 0.06415244339, 0.1058653831}};
-    // clang-format on
+    const Matrixd m_expected = {{0.4918333096, 0.4936763535, 0.0691721256, 0.1141489426},
+                                {0.6323384414, 0.6347079994, 0.08893296416, 0.1467585929},
+                                {0.2597625006, 0.260735907, 0.03653336195, 0.06028793536},
+                                {0.4561419543, 0.4578512522, 0.06415244339, 0.1058653831}};
 
-    const Matrixd m_expected = array4x4ToMatrix<double>(m_ar);
-    const Vec4Dd v0(ar0);
-    const Vec4Dd v1(ar1);
+    const Vec4Dd v0(0.5507979026, 0.7081478226, 0.2909047389, 0.5108276052);
+    const Vec4Dd v1(0.8929469543, 0.8962930889, 0.1255853105, 0.2072428781);
 
     const Matrixd m_actual = v0.outerProduct(v1);
 
@@ -398,5 +389,5 @@ TEST_F(Vec4DTest, NormalizedVectorBetweenPoints)
     ASSERT_NEAR(vres_expected.w, vres_actual.w, eps);
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

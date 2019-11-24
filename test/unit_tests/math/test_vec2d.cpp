@@ -198,18 +198,12 @@ TEST_F(Vec2DTest, NegateVector)
 TEST_F(Vec2DTest, MatrixVectorMultiplication)
 {
     const double eps = 1e-8;
-    const double ar[2] = {0.02398188238, 0.558854088};
-    // clang-format off
-    const double m_ar[2][2] = {{0.5507979026, 0.8929469543},
-                               {0.7081478226, 0.8962930889}};
-    // clang-format on
-    const double ar_res_right[2] = {0.5122362263, 0.5178797746};
-    const double ar_res_left[2] = {0.4089604761, 0.5223116056};
 
-    const Matrixd m = array2x2ToMatrix<double>(m_ar);
-    const Vec2Dd v(ar);
-    const Vec2Dd vres_right_expected(ar_res_right);
-    const Vec2Dd vres_left_expected(ar_res_left);
+    const Matrixd m = {{0.5507979026, 0.8929469543}, {0.7081478226, 0.8962930889}};
+
+    const Vec2Dd v(0.02398188238, 0.558854088);
+    const Vec2Dd vres_right_expected(0.5122362263, 0.5178797746);
+    const Vec2Dd vres_left_expected(0.4089604761, 0.5223116056);
 
     const Vec2Dd vres_right_actual = m * v;
     const Vec2Dd vres_left_actual = v * m;
@@ -295,16 +289,10 @@ TEST_F(Vec2DTest, VectorVectorElementwiseDivide)
 TEST_F(Vec2DTest, OuterProduct)
 {
     const double eps = 1e-8;
-    const double ar0[2] = {0.5507979026, 0.7081478226};
-    const double ar1[2] = {0.8929469543, 0.8962930889};
-    // clang-format off
-    const double m_ar[2][2] = {{0.4918333096, 0.4936763535},
-                               {0.6323384414, 0.6347079993}};
-    // clang-format on
+    const Matrixd m_expected = {{0.4918333096, 0.4936763535}, {0.6323384414, 0.6347079993}};
 
-    const Matrixd m_expected = array2x2ToMatrix<double>(m_ar);
-    const Vec2Dd v0(ar0);
-    const Vec2Dd v1(ar1);
+    const Vec2Dd v0(0.5507979026, 0.7081478226);
+    const Vec2Dd v1(0.8929469543, 0.8962930889);
 
     const Matrixd m_actual = v0.outerProduct(v1);
 
@@ -345,5 +333,5 @@ TEST_F(Vec2DTest, NormalizedVectorBetweenPoints)
     ASSERT_NEAR(vres_expected.y, vres_actual.y, eps);
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

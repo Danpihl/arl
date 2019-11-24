@@ -72,6 +72,22 @@ template <typename T> Matrix<T>& Matrix<T>::operator=(const Matrix<T>& m)
     return *this;
 }
 
+template <typename T> Matrix<T>::Matrix(const T a[3][3])
+{
+    is_allocated_ = true;
+    num_rows_ = 3;
+    num_cols_ = 3;
+
+    DATA_ALLOCATION(data_, 9, T, "Matrix");
+    for (size_t r = 0; r < 3; r++)
+    {
+        for (size_t c = 0; c < 3; c++)
+        {
+            data_[r * 3 + c] = a[r][c];
+        }
+    }
+}
+
 template <typename T> Matrix<T> rotationMatrixX(const T angle)
 {
     const T ca = std::cos(angle);

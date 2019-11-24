@@ -22,3 +22,17 @@ template <typename T> class IIRFilter
 private:
 public:
 };
+
+template <typename T> class PinholeCamera
+{
+private:
+    Vector<T> distortion_coefficients;
+    // Camera pose is defined as taking points in the local camera coordinate system
+    // to the global coordinate system, where the pose is defined
+    // P_global = R_camera_pose * P_camera + t_camera_pose
+    PoseSE3<T> pose;
+
+public:
+    OrderedSet2D<T> project3DPointsToCamera(OrderedSet3D<T> points);
+    PoseSE3<T> getPose();
+};

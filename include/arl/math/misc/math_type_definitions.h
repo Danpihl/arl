@@ -65,6 +65,6 @@ typedef Point4D<float> Point4Df;
 
 typedef Vec2D<int> Vec2Di;
 
-} // namespace arl
+}  // namespace arl
 
 #endif
