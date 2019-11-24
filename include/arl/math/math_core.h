@@ -17,8 +17,6 @@
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 
-// #include "arl/math/class_defs/forward_decl.h"
-
 namespace arl
 {
 template <typename T> struct Vec2D;
@@ -62,20 +60,6 @@ template <typename T> using Point2D = Vec2D<T>;
 template <typename T> using Point3D = Vec3D<T>;
 template <typename T> using Point4D = Vec4D<T>;
 template <typename T> using Point = Vector<T>;
-
-template <typename T> Matrix<T> array3x3ToMatrix(const double a[3][3])
-{
-    Matrix<T> m(3, 3);
-    for (size_t r = 0; r < 3; r++)
-    {
-        for (size_t c = 0; c < 3; c++)
-        {
-            m(r, c) = a[r][c];
-        }
-    }
-
-    return m;
-}
 
 }  // namespace arl
 

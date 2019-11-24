@@ -48,8 +48,7 @@ TEST_F(RollPitchYawTest, RpyToMatrix)
     {
         const RollPitchYawd rpy(rpy_arrays[k][0], rpy_arrays[k][1], rpy_arrays[k][2]);
 
-        const Matrixd rotation_matrix_expected =
-            array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd rotation_matrix_actual = rpy.toRotationMatrix();
 
         ASSERT_MATRIX_NEAR_MATRIX(rotation_matrix_expected, rotation_matrix_actual, eps);
@@ -81,7 +80,7 @@ TEST_F(RollPitchYawTest, MatrixToRpy)
     for (int k = 0; k < 13; k++)
     {
         const RollPitchYawd rpy_expected(rpy_arrays[k][0], rpy_arrays[k][1], rpy_arrays[k][2]);
-        const Matrixd rotation_matrix = array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix = Matrix<double>(rotation_matrix_arrays[k]);
 
         const RollPitchYawd rpy_actual = rotationMatrixToRollPitchYaw(rotation_matrix);
 
@@ -97,8 +96,7 @@ TEST_F(RollPitchYawTest, RotationMatrixRollAndX)
 
     for (size_t k = 8; k < 10; k++)
     {
-        const Matrixd rotation_matrix_expected =
-            array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd rotation_matrix_actual_roll = rotationMatrixFromRoll(rpy_arrays[k][0]);
         const Matrixd rotation_matrix_actual_x = rotationMatrixX(rpy_arrays[k][0]);
 
@@ -113,8 +111,7 @@ TEST_F(RollPitchYawTest, RotationMatrixPitchAndY)
 
     for (size_t k = 10; k < 12; k++)
     {
-        const Matrixd rotation_matrix_expected =
-            array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd rotation_matrix_actual_pitch = rotationMatrixFromPitch(rpy_arrays[k][1]);
         const Matrixd rotation_matrix_actual_y = rotationMatrixY(rpy_arrays[k][1]);
 
@@ -129,8 +126,7 @@ TEST_F(RollPitchYawTest, RotationMatrixYawAndZ)
 
     for (size_t k = 12; k < 14; k++)
     {
-        const Matrixd rotation_matrix_expected =
-            array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd rotation_matrix_actual_yaw = rotationMatrixFromYaw(rpy_arrays[k][2]);
         const Matrixd rotation_matrix_actual_z = rotationMatrixZ(rpy_arrays[k][2]);
 
@@ -175,5 +171,5 @@ TEST_F(RollPitchYawTest, AxisAngleToRollPitchYaw)
     }
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

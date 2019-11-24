@@ -370,7 +370,7 @@ TEST_F(Vec3DTest, OuterProduct)
                                {0.2597625006, 0.260735907, 0.03653336196}};
     // clang-format on
 
-    const Matrixd m_expected = array3x3ToMatrix<double>(m_ar);
+    const Matrixd m_expected = Matrix<double>(m_ar);
     const Vec3Dd v0(ar0);
     const Vec3Dd v1(ar1);
 

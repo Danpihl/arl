@@ -5,7 +5,6 @@
 
 #include <gtest/gtest.h>
 
-#include "arl/math/general_matrix_math_functions.h"
 #include "arl/math/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
 

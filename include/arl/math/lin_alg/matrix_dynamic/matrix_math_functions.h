@@ -1,6 +1,6 @@
 // Copyright 2019 Arrowtwig
-#ifndef GENERAL_MATRIX_MATH_FUNCTIONS_H_
-#define GENERAL_MATRIX_MATH_FUNCTIONS_H_
+#ifndef MATRIX_MATH_FUNCTIONS_H_
+#define MATRIX_MATH_FUNCTIONS_H_
 
 #include <cmath>
 #include <cstdarg>

@@ -3,7 +3,6 @@
 
 namespace arl
 {
-
 template <typename T> struct QRMatrixPair
 {
     Matrix<T> q;

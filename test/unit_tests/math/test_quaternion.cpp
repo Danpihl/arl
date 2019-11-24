@@ -69,7 +69,7 @@ TEST_F(QuaternionTest, QuaternionToRotationMatrix)
                             quaternion_arrays[k][1],
                             quaternion_arrays[k][2]);
 
-        Matrixd rotation_matrix_expected = array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        Matrixd rotation_matrix_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd rotation_matrix_actual = q.toRotationMatrix();
 
         ASSERT_MATRIX_NEAR_MATRIX(rotation_matrix_expected, rotation_matrix_actual, eps);
@@ -175,5 +175,5 @@ TEST_F(QuaternionTest, RollPitchYawToQuaternion)
     }
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

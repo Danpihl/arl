@@ -1,6 +1,6 @@
 // Copyright 2019 Arrowtwig
-#ifndef GENERAL_MATH_FUNCTIONS_H_
-#define GENERAL_MATH_FUNCTIONS_H_
+#ifndef VECTOR_MATH_FUNCTIONS_H_
+#define VECTOR_MATH_FUNCTIONS_H_
 
 #include <cmath>
 #include <cstdarg>

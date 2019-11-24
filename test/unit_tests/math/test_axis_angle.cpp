@@ -54,7 +54,7 @@ TEST_F(AxisAngleTest, AxisAngleToMatrix)
                                     axis_arrays[k][0] * 1.0,
                                     axis_arrays[k][1] * 1.0,
                                     axis_arrays[k][2] * 1.0);
-        const Matrixd mat_expected = array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd mat_expected = Matrix<double>(rotation_matrix_arrays[k]);
         const Matrixd mat_actual = axis_angle.toRotationMatrix();
         ASSERT_MATRIX_NEAR_MATRIX(mat_expected, mat_actual, eps);
     }
@@ -66,7 +66,7 @@ TEST_F(AxisAngleTest, MatrixToAxisAngle)
 
     for (size_t k = 0; k < 13; k++)
     {
-        const Matrixd rotation_matrix = array3x3ToMatrix<double>(rotation_matrix_arrays[k]);
+        const Matrixd rotation_matrix = Matrix<double>(rotation_matrix_arrays[k]);
 
         const AxisAngled axis_angle_expected(
             angle_arrays[k][0], axis_arrays[k][0], axis_arrays[k][1], axis_arrays[k][2]);
