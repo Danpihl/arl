@@ -7,7 +7,7 @@
 
 #include "arl/math/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
-#include "test_data/test_data_rotations.h"
+#include "../test_data/test_data_rotations.h"
 
 namespace arl
 {
