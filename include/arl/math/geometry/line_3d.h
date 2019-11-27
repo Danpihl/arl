@@ -23,9 +23,9 @@ template <typename T> Vec3D<T> Line3D<T>::vectorNormalToLine() const
 
     // Dot product equals zero: v.x * vn.x + v.y * vn.y + v.z * vn.z = 0
 
-    const double xa = std::fabs(vnorm.x);
-    const double ya = std::fabs(vnorm.y);
-    const double za = std::fabs(vnorm.z);
+    const T xa = std::fabs(vnorm.x);
+    const T ya = std::fabs(vnorm.y);
+    const T za = std::fabs(vnorm.z);
     if ((za > xa) && (za > ya))
     {
         vn.x = 1.0;
