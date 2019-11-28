@@ -182,7 +182,7 @@ template <typename T> Vector<T> linspace0(const T x0, const T x1, const size_t n
     assert(num_values > 0);
     Vector<T> v(num_values);
 
-    const double dx = (x1 - x0) / static_cast<double>(num_values - 1);
+    const T dx = (x1 - x0) / static_cast<T>(num_values - 1);
     v(0) = x0;
 
     for (size_t k = 1; k < num_values; k++)

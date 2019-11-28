@@ -63,20 +63,20 @@ template <typename T> Matrix<T> Quaternion<T>::toRotationMatrix() const
     Matrix<T> m(3, 3);
 
     const Quaternion<T> qn = this->normalized();
-    const double qr = qn.w;
-    const double qi = qn.x;
-    const double qj = qn.y;
-    const double qk = qn.z;
+    const T qr = qn.w;
+    const T qi = qn.x;
+    const T qj = qn.y;
+    const T qk = qn.z;
 
-    m(0, 0) = 1.0f - 2.0f * (qj * qj + qk * qk);
-    m(0, 1) = 2.0f * (qi * qj - qk * qr);
-    m(0, 2) = 2.0f * (qi * qk + qj * qr);
-    m(1, 0) = 2.0f * (qi * qj + qk * qr);
-    m(1, 1) = 1.0f - 2.0f * (qi * qi + qk * qk);
-    m(1, 2) = 2.0f * (qj * qk - qi * qr);
-    m(2, 0) = 2.0f * (qi * qk - qj * qr);
-    m(2, 1) = 2.0f * (qj * qk + qi * qr);
-    m(2, 2) = 1.0f - 2.0f * (qi * qi + qj * qj);
+    m(0, 0) = 1.0 - 2.0 * (qj * qj + qk * qk);
+    m(0, 1) = 2.0 * (qi * qj - qk * qr);
+    m(0, 2) = 2.0 * (qi * qk + qj * qr);
+    m(1, 0) = 2.0 * (qi * qj + qk * qr);
+    m(1, 1) = 1.0 - 2.0 * (qi * qi + qk * qk);
+    m(1, 2) = 2.0 * (qj * qk - qi * qr);
+    m(2, 0) = 2.0 * (qi * qk - qj * qr);
+    m(2, 1) = 2.0 * (qj * qk + qi * qr);
+    m(2, 2) = 1.0 - 2.0 * (qi * qi + qj * qj);
 
     return m;
 }
@@ -93,7 +93,7 @@ template <typename T> T Quaternion<T>::squaredNorm() const
 
 template <typename T> Quaternion<T> Quaternion<T>::normalized() const
 {
-    const double d = this->norm();
+    const T d = this->norm();
     return Quaternion<T>(w / d, x / d, y / d, z / d);
 }
 

@@ -250,7 +250,7 @@ template <typename T> Matrix<T> linspace0ColMat(const T x0, const T x1, const si
     assert(num_values > 0);
     Matrix<T> m(num_values, 1);
 
-    const double dx = (x1 - x0) / static_cast<double>(num_values - 1);
+    const T dx = (x1 - x0) / static_cast<T>(num_values - 1);
     m(0, 0) = x0;
 
     for (size_t r = 1; r < num_values; r++)
