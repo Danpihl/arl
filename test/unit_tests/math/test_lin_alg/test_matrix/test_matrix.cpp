@@ -1341,5 +1341,19 @@ TEST_F(MatrixTest, MatrixVCatGeneral)
     }
 }
 
+TEST_F(MatrixTest, MatrixSingleArgIndexing)
+{
+    /*const Matrix<int> m0 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+    const Vector<int> v0 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    PRINT() << "rows: " << m0.rows();
+    PRINT() << "cols: " << m0.cols();
+
+    for (size_t k = 0; k < v0.size(); k++)
+    {
+        ASSERT_EQ(v0(k), m0(k));
+    }*/
+}
+
 }  // namespace
 }  // namespace arl

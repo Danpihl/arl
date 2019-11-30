@@ -566,6 +566,18 @@ template <typename T> SVDMatrixTriplet<T> Matrix<T>::svd() const
     return svd_triplet;
 }
 
+template <typename T> T& Matrix<T>::operator()(const size_t idx)
+{
+    assert(idx < (num_cols_ * num_cols_));
+    return data_[idx];
+}
+
+template <typename T> const T& Matrix<T>::operator()(const size_t idx) const
+{
+    assert(idx < (num_cols_ * num_cols_));
+    return data_[idx];
+}
+
 template <typename T> T& Matrix<T>::operator()(const size_t r, const size_t c)
 {
     assert(r < num_rows_ && "Row index is larger than num_rows_-1!");

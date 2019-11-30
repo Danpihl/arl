@@ -46,6 +46,8 @@ public:
     ~Matrix();
     T& operator()(const size_t r, const size_t c);
     const T& operator()(const size_t r, const size_t c) const;
+    T& operator()(const size_t idx);
+    const T& operator()(const size_t idx) const;
 
     Matrix<T> operator()(const size_t row, const IndexSpan& col_idx_span) const;
     Matrix<T> operator()(const IndexSpan& row_idx_span, const size_t col) const;
