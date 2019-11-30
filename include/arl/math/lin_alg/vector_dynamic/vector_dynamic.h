@@ -904,6 +904,16 @@ Vector<T> Vector<T>::normalizedVectorBetweenPoints(const Point<T>& end_point) co
     return (end_point - *this).normalized();
 }
 
+template <typename T> T* Vector<T>::begin() const
+{
+    return &data_[0];
+}
+
+template <typename T> T* Vector<T>::end() const
+{
+    return &data_[vector_length_];
+}
+
 }  // namespace arl
 
 #endif

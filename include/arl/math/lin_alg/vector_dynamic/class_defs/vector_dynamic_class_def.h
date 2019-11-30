@@ -1,6 +1,8 @@
 #ifndef VECTOR_DYNAMIC_CLASS_H_
 #define VECTOR_DYNAMIC_CLASS_H_
 
+#include <iterator>
+
 namespace arl
 {
 template <typename T> class Vector
@@ -54,6 +56,13 @@ public:
     Matrix<T> toColumnVectorMat() const;
     Matrix<T> toRowVectorMat() const;
     size_t countNumNonZeroElements() const;
+
+    T* begin() const;
+    T* end() const;
+    // const T* begin() const { return &data_[0]; }
+    // const T* end() const { return &data_[vector_length_ - 1]; }
+
+    //
 };
 }  // namespace arl
 

@@ -68,20 +68,41 @@ public:
     size_t numElements() const;
     void hCat(const Vector<T>& v);
     void vCat(const Vector<T>& v);
+
+    void hCat(const Matrix<T>& m);
+    void vCat(const Matrix<T>& m);
+
+    void hCat(const Vec2D<T>& v);
+    void vCat(const Vec2D<T>& v);
+    void hCat(const Vec3D<T>& v);
+    void vCat(const Vec3D<T>& v);
+    void hCat(const Vec4D<T>& v);
+    void vCat(const Vec4D<T>& v);
+
     bool isAllocated() const;
     void fill(const T val);
     void switchRows(size_t r0, size_t r1);
     void switchColumns(size_t c0, size_t c1);
     T* getDataPointer() const;
-    Matrix<T> transposed() const;
+    Matrix<T> getTranspose() const;
+    void transpose();
 
-    void addVectorToMatrixCols(const Vector<T>& v);
-    void addVectorToMatrixRows(const Vector<T>& v);
+    void addToAllCols(const Vector<T>& v);
+    void addToAllRows(const Vector<T>& v);
+    void addToAllCols(const Matrix<T>& m);
+    void addToAllRows(const Matrix<T>& m);
 
-    Vector<T> getColumnAsVector(size_t column_idx) const;
-    Vector<T> getRowAsVector(size_t row_idx) const;
-    Matrix<T> getColumn(size_t column_idx) const;
-    Matrix<T> getRow(size_t row_idx) const;
+    void addToCol(const size_t col_idx, const Vector<T>& v);
+    void addToRow(const size_t row_idx, const Vector<T>& v);
+    void addToCol(const size_t col_idx, const Matrix<T>& m);
+    void addToRow(const size_t row_idx, const Matrix<T>& m);
+
+    Vector<T> toVector() const;
+
+    Vector<T> getColumnAsVector(const size_t column_idx) const;
+    Vector<T> getRowAsVector(const size_t row_idx) const;
+    Matrix<T> getColumn(const size_t column_idx) const;
+    Matrix<T> getRow(const size_t row_idx) const;
     size_t lastRowIdx() const;
     size_t lastColIdx() const;
     Matrix<T> inverse() const;

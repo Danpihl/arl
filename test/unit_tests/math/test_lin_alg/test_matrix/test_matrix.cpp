@@ -558,7 +558,7 @@ TEST_F(MatrixTest, MatrixTranspose)
 
     fillMatrixWithArrayRowMajor(m, m_array);
 
-    Matrixd m_transpose = m.transposed();
+    Matrixd m_transpose = m.getTranspose();
     ASSERT_TRUE(m_transpose.rows() == 4 && m_transpose.cols() == 3);
     for (size_t r = 0; r < 4; r++)
     {
@@ -1186,9 +1186,158 @@ TEST_F(MatrixTest, MatrixSVDecomposition)
 
         const SVDMatrixTriplet<double> svd_triplet = m_expected.svd();
 
-        const Matrixd m_actual = svd_triplet.u * svd_triplet.s * svd_triplet.v.transposed();
+        const Matrixd m_actual = svd_triplet.u * svd_triplet.s * svd_triplet.v.getTranspose();
 
         ASSERT_MATRIX_NEAR_MATRIX(m_expected, m_actual, eps);
+    }
+}
+
+TEST_F(MatrixTest, MatrixHCat)
+{
+    const double eps = 1e-8;
+    const Matrixd mref = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Matrixd m0 = mref;
+    ASSERT_MATRIX_NEAR_MATRIX(m0, mref, eps);
+    const Matrixd m1 = {{11, 12, 13, 64}, {14, 15, 16, 43}, {16, 17, 18, 32}};
+    const Matrixd m_exp = {
+        {1, 2, 3, 11, 12, 13, 64}, {4, 5, 6, 14, 15, 16, 43}, {7, 8, 9, 16, 17, 18, 32}};
+
+    m0.hCat(m1);
+
+    ASSERT_MATRIX_NEAR_MATRIX(m0, m_exp, eps);
+}
+
+TEST_F(MatrixTest, MatrixVCat)
+{
+    const double eps = 1e-8;
+    const Matrixd mref = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Matrixd m0 = mref;
+    ASSERT_MATRIX_NEAR_MATRIX(m0, mref, eps);
+    const Matrixd m1 = {{11, 12, 13}, {14, 15, 16}, {16, 17, 18}, {63, 43, 42}};
+    const Matrixd m_exp = {
+        {1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {11, 12, 13}, {14, 15, 16}, {16, 17, 18}, {63, 43, 42}};
+    m0.vCat(m1);
+
+    ASSERT_MATRIX_NEAR_MATRIX(m0, m_exp, eps);
+}
+
+TEST_F(MatrixTest, MatrixHCatGeneral)
+{
+    const Vector<size_t> rows = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+    const Vector<size_t> cols0 = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+    const Vector<size_t> cols1 = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+
+    for (size_t r0 : rows)
+    {
+        for (size_t c0 : cols0)
+        {
+            for (size_t c1 : cols1)
+            {
+                Matrixd mref(r0, c0);
+                Matrixd m0;
+                Matrixd m1(r0, c1);
+
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        mref(r, c) = (r + 3) + (c * r + 1) * 3 + 112;
+                    }
+                }
+                m0 = mref;
+                ASSERT_MATRIX_EQ_MATRIX(m0, mref);
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = 0; c < c1; c++)
+                    {
+                        m1(r, c) = (r + 2) + (c * r - 1) * 2 + 11;
+                    }
+                }
+
+                ASSERT_EQ(m0.rows(), r0);
+                ASSERT_EQ(m0.cols(), c0);
+                ASSERT_EQ(m1.rows(), r0);
+                ASSERT_EQ(m1.cols(), c1);
+
+                m0.hCat(m1);
+                ASSERT_EQ(m0.rows(), r0);
+                ASSERT_EQ(m0.cols(), c0 + m1.cols());
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        ASSERT_EQ(m0(r, c), mref(r, c));
+                    }
+                }
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = c0; c < (c0 + c1); c++)
+                    {
+                        ASSERT_EQ(m0(r, c), m1(r, c - c0));
+                    }
+                }
+            }
+        }
+    }
+}
+
+TEST_F(MatrixTest, MatrixVCatGeneral)
+{
+    const Vector<size_t> cols = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+    const Vector<size_t> rows0 = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+    const Vector<size_t> rows1 = {1, 2, 4, 7, 10, 15, 17, 25, 30};
+
+    for (size_t c0 : cols)
+    {
+        for (size_t r0 : rows0)
+        {
+            for (size_t r1 : rows1)
+            {
+                Matrixd mref(r0, c0);
+                Matrixd m0;
+                Matrixd m1(r1, c0);
+
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        mref(r, c) = (r + 3) + (c * r + 1) * 3 + 112;
+                    }
+                }
+                m0 = mref;
+                ASSERT_MATRIX_EQ_MATRIX(m0, mref);
+                for (size_t r = 0; r < r1; r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        m1(r, c) = (r + 2) + (c * r - 1) * 2 + 11;
+                    }
+                }
+
+                ASSERT_EQ(m0.rows(), r0);
+                ASSERT_EQ(m0.cols(), c0);
+                ASSERT_EQ(m1.rows(), r1);
+                ASSERT_EQ(m1.cols(), c0);
+
+                m0.vCat(m1);
+                ASSERT_EQ(m0.cols(), c0);
+                ASSERT_EQ(m0.rows(), r0 + m1.rows());
+                for (size_t r = 0; r < r0; r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        ASSERT_EQ(m0(r, c), mref(r, c));
+                    }
+                }
+                for (size_t r = r0; r < (r0 + r1); r++)
+                {
+                    for (size_t c = 0; c < c0; c++)
+                    {
+                        ASSERT_EQ(m0(r, c), m1(r - r0, c));
+                    }
+                }
+            }
+        }
     }
 }
 

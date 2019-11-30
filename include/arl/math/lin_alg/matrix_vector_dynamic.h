@@ -16,7 +16,39 @@
 
 namespace arl
 {
-template <typename T> void Matrix<T>::addVectorToMatrixCols(const Vector<T>& v)
+template <typename T> void Matrix<T>::addToAllCols(const Matrix<T>& m)
+{
+    ASSERT(is_allocated_) << "Matrix not allocated!";
+    ASSERT(m.isAllocated()) << "Matrix not allocated!";
+    ASSERT(num_rows_ == m.rows()) << "Error in dimension!";
+    ASSERT(m.cols() == 1) << "Error in dimension!";
+
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        for (size_t r = 0; r < num_rows_; r++)
+        {
+            data_[r * num_cols_ + c] = data_[r * num_cols_ + c] + m(r, 0);
+        }
+    }
+}
+
+template <typename T> void Matrix<T>::addToAllRows(const Matrix<T>& m)
+{
+    ASSERT(is_allocated_) << "Matrix not allocated!";
+    ASSERT(m.isAllocated()) << "Matrix not allocated!";
+    ASSERT(num_cols_ == m.cols()) << "Error in dimension!";
+    ASSERT(m.rows() == 1) << "Error in dimension!";
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            data_[r * num_cols_ + c] = data_[r * num_cols_ + c] + m(0, c);
+        }
+    }
+}
+
+template <typename T> void Matrix<T>::addToAllCols(const Vector<T>& v)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
     ASSERT(v.isAllocated()) << "Vector not allocated!";
@@ -31,7 +63,7 @@ template <typename T> void Matrix<T>::addVectorToMatrixCols(const Vector<T>& v)
     }
 }
 
-template <typename T> void Matrix<T>::addVectorToMatrixRows(const Vector<T>& v)
+template <typename T> void Matrix<T>::addToAllRows(const Vector<T>& v)
 {
     ASSERT(is_allocated_) << "Matrix not allocated!";
     ASSERT(v.isAllocated()) << "Vector not allocated!";
@@ -42,6 +74,72 @@ template <typename T> void Matrix<T>::addVectorToMatrixRows(const Vector<T>& v)
         for (size_t c = 0; c < num_cols_; c++)
         {
             data_[r * num_cols_ + c] = data_[r * num_cols_ + c] + v(c);
+        }
+    }
+}
+
+template <typename T> void Matrix<T>::addToCol(const size_t col_idx, const Vector<T>& v)
+{
+    ASSERT(v.size() == num_rows_);
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        data_[r * num_cols_ + col_idx] = data_[r * num_cols_ + col_idx] + v(r);
+    }
+}
+
+template <typename T> void Matrix<T>::addToRow(const size_t row_idx, const Vector<T>& v)
+{
+    ASSERT(v.size() == num_cols_);
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        data_[row_idx * num_cols_ + c] = data_[row_idx * num_cols_ + c] + v(c);
+    }
+}
+
+template <typename T> void Matrix<T>::addToCol(const size_t col_idx, const Matrix<T>& m)
+{
+    ASSERT((m.rows() == 1) || (m.cols() == 1));
+
+    if (m.rows() == 1)
+    {
+        ASSERT(m.cols() == num_rows_);
+
+        for (size_t r = 0; r < num_rows_; r++)
+        {
+            data_[r * num_cols_ + col_idx] = data_[r * num_cols_ + col_idx] + m(0, r);
+        }
+    }
+    else
+    {
+        ASSERT(m.rows() == num_rows_);
+
+        for (size_t r = 0; r < num_rows_; r++)
+        {
+            data_[r * num_cols_ + col_idx] = data_[r * num_cols_ + col_idx] + m(r, 0);
+        }
+    }
+}
+
+template <typename T> void Matrix<T>::addToRow(const size_t row_idx, const Matrix<T>& m)
+{
+    ASSERT((m.rows() == 1) || (m.cols() == 1));
+
+    if (m.rows() == 1)
+    {
+        ASSERT(m.cols() == num_cols_);
+
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            data_[row_idx * num_cols_ + c] = data_[row_idx * num_cols_ + c] + m(0, c);
+        }
+    }
+    else
+    {
+        ASSERT(m.rows() == num_cols_);
+
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            data_[row_idx * num_cols_ + c] = data_[row_idx * num_cols_ + c] + m(c, 0);
         }
     }
 }
@@ -100,6 +198,96 @@ template <typename T> void Matrix<T>::vCat(const Vector<T>& v)
 
     delete[] data_;
     data_ = temp_data;
+}
+
+template <typename T> void Matrix<T>::hCat(const Vec2D<T>& v)
+{
+    this->hCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::vCat(const Vec2D<T>& v)
+{
+    this->vCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::hCat(const Vec3D<T>& v)
+{
+    this->hCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::vCat(const Vec3D<T>& v)
+{
+    this->vCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::hCat(const Vec4D<T>& v)
+{
+    this->hCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::vCat(const Vec4D<T>& v)
+{
+    this->vCat(v.toVector());
+}
+
+template <typename T> void Matrix<T>::hCat(const Matrix<T>& m)
+{
+    ASSERT(is_allocated_);
+    ASSERT(m.isAllocated());
+    ASSERT(m.rows() == num_rows_);
+    const size_t new_num_cols = num_cols_ + m.cols();
+
+    T* temp_data;
+    DATA_ALLOCATION(temp_data, num_rows_ * new_num_cols, T, "Matrix");
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            temp_data[r * new_num_cols + c] = data_[r * num_cols_ + c];
+        }
+    }
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = num_cols_; c < new_num_cols; c++)
+        {
+            temp_data[r * new_num_cols + c] = m(r, c - num_cols_);
+        }
+    }
+    delete data_;
+    data_ = temp_data;
+    num_cols_ = new_num_cols;
+}
+
+template <typename T> void Matrix<T>::vCat(const Matrix<T>& m)
+{
+    ASSERT(is_allocated_);
+    ASSERT(m.isAllocated());
+    ASSERT(m.cols() == num_cols_);
+    const size_t new_num_rows = num_rows_ + m.rows();
+
+    T* temp_data;
+    DATA_ALLOCATION(temp_data, new_num_rows * num_cols_, T, "Matrix");
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            temp_data[r * num_cols_ + c] = data_[r * num_cols_ + c];
+        }
+    }
+
+    for (size_t r = num_rows_; r < new_num_rows; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            temp_data[r * num_cols_ + c] = m(r - num_rows_, c);
+        }
+    }
+    delete data_;
+    data_ = temp_data;
+    num_rows_ = new_num_rows;
 }
 
 template <typename T> Matrix<T> hCat(const Matrix<T>& m, const Vector<T>& v)

@@ -96,5 +96,51 @@ TEST_F(VectorIndexingTest, VectorEndIndexing)
     }
 }
 
+TEST_F(VectorIndexingTest, VectorBeginEnd)
+{
+    const Vectord v0 = {1.2, 4.3, 1.5, 5.2, 3.6, 3.4, 6.7};
+    const size_t vector_size = v0.size();
+    const double* const vector_data = v0.getDataPointer();
+
+    for (size_t k = 0; k < vector_size; k++)
+    {
+        ASSERT_EQ(v0(k), vector_data[k]);
+    }
+    ASSERT_EQ(vector_data[0], *(v0.begin()));
+    ASSERT_EQ(vector_data[vector_size - 1], *(v0.end() - 1));
+
+    ASSERT_EQ(&vector_data[0], v0.begin());
+    ASSERT_EQ(&vector_data[vector_size], v0.end());
+
+    Vectord nc_v0 = {1.2, 4.3, 1.5, 5.2, 3.6, 3.4, 6.7};
+    const size_t nc_vector_size = nc_v0.size();
+    const double* const nc_vector_data = nc_v0.getDataPointer();
+
+    for (size_t k = 0; k < nc_vector_size; k++)
+    {
+        ASSERT_EQ(nc_v0(k), nc_vector_data[k]);
+    }
+    ASSERT_EQ(nc_vector_data[0], *(nc_v0.begin()));
+    ASSERT_EQ(nc_vector_data[nc_vector_size - 1], *(nc_v0.end() - 1));
+
+    ASSERT_EQ(&nc_vector_data[0], nc_v0.begin());
+    ASSERT_EQ(&nc_vector_data[nc_vector_size], nc_v0.end());
+}
+
+TEST_F(VectorIndexingTest, VectorBeginEndIterate)
+{
+    const Vectord v0 = {1.2, 4.3, 1.5, 5.2, 3.6, 3.4, 6.7};
+    const double* const vector_data = v0.getDataPointer();
+
+    size_t idx = 0;
+    for (double d : v0)
+    {
+        ASSERT_EQ(d, vector_data[idx]);
+        idx++;
+    }
+    ASSERT_EQ(idx, v0.size());
+    ASSERT_EQ(v0(v0.size() - 1), v0(idx - 1));
+}
+
 }  // namespace
 }  // namespace arl

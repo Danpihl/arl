@@ -51,6 +51,19 @@
         }                                          \
     }
 
+#define ASSERT_MATRIX_EQ_MATRIX(m0, m1)            \
+    ASSERT_TRUE(m0.isAllocated());                 \
+    ASSERT_TRUE(m1.isAllocated());                 \
+    ASSERT_TRUE(m0.rows() == m1.rows());           \
+    ASSERT_TRUE(m0.cols() == m1.cols());           \
+    for (size_t r = 0; r < m0.rows(); r++)         \
+    {                                              \
+        for (size_t c = 0; c < m0.cols(); c++)     \
+        {                                          \
+            ASSERT_EQ(m0(r, c), m1(r, c));         \
+        }                                          \
+    }
+
 #define ASSERT_MATRIX_NEAR_SCALAR(m, f, eps)   \
     ASSERT_TRUE(m.isAllocated());              \
     ASSERT_TRUE(m.rows() > 0 && m.cols() > 0); \

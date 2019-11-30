@@ -914,7 +914,21 @@ template <typename T> Vector<T> operator*(const Vector<T>& v, const Matrix<T>& m
     return res;
 }
 
-template <typename T> Matrix<T> Matrix<T>::transposed() const
+template <typename T> void Matrix<T>::transpose()
+{
+    const Matrix<T> temp_mat = *this;
+    std::swap(num_rows_, num_cols_);
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            data_[c * num_cols_ + r] = temp_mat(c, r);
+        }
+    }
+}
+
+template <typename T> Matrix<T> Matrix<T>::getTranspose() const
 {
     Matrix<T> res(num_cols_, num_rows_);
 
@@ -1165,7 +1179,7 @@ template <typename T> std::ostream& operator<<(std::ostream& os, const Matrix<T>
     return os;
 }
 
-template <typename T> Vector<T> Matrix<T>::getColumnAsVector(size_t column_idx) const
+template <typename T> Vector<T> Matrix<T>::getColumnAsVector(const size_t column_idx) const
 {
     ASSERT(column_idx < num_cols_) << "Tried to access column outside of matrix bounds!";
     Vector<T> column_vec(num_rows_);
@@ -1177,7 +1191,7 @@ template <typename T> Vector<T> Matrix<T>::getColumnAsVector(size_t column_idx) 
     return column_vec;
 }
 
-template <typename T> Vector<T> Matrix<T>::getRowAsVector(size_t row_idx) const
+template <typename T> Vector<T> Matrix<T>::getRowAsVector(const size_t row_idx) const
 {
     ASSERT(row_idx < num_rows_) << "Tried to access row outside of matrix bounds!";
     Vector<T> row_vec(num_cols_);
@@ -1189,7 +1203,7 @@ template <typename T> Vector<T> Matrix<T>::getRowAsVector(size_t row_idx) const
     return row_vec;
 }
 
-template <typename T> Matrix<T> Matrix<T>::getColumn(size_t column_idx) const
+template <typename T> Matrix<T> Matrix<T>::getColumn(const size_t column_idx) const
 {
     ASSERT(column_idx < num_cols_) << "Tried to access column outside of matrix bounds!";
     Matrix<T> column_mat(num_rows_, 1);
@@ -1201,7 +1215,7 @@ template <typename T> Matrix<T> Matrix<T>::getColumn(size_t column_idx) const
     return column_mat;
 }
 
-template <typename T> Matrix<T> Matrix<T>::getRow(size_t row_idx) const
+template <typename T> Matrix<T> Matrix<T>::getRow(const size_t row_idx) const
 {
     ASSERT(row_idx < num_rows_) << "Tried to access row outside of matrix bounds!";
     Matrix<T> row_mat(1, num_cols_);
@@ -1211,6 +1225,35 @@ template <typename T> Matrix<T> Matrix<T>::getRow(size_t row_idx) const
         row_mat(0, k) = data_[num_cols_ * row_idx + k];
     }
     return row_mat;
+}
+
+template <typename T> Vector<T> Matrix<T>::toVector() const
+{
+    ASSERT(is_allocated_);
+    ASSERT((num_rows_ == 1) || (num_cols_ == 1)) << "One dimension must be equal to 1!";
+    const size_t num_elements = std::max(num_rows_, num_cols_);
+    Vector<T> vres(num_elements);
+
+    for (size_t k = 0; k < num_elements; k++)
+    {
+        vres(k) = data_[k];
+    }
+
+    return vres;
+}
+
+template <typename T>
+Matrix<T> uniqueMatrix(const size_t rows, const size_t cols, const T offset = 0.0)
+{
+    Matrix<T> mres(rows, cols);
+    for (size_t r = 0; r < rows; r++)
+    {
+        for (size_t c = 0; c < cols; c++)
+        {
+            mres(r, c) = r * cols + c + offset;
+        }
+    }
+    return mres;
 }
 
 }  // namespace arl
