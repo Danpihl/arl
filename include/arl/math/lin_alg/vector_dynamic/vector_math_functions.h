@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <cstdarg>
+#include <cstdlib>
 #include <utility>
 
 #include "arl/math/math_core.h"
@@ -32,7 +33,7 @@ template <typename T> bool all(const Vector<T>& v)
     return b;
 }
 
-template <typename T> Vector<size_t> find(const Vector<T>& v)
+template <typename T> Vector<size_t> findIndicesOfNonZeroElements(const Vector<T>& v)
 {
     std::vector<size_t> std_vec;
     for (size_t k = 0; k < v.size(); k++)
@@ -42,7 +43,7 @@ template <typename T> Vector<size_t> find(const Vector<T>& v)
             std_vec.push_back(k);
         }
     }
-    Vector<size_t> vres = std_vec;
+    const Vector<size_t> vres = std_vec;
     return vres;
 }
 
@@ -216,6 +217,236 @@ template <typename T> Vector<T> linspace2(const T x0, const T x1, const T dx)
     const size_t num_values = (x1 - x0) / dx;
 
     return linspace0(x0, x1, num_values);
+}
+
+template <typename T> T sum(const Vector<T>& vin)
+{
+    assert(vin.size() > 0);
+
+    T s = vin(0);
+    for (size_t k = 1; k < vin.size(); k++)
+    {
+        s = s + vin(k);
+    }
+
+    return s;
+}
+
+template <typename T> T mean(const Vector<T>& vin)
+{
+    assert(vin.size() > 0);
+
+    return sum(vin) / static_cast<T>(vin.size());
+}
+
+template <typename T> T variance(const Vector<T>& vin)
+{
+    assert(vin.size() > 0);
+
+    const T m = mean(vin);
+
+    T s = 0.0;
+    for (size_t k = 0; k < vin.size(); k++)
+    {
+        s = s + (vin(k) - m) * (vin(k) - m);
+    }
+    ASSERT(false) << "Function is broken currently!";
+
+    return s / static_cast<T>(vin.size());
+}
+
+template <typename T> T rootMeanSquare(const Vector<T>& vin)
+{
+    assert(vin.size() > 0);
+
+    T s = 0.0;
+    for (size_t k = 0; k < vin.size(); k++)
+    {
+        s = s + vin(k) * vin(k);
+    }
+
+    return std::sqrt(s / static_cast<T>(vin.size()));
+}
+
+template <typename T> Vector<T> uniformRandom(const size_t num_elements, const int res = 10000)
+{
+    Vector<T> vout(num_elements);
+    const T inverse_res = 1.0 / static_cast<T>(res - 1);
+
+    for (size_t k = 0; k < num_elements; k++)
+    {
+        vout(k) = static_cast<T>(rand() % res) * inverse_res;
+    }
+
+    return vout;
+}
+
+template <typename T> Vector<T> uniformRandomInt(const size_t num_elements, const int max_num)
+{
+    Vector<T> vout(num_elements);
+    const int max_num_increased = max_num + 1;
+
+    for (size_t k = 0; k < num_elements; k++)
+    {
+        vout(k) = static_cast<T>(rand() % max_num_increased);
+    }
+
+    return vout;
+}
+
+inline Vector<size_t> randomPermutation(const size_t num_elements)
+{
+    Vector<size_t> v_numbers(num_elements);
+    Vector<float> v_rand = uniformRandom<float>(num_elements);
+
+    for (size_t k = 0; k < num_elements; k++)
+    {
+        v_numbers(k) = k;
+    }
+
+    bool done = false;
+
+    while (!done)
+    {
+        bool did_swap = false;
+        for (size_t k = 0; k < num_elements - 1; k++)
+        {
+            if (v_rand(k) > v_rand(k + 1))
+            {
+                const float temp = v_rand(k);
+                v_rand(k) = v_rand(k + 1);
+                v_rand(k + 1) = temp;
+
+                const size_t temp_i = v_numbers(k);
+                v_numbers(k) = v_numbers(k + 1);
+                v_numbers(k + 1) = temp_i;
+
+                did_swap = true;
+            }
+        }
+        if (!did_swap)
+        {
+            done = true;
+        }
+    }
+
+    return v_numbers;
+}
+
+template <typename T> Vector<size_t> sortedIndices(const Vector<T>& vin)
+{
+    Vector<size_t> v_indices(vin.size());
+    Vector<T> v_temp(vin);
+
+    for (size_t k = 0; k < vin.size(); k++)
+    {
+        v_indices(k) = k;
+    }
+
+    bool done = false;
+
+    while (!done)
+    {
+        bool did_swap = false;
+        for (size_t k = 0; k < vin.size() - 1; k++)
+        {
+            if (v_temp(k) > v_temp(k + 1))
+            {
+                const T temp = v_temp(k);
+                v_temp(k) = v_temp(k + 1);
+                v_temp(k + 1) = temp;
+
+                const size_t temp_i = v_indices(k);
+                v_indices(k) = v_indices(k + 1);
+                v_indices(k + 1) = temp_i;
+
+                did_swap = true;
+            }
+        }
+        if (!did_swap)
+        {
+            done = true;
+        }
+    }
+
+    return v_indices;
+}
+
+template <typename T>
+std::pair<Vector<T>, Vector<size_t>> sortValuesAndIndices(const Vector<T>& vin)
+{
+    Vector<size_t> v_indices(vin.size());
+    Vector<T> v_values(vin);
+
+    for (size_t k = 0; k < vin.size(); k++)
+    {
+        v_indices(k) = k;
+    }
+
+    bool done = false;
+
+    while (!done)
+    {
+        bool did_swap = false;
+        for (size_t k = 0; k < vin.size() - 1; k++)
+        {
+            if (v_values(k) > v_values(k + 1))
+            {
+                const T temp = v_values(k);
+                v_values(k) = v_values(k + 1);
+                v_values(k + 1) = temp;
+
+                const size_t temp_i = v_indices(k);
+                v_indices(k) = v_indices(k + 1);
+                v_indices(k + 1) = temp_i;
+
+                did_swap = true;
+            }
+        }
+        if (!did_swap)
+        {
+            done = true;
+        }
+    }
+
+    return std::pair<Vector<T>, Vector<size_t>>(v_values, v_indices);
+}
+
+template <typename T, typename Y> Vector<T> roundAndCastVector(const Vector<T>& vin)
+{
+    Vector<Y> vout(vin.size());
+    for (size_t k = 0; k < vin.size(); k++)
+    {
+        vout(k) = static_cast<Y>(std::round(vin(k)));
+    }
+
+    return vout;
+}
+
+template <typename T> Vector<T> integerLinspace(const T x0, const T x1)
+{
+    const T num_values = static_cast<int>(x1 - x0 + static_cast<T>(1));
+    ASSERT(num_values > 0);
+    Vector<T> v(num_values);
+
+    v(0) = x0;
+    for (size_t k = 1; k < num_values; k++)
+    {
+        v(k) = v(k - 1) + static_cast<T>(1);
+    }
+
+    return v;
+}
+
+template <typename T> Vector<T> vectorWithOnes(const size_t num_values)
+{
+    Vector<T> v(num_values);
+    const T one_casted = static_cast<T>(1);
+    for (size_t k = 0; k < num_values; k++)
+    {
+        v(k) = one_casted;
+    }
+    return v;
 }
 
 }  // namespace arl

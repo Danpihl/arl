@@ -503,6 +503,25 @@ TEST_F(VectorTest, FillVector)
     }
 }
 
+TEST_F(VectorTest, ResizeVectorSimple)
+{
+    Vectord v_uninitialized;
+    ASSERT_FALSE(v_uninitialized.isAllocated());
+    ASSERT_EQ(v_uninitialized.size(), static_cast<size_t>(0));
+
+    v_uninitialized.resize(0);
+    ASSERT_FALSE(v_uninitialized.isAllocated());
+    ASSERT_EQ(v_uninitialized.size(), static_cast<size_t>(0));
+
+    v_uninitialized.resize(31);
+    ASSERT_TRUE(v_uninitialized.isAllocated());
+    ASSERT_EQ(v_uninitialized.size(), static_cast<size_t>(31));
+
+    v_uninitialized.resize(31);
+    ASSERT_TRUE(v_uninitialized.isAllocated());
+    ASSERT_EQ(v_uninitialized.size(), static_cast<size_t>(31));
+}
+
 TEST_F(VectorTest, ResizeVector)
 {
     Vectord v_initialized(10);
@@ -647,6 +666,133 @@ TEST_F(VectorTest, InitializerListEqual)
     for (size_t k = 0; k < v0.size(); k++)
     {
         ASSERT_EQ(v0(k), static_cast<int>(k));
+    }
+}
+
+TEST_F(VectorTest, Sorting)
+{
+    Vector<int> v0 = {0, 2, 6,  1, 3, 7,  10, 1,  3,  11, 23, 3,  1, 2, 5, 2,  7, 4, 2,  4,
+                      7, 3, 99, 1, 5, 42, 65, 14, 92, 42, 10, 32, 6, 3, 1, 53, 1, 4, 23, 4};
+    v0.sort();
+    for (size_t k = 0; k < v0.size() - 1; k++)
+    {
+        ASSERT_LE(v0(k), v0(k + 1));
+    }
+}
+
+TEST_F(VectorTest, SortingIndices)
+{
+    const Vector<int> v0 = {0, 2, 6,  1, 3, 7,  10, 1,  3,  11, 23, 3,  1, 2, 5, 2,  7, 4, 2,  4,
+                            7, 3, 99, 1, 5, 42, 65, 14, 92, 42, 10, 32, 6, 3, 1, 53, 1, 4, 23, 4};
+
+    const Vector<size_t> v_indices = sortedIndices(v0);
+
+    for (size_t k = 0; k < v0.size() - 1; k++)
+    {
+        const size_t idx0 = v_indices(k);
+        const size_t idx1 = v_indices(k + 1);
+        ASSERT_LE(v0(idx0), v0(idx1));
+    }
+}
+
+TEST_F(VectorTest, SortingValuesAndIndices)
+{
+    const Vector<int> v0 = {0, 2, 6,  1, 3, 7,  10, 1,  3,  11, 23, 3,  1, 2, 5, 2,  7, 4, 2,  4,
+                            7, 3, 99, 1, 5, 42, 65, 14, 92, 42, 10, 32, 6, 3, 1, 53, 1, 4, 23, 4};
+
+    const std::pair<Vector<int>, Vector<size_t>> p = sortValuesAndIndices(v0);
+    const Vector<int> v_values = p.first;
+    const Vector<size_t> v_indices = p.second;
+
+    for (size_t k = 0; k < v0.size() - 1; k++)
+    {
+        ASSERT_LE(v_values(k), v_values(k + 1));
+
+        const size_t idx0 = v_indices(k);
+        const size_t idx1 = v_indices(k + 1);
+        ASSERT_LE(v0(idx0), v0(idx1));
+    }
+}
+
+TEST_F(VectorTest, VectorCasting)
+{
+    const Vector<float> v0 = {-2.1, -1.8, -1.2, -0.7, -0.3, 0.1, 0.7, 1.1, 1.7, 2.2};
+    Vector<int> v1;
+    v1 = v0;
+
+    const Vector<int> v2 = v0;
+
+    const Vector<int> v_exp = {-2, -1, -1, 0, 0, 0, 0, 1, 1, 2};
+
+    ASSERT_VECTOR_EQ_VECTOR(v_exp, v1);
+    ASSERT_VECTOR_EQ_VECTOR(v_exp, v2);
+}
+
+TEST_F(VectorTest, IntegerLinspace)
+{
+    const float l0 = -3.0f;
+    const float l1 = 7.0f;
+    const Vector<float> v0 = integerLinspace(l0, l1);
+
+    const size_t num_elements = static_cast<size_t>(l1 - l0) + 1;
+
+    ASSERT_EQ(num_elements, v0.size());
+    for (size_t k = 0; k < num_elements; k++)
+    {
+        ASSERT_EQ(static_cast<float>(k + l0), v0(k));
+    }
+}
+
+TEST_F(VectorTest, SumMeanVarRMS)
+{
+    const double eps = 1e-5;
+    const Vector<double> v0 = {2.2, 5.3, 0.2, -0.12, 0.3, 45.0, 32, 97.3, -78.5};
+    const double sum_exp = 103.68;
+    const double mean_exp = 11.52;
+    const double var_exp = 2189.65;
+    const double rms_exp = 45.5968;
+
+    ASSERT_NEAR(sum_exp, sum(v0), eps);
+    ASSERT_NEAR(mean_exp, mean(v0), eps);
+    // ASSERT_NEAR(var_exp, variance(v0), eps);
+    ASSERT_NEAR(rms_exp, rootMeanSquare(v0), eps);
+}
+
+TEST_F(VectorTest, FindItemsInVector)
+{
+    const Vector<int> v0 = {0, 2, 4, 2, 5, 6, 2, 3, 4, 6, 4, 9, 1, 0};
+
+    const Vector<size_t> indices_of_1_exp = {12};
+    const Vector<size_t> indices_of_2_exp = {1, 3, 6};
+    const Vector<size_t> indices_of_4_exp = {2, 8, 10};
+    const Vector<size_t> indices_of_6_exp = {5, 9};
+    const Vector<size_t> indices_of_0_exp;
+
+    const Vector<size_t> indices_of_2_act = v0.findIndicesOf(2);
+    const Vector<size_t> indices_of_4_act = v0.findIndicesOf(4);
+    const Vector<size_t> indices_of_6_act = v0.findIndicesOf(6);
+    const Vector<size_t> indices_of_1_act = v0.findIndicesOf(1);
+    const Vector<size_t> indices_of_0_act = v0.findIndicesOf(-1);
+
+    ASSERT_VECTOR_EQ_VECTOR(indices_of_2_exp, indices_of_2_act);
+    ASSERT_VECTOR_EQ_VECTOR(indices_of_4_exp, indices_of_4_act);
+    ASSERT_VECTOR_EQ_VECTOR(indices_of_6_exp, indices_of_6_act);
+    ASSERT_VECTOR_EQ_VECTOR(indices_of_1_exp, indices_of_1_act);
+    ASSERT_EQ(indices_of_0_act.size(), indices_of_0_exp.size());
+    ASSERT_EQ(indices_of_0_act.size(), static_cast<size_t>(0));
+}
+
+TEST_F(VectorTest, VectorWithOnes)
+{
+    for (size_t num_values = 1; num_values < 10; num_values++)
+    {
+        const Vector<int> ones_vec_int = vectorWithOnes<int>(num_values);
+        const Vector<double> ones_vec_double = vectorWithOnes<double>(num_values);
+        for (size_t k = 0; k < num_values; k++)
+        {
+            ASSERT_EQ(ones_vec_int(k), 1);
+            ASSERT_EQ(ones_vec_double(k), 1.0);
+        }
     }
 }
 

@@ -8,6 +8,7 @@
 #include "arl/utilities/logging.h"
 
 #include <cmath>
+#include <type_traits>
 #include <utility>
 
 namespace arl
@@ -64,13 +65,51 @@ template <typename T> Vector<T>& Vector<T>::operator=(const Vector<T>& v)
         }
         vector_length_ = v.size();
 
-        // DATA_ALLOCATION(data_, v.size(), T, "Vector");
         is_allocated_ = true;
 
         for (size_t k = 0; k < v.size(); k++)
         {
             data_[k] = v(k);
         }
+    }
+
+    return *this;
+}
+
+template <typename T>
+template <typename Y>
+Vector<T>::Vector(const Vector<Y>& v) : is_allocated_(true)
+{
+    vector_length_ = v.size();
+
+    DATA_ALLOCATION(data_, v.size(), T, "Vector");
+
+    for (size_t k = 0; k < v.size(); k++)
+    {
+        data_[k] = static_cast<T>(v(k));
+    }
+}
+
+template <typename T> template <typename Y> Vector<T>& Vector<T>::operator=(const Vector<Y>& v)
+{
+    if (is_allocated_)
+    {
+        if (v.size() != vector_length_)
+        {
+            delete[] data_;
+            DATA_ALLOCATION(data_, v.size(), T, "Vector");
+        }
+    }
+    else
+    {
+        DATA_ALLOCATION(data_, v.size(), T, "Vector");
+    }
+    vector_length_ = v.size();
+    is_allocated_ = true;
+
+    for (size_t k = 0; k < v.size(); k++)
+    {
+        data_[k] = static_cast<T>(v(k));
     }
 
     return *this;
@@ -95,8 +134,6 @@ template <typename T> Vector<T>::Vector(const std::initializer_list<T>& il)
 
 template <typename T> Vector<T>::Vector(const std::vector<T>& v)
 {
-    ASSERT(v.size() > 0) << "Tried to initialize with empty vector!";
-
     if (v.size() == 0)
     {
         vector_length_ = 0;
@@ -230,7 +267,7 @@ template <typename T> bool Vector<T>::isAllocated() const
     return is_allocated_;
 }
 
-template <typename T> void Vector<T>::fill(T val)
+template <typename T> void Vector<T>::fill(const T& val)
 {
     assert(is_allocated_ && "Tried to fill un allocated vector!");
     for (size_t k = 0; k < vector_length_; k++)
@@ -241,15 +278,39 @@ template <typename T> void Vector<T>::fill(T val)
 
 template <typename T> void Vector<T>::resize(const size_t vector_length)
 {
-    if (is_allocated_)
+    if ((vector_length != vector_length_) && (vector_length != 0))
     {
-        delete[] data_;
+        if (is_allocated_)
+        {
+            delete[] data_;
+        }
+
+        if (vector_length == 0)
+        {
+            is_allocated_ = false;
+            vector_length_ = 0;
+        }
+        else
+        {
+            is_allocated_ = true;
+            DATA_ALLOCATION(data_, vector_length, T, "Vector");
+            vector_length_ = vector_length;
+        }
     }
+}
 
-    is_allocated_ = true;
-    DATA_ALLOCATION(data_, vector_length, T, "Vector");
+template <typename T> Vector<size_t> Vector<T>::findIndicesOf(const T& item_to_find) const
+{
+    std::vector<size_t> indices_of_found_items;
 
-    vector_length_ = vector_length;
+    for (size_t k = 0; k < vector_length_; k++)
+    {
+        if (data_[k] == item_to_find)
+        {
+            indices_of_found_items.push_back(k);
+        }
+    }
+    return indices_of_found_items;
 }
 
 template <typename T> size_t Vector<T>::countNumNonZeroElements() const
@@ -274,6 +335,39 @@ template <typename T> size_t Vector<T>::endIndex() const
 template <typename T> T* Vector<T>::getDataPointer() const
 {
     return data_;
+}
+
+template <typename T> Vector<T> Vector<T>::sorted() const
+{
+    Vector<T> v(*this);
+    v.sort();
+
+    return v;
+}
+
+template <typename T> void Vector<T>::sort()
+{
+    bool done = false;
+
+    while (!done)
+    {
+        bool did_swap = false;
+        for (size_t k = 0; k < vector_length_ - 1; k++)
+        {
+            if (data_[k] > data_[k + 1])
+            {
+                const T temp = data_[k];
+                data_[k] = data_[k + 1];
+                data_[k + 1] = temp;
+
+                did_swap = true;
+            }
+        }
+        if (!did_swap)
+        {
+            done = true;
+        }
+    }
 }
 
 template <typename T> T Vector<T>::norm() const
@@ -336,6 +430,18 @@ template <typename T> T operator*(const Vector<T>& v0, const Vector<T>& v1)
         d = d + v0(k) * v1(k);
     }
     return d;
+}
+
+template <typename T> Vector<T> operator%(const Vector<T>& v, const int i)
+{
+    Vector<T> vout(v.size());
+
+    for (size_t k = 0; k < v.size(); k++)
+    {
+        vout(k) = static_cast<T>(static_cast<int>(v(k)) % i);
+    }
+
+    return vout;
 }
 
 template <typename T> Vector<T> operator*(const T f, const Vector<T>& v)

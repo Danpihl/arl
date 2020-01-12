@@ -32,7 +32,7 @@ set(TEST_LIB_FILES libgtest.a
 # test-math-core executable
 add_executable(test-math-core ${TEST_CPP_FILES} ${TEST_UTILS_FILES})
 target_link_libraries(test-math-core ${TEST_LIB_FILES})
-cotire(test-math-core)
+# cotire(test-math-core)
 
 # set(RAPIDCHECK_CPP rapidcheck/rc_math.cpp)
 
@@ -83,7 +83,7 @@ cotire(test-math-core-complex)
 add_executable(test-math-core-vector test_lin_alg/test_vector/test_vector.cpp test_lin_alg/test_vector/test_vector_indexing.cpp
                                      ${TEST_UTILS_FILES})
 target_link_libraries(test-math-core-vector ${TEST_LIB_FILES})
-cotire(test-math-core-vector)
+# cotire(test-math-core-vector)
 
 add_executable(test-math-core-vector-matrix test_lin_alg/test_vector_matrix/test_vector_matrix.cpp ${TEST_UTILS_FILES})
 target_link_libraries(test-math-core-vector-matrix ${TEST_LIB_FILES})

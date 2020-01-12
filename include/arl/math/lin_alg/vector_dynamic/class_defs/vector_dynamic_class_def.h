@@ -16,6 +16,7 @@ public:
     Vector();
     Vector(const size_t vector_length);
     Vector(const Vector<T>& v);
+    template <typename Y> Vector(const Vector<Y>& v);
 
     Vec2D<T> toVec2D() const;
     Vec3D<T> toVec3D() const;
@@ -40,11 +41,13 @@ public:
     size_t size() const;
     size_t numElements() const;
     bool isAllocated() const;
-    void fill(T val);
+    void fill(const T& val);
     void resize(const size_t vector_length);
     size_t endIndex() const;
     T* getDataPointer() const;
 
+    void sort();
+    Vector<T> sorted() const;
     Vector<T> normalized() const;
     Vector<T> vectorBetweenPoints(const Point<T>& end_point) const;
     Vector<T> normalizedVectorBetweenPoints(const Point<T>& end_point) const;
@@ -59,10 +62,13 @@ public:
 
     T* begin() const;
     T* end() const;
+    Vector<size_t> findIndicesOf(const T& item_to_find) const;
     // const T* begin() const { return &data_[0]; }
     // const T* end() const { return &data_[vector_length_ - 1]; }
 
     //
+
+    template <typename Y> Vector<T>& operator=(const Vector<Y>& rhs);
 };
 }  // namespace arl
 

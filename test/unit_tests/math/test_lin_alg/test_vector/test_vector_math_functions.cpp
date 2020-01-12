@@ -122,5 +122,5 @@ TEST_F(GeneralMathFunctionsTest, VecAny)
     ASSERT_FALSE(any(v2));
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl
