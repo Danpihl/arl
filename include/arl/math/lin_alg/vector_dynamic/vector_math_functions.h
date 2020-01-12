@@ -412,7 +412,7 @@ std::pair<Vector<T>, Vector<size_t>> sortValuesAndIndices(const Vector<T>& vin)
     return std::pair<Vector<T>, Vector<size_t>>(v_values, v_indices);
 }
 
-template <typename T, typename Y> Vector<T> roundAndCastVector(const Vector<T>& vin)
+template <typename Y, typename T> Vector<Y> roundAndCast(const Vector<T>& vin)
 {
     Vector<Y> vout(vin.size());
     for (size_t k = 0; k < vin.size(); k++)

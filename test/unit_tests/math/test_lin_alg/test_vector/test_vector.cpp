@@ -796,5 +796,19 @@ TEST_F(VectorTest, VectorWithOnes)
     }
 }
 
+TEST_F(VectorTest, RoundAndCast)
+{
+    const Vector<float> v0 = {-2.1, -1.8, -1.2, -0.7, -0.3, 0.1, 0.7, 1.1, 1.7, 2.2};
+    Vector<int> v1;
+    v1 = roundAndCast<int>(v0);
+
+    const Vector<int> v2 = roundAndCast<int>(v0);
+
+    const Vector<int> v_exp = {-2, -2, -1, -1, 0, 0, 1, 1, 2, 2};
+
+    ASSERT_VECTOR_EQ_VECTOR(v_exp, v1);
+    ASSERT_VECTOR_EQ_VECTOR(v_exp, v2);
+}
+
 }  // namespace
 }  // namespace arl

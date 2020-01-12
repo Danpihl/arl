@@ -63,11 +63,6 @@ public:
     T* begin() const;
     T* end() const;
     Vector<size_t> findIndicesOf(const T& item_to_find) const;
-    // const T* begin() const { return &data_[0]; }
-    // const T* end() const { return &data_[vector_length_ - 1]; }
-
-    //
-
     template <typename Y> Vector<T>& operator=(const Vector<Y>& rhs);
 };
 }  // namespace arl
