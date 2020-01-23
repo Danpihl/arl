@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-void printStringVec(const std::vector<std::string>& v)
+void printStringVecForSplitStringDebug(const std::vector<std::string>& v)
 {
     size_t idx = 0;
     for (const std::string s : v)
@@ -20,6 +20,16 @@ void printStringVec(const std::vector<std::string>& v)
         {
             std::cout << s << "|" << std::endl;
         }
+    }
+    std::cout << std::endl;
+}
+
+void printStringVec(const std::vector<std::string>& v)
+{
+    size_t idx = 0;
+    for (const std::string s : v)
+    {
+        std::cout << s << std::endl;
     }
     std::cout << std::endl;
 }

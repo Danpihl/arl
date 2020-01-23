@@ -100,11 +100,11 @@ TEST_F(StringUtilsTest, TestSplitStringOneSpace)
     const std::string s3 = "AaaABbbBCccC ";
     const std::string s4 = "AaaABbbBCccC";
     const std::string delim = " ";
-    const std::vector<std::string> split_string0 = splitString2(s0, delim);
-    const std::vector<std::string> split_string1 = splitString2(s1, delim);
-    const std::vector<std::string> split_string2 = splitString2(s2, delim);
-    const std::vector<std::string> split_string3 = splitString2(s3, delim);
-    const std::vector<std::string> split_string4 = splitString2(s4, delim);
+    const std::vector<std::string> split_string0 = splitString(s0, delim);
+    const std::vector<std::string> split_string1 = splitString(s1, delim);
+    const std::vector<std::string> split_string2 = splitString(s2, delim);
+    const std::vector<std::string> split_string3 = splitString(s3, delim);
+    const std::vector<std::string> split_string4 = splitString(s4, delim);
 
     const std::vector<std::string> split_string0_exp = {"", "AaaABbbBCccC"};
     const std::vector<std::string> split_string1_exp = {"AaaA", "BbbBCccC"};
@@ -134,15 +134,15 @@ TEST_F(StringUtilsTest, TestSplitStringMultipleSpaces)
     const std::string s8 = "  d     d";
     const std::string s9 = " ";
 
-    const std::vector<std::string> split_string0 = splitString3(s0, delim);
-    const std::vector<std::string> split_string1 = splitString3(s1, delim);
-    const std::vector<std::string> split_string2 = splitString3(s2, delim);
-    const std::vector<std::string> split_string3 = splitString3(s3, delim);
-    const std::vector<std::string> split_string4 = splitString3(s4, delim);
-    const std::vector<std::string> split_string5 = splitString3(s5, delim);
-    const std::vector<std::string> split_string6 = splitString3(s6, delim);
-    const std::vector<std::string> split_string7 = splitString3(s7, delim);
-    const std::vector<std::string> split_string8 = splitString3(s8, delim);
+    const std::vector<std::string> split_string0 = splitString(s0, delim);
+    const std::vector<std::string> split_string1 = splitString(s1, delim);
+    const std::vector<std::string> split_string2 = splitString(s2, delim);
+    const std::vector<std::string> split_string3 = splitString(s3, delim);
+    const std::vector<std::string> split_string4 = splitString(s4, delim);
+    const std::vector<std::string> split_string5 = splitString(s5, delim);
+    const std::vector<std::string> split_string6 = splitString(s6, delim);
+    const std::vector<std::string> split_string7 = splitString(s7, delim);
+    const std::vector<std::string> split_string8 = splitString(s8, delim);
 
     const std::vector<std::string> split_string0_exp = {
         "", "", "AaaA", "", "B", "bb", "", "", "B", "Cc", "cC", ""};
@@ -176,9 +176,30 @@ TEST_F(StringUtilsTest, TestSplitStringWithTestVectors)
     {
         const std::string delim = delimiters[k];
         const std::string string_to_test = test_strings[k];
-        const std::vector<std::string> split_string_act = splitString3(string_to_test, delim);
+
+        const std::vector<std::string> split_string_act = splitString(string_to_test, delim);
         const std::vector<std::string> split_string_exp = gt_vectors[k];
+
         ASSERT_STD_VEC_EQ_STD_VEC(split_string_exp, split_string_act);
+    }
+}
+
+TEST_F(StringUtilsTest, TestSortStringVector)
+{
+    const std::vector<std::vector<std::string>> v = {
+        {"00001", "3", "6", "5", "2", "9", "0", "3", "-001", "3"},
+        {"2", "1", "5", "4", "4", "2", "4"},
+        {"-1", "-3", "4", "-3", "-3", "2", "-5", "6", "9"}};
+    for (size_t k = 0; k < v.size(); k++)
+    {
+        const auto res = sortIntegerStringVector(v[k]);
+        ASSERT_EQ(res.size(), v[k].size());
+        for (size_t i = 0; i < (res.size() - 1); i++)
+        {
+            const int current_num = std::stoi(res[i], nullptr, 10);
+            const int next_num = std::stoi(res[i + 1], nullptr, 10);
+            ASSERT_GE(next_num, current_num);
+        }
     }
 }
 
