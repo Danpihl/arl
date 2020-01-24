@@ -26,7 +26,6 @@ void printStringVecForSplitStringDebug(const std::vector<std::string>& v)
 
 void printStringVec(const std::vector<std::string>& v)
 {
-    size_t idx = 0;
     for (const std::string s : v)
     {
         std::cout << s << std::endl;

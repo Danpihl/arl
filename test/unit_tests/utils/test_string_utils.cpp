@@ -49,37 +49,38 @@ TEST_F(StringUtilsTest, TestSplitString)
     const std::vector<std::string> split_str_act = splitString(s0, ",");
 
     ASSERT_EQ(split_str_exp.size(), split_str_act.size());
-
-    for (size_t k = 0; k < split_str_exp.size(); k++)
-    {
-        ASSERT_EQ(split_str_exp[k], split_str_act[k]);
-    }
+    ASSERT_STD_VEC_EQ_STD_VEC(split_str_exp, split_str_act);
 }
 
 TEST_F(StringUtilsTest, TestSplitString1)
 {
     const std::string s0 = "f4oim,g43rf,22f,hw4,,";
-    const std::vector<std::string> split_str_exp = {"f4oim", "g43rf", "22f", "hw4"};
+    const std::vector<std::string> split_str_exp = {"f4oim", "g43rf", "22f", "hw4", "", ""};
     const std::vector<std::string> split_str_act = splitString(s0, ",");
 
-    // ASSERT_EQ(split_str_exp.size(), split_str_act.size());
+    ASSERT_EQ(split_str_exp.size(), split_str_act.size());
 
-    /*for (size_t k = 0; k < split_str_exp.size(); k++)
-    {
-        // ASSERT_EQ(split_str_exp[k], split_str_act[k]);
-        std::cout << split_str_act[k] << std::endl;
-    }*/
+    ASSERT_STD_VEC_EQ_STD_VEC(split_str_exp, split_str_act);
 }
 
 TEST_F(StringUtilsTest, TestFindSubStringIndices)
 {
     const std::string s0 = "micdfacdeorcdmmacdfcdcdoacd";
     const std::string sub_str = "cd";
-    std::vector<size_t> indices = findSubStringIndices(s0, sub_str);
-    for (size_t k = 0; k < indices.size(); k++)
-    {
-        // PRINT() << indices[k];
-    }
+
+    const std::vector<size_t> indices_exp = {2, 6, 11, 16, 19, 21, 25};
+    const std::vector<size_t> indices_act = findSubStringIndices(s0, sub_str);
+    ASSERT_STD_VEC_EQ_STD_VEC(indices_exp, indices_act);
+}
+
+TEST_F(StringUtilsTest, TestFindSubStringIndicesEmpty)
+{
+    const std::string s0 = "micdfacdeorcdmmacdfcdcdoacd";
+    const std::string sub_str = "cdq";
+
+    const std::vector<size_t> indices_exp;
+    const std::vector<size_t> indices_act = findSubStringIndices(s0, sub_str);
+    ASSERT_EQ(indices_exp.size(), indices_act.size());
 }
 
 TEST_F(StringUtilsTest, TestFindSubStringIndices1)
@@ -117,54 +118,6 @@ TEST_F(StringUtilsTest, TestSplitStringOneSpace)
     ASSERT_STD_VEC_EQ_STD_VEC(split_string2, split_string2_exp);
     ASSERT_STD_VEC_EQ_STD_VEC(split_string3, split_string3_exp);
     ASSERT_STD_VEC_EQ_STD_VEC(split_string4, split_string4_exp);
-}
-
-TEST_F(StringUtilsTest, TestSplitStringMultipleSpaces)
-{
-    const std::string delim = " ";
-
-    const std::string s0 = "  AaaA  B bb   B Cc cC ";
-    const std::string s1 = "     ";
-    const std::string s2 = "          ";
-    const std::string s3 = " d  d  ";
-    const std::string s4 = "  dd   d dd  d ";
-    const std::string s5 = "d     d ";
-    const std::string s6 = " d     d";
-    const std::string s7 = "d     d  ";
-    const std::string s8 = "  d     d";
-    const std::string s9 = " ";
-
-    const std::vector<std::string> split_string0 = splitString(s0, delim);
-    const std::vector<std::string> split_string1 = splitString(s1, delim);
-    const std::vector<std::string> split_string2 = splitString(s2, delim);
-    const std::vector<std::string> split_string3 = splitString(s3, delim);
-    const std::vector<std::string> split_string4 = splitString(s4, delim);
-    const std::vector<std::string> split_string5 = splitString(s5, delim);
-    const std::vector<std::string> split_string6 = splitString(s6, delim);
-    const std::vector<std::string> split_string7 = splitString(s7, delim);
-    const std::vector<std::string> split_string8 = splitString(s8, delim);
-
-    const std::vector<std::string> split_string0_exp = {
-        "", "", "AaaA", "", "B", "bb", "", "", "B", "Cc", "cC", ""};
-    const std::vector<std::string> split_string1_exp = {"", "", "", "", "", ""};
-    const std::vector<std::string> split_string2_exp = {"", "", "", "", "", "", "", "", "", "", ""};
-    const std::vector<std::string> split_string3_exp = {"", "d", "", "d", "", ""};
-    const std::vector<std::string> split_string4_exp = {
-        "", "", "dd", "", "", "d", "dd", "", "d", ""};
-    const std::vector<std::string> split_string5_exp = {"d", "", "", "", "", "d", ""};
-    const std::vector<std::string> split_string6_exp = {"", "d", "", "", "", "", "d"};
-    const std::vector<std::string> split_string7_exp = {"d", "", "", "", "", "d", "", ""};
-    const std::vector<std::string> split_string8_exp = {"", "", "d", "", "", "", "", "d"};
-
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string0, split_string0_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string1, split_string1_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string2, split_string2_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string3, split_string3_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string4, split_string4_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string5, split_string5_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string6, split_string6_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string7, split_string7_exp);
-    ASSERT_STD_VEC_EQ_STD_VEC(split_string8, split_string8_exp);
 }
 
 TEST_F(StringUtilsTest, TestSplitStringWithTestVectors)
