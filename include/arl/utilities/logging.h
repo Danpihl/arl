@@ -3,6 +3,7 @@
 
 #include <sys/time.h>
 #include <chrono>
+#include <csignal>
 #include <functional>
 #include <iostream>
 #include <mutex>
@@ -318,6 +319,10 @@ public:
 
     explicit Log() : pre_string_(""), assertion_condition_(true), should_print_(true) {}
 
+    explicit Log(const bool cond) : pre_string_(""), assertion_condition_(true), should_print_(cond)
+    {
+    }
+
     std::ostringstream& getStream()
     {
         return string_stream_;
@@ -328,7 +333,7 @@ public:
         if (!assertion_condition_)
         {
             std::cout << pre_string_ + string_stream_.str() << std::endl;
-            exit(-1);
+            raise(SIGABRT);
         }
         else
         {
@@ -406,6 +411,8 @@ inline void showThreadId(const bool show_thread_id)
         .getStream()
 
 #define PRINT() arl::logging::internal::Log().getStream()
+
+#define PRINT_COND(cond) arl::logging::internal::Log(cond).getStream()
 
 #define ASSERT(cond)                                                                            \
     arl::logging::internal::Log(                                                                \
