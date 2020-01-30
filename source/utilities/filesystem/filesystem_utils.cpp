@@ -7,9 +7,12 @@
 #include <string>
 
 #include "arl/utilities/logging.h"
+
+#include <boost/filesystem.hpp>
+
 namespace arl
 {
-/*bool fileExists(std::string path)
+bool fileExists(const std::string& path)
 {
     return boost::filesystem::exists(path);
 }
@@ -78,28 +81,6 @@ std::vector<std::string> getSortedFileListFromDir(std::string dir)
     return file_list;
 }
 
-std::vector<std::string> getSortedFileListFromDirWithZeroPaddedFiles(std::string dir)
-{
-    std::vector<std::string> file_list;
-
-    if (!dir.empty())
-    {
-        boost::filesystem::path boost_path(dir);
-        boost::filesystem::recursive_directory_iterator end_iterator;
-
-        for (boost::filesystem::recursive_directory_iterator it(boost_path); it != end_iterator;
-             ++it)
-        {
-            const boost::filesystem::path file_path = (*it);
-            file_list.push_back(file_path.string());
-        }
-
-        std::sort(file_list.begin(), file_list.end());
-    }
-
-    return file_list;
-}*/
-
 std::string joinPaths(const std::string& file_path0, const std::string& file_path1)
 {
     ASSERT(file_path0.length() > 0) << "file_path0 was empty!";
@@ -123,6 +104,29 @@ std::string extractPathFromFullFilePath(const std::string& full_file_path)
 {
     // TODO: What happens if this is already a folder path?
     const int idx = full_file_path.find_last_of("/");
-    return full_file_path.substr(0, idx);
+    if (idx == 0)
+    {
+        return "/";
+    }
+    else
+    {
+        return full_file_path.substr(0, idx);
+    }
 }
+
+bool isDirectory(const std::string& path)
+{
+    return boost::filesystem::is_directory(path);
+}
+
+bool isFile(const std::string& path)
+{
+    return boost::filesystem::is_regular_file(path);
+}
+
+bool createDir(const std::string& path)
+{
+    return boost::filesystem::create_directory(path);
+}
+
 }  // namespace arl

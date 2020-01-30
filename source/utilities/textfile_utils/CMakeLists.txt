@@ -6,4 +6,4 @@ set (CMAKE_CXX_STANDARD 14)
 
 # textfile-utils library
 add_library(textfile-utils SHARED textfile_utils.cpp)
-target_link_libraries(textfile-utils string-utils)
+target_link_libraries(textfile-utils string-utils filesystem-utils)

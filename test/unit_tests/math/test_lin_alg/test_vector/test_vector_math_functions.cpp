@@ -97,7 +97,7 @@ TEST_F(GeneralMathFunctionsTest, VecFind)
     const Vector<int> v0({0, 1, 0, 0, 2, 0, 1, -3, 0, 0, -1, 1, 0, 3, 0, 2});
     const Vector<size_t> v_exp({1, 4, 6, 7, 10, 11, 13, 15});
 
-    const Vector<size_t> v_act = find(v0);
+    const Vector<size_t> v_act = findIndicesOfNonZeroElements(v0);
 
     ASSERT_VECTOR_EQ_VECTOR(v_exp, v_act);
 }
