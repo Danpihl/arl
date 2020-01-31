@@ -4,8 +4,6 @@
 #include <vector>
 
 #include <gtest/gtest.h>
-#include <iostream>
-#include <string>
 
 #include "arl/utilities/filesystem_utils.h"
 #include "arl/utilities/logging.h"

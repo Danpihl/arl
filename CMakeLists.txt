@@ -51,7 +51,7 @@ add_subdirectory(apps/test_image_application)
 add_subdirectory(source/utilities/string_utils)
 add_subdirectory(source/utilities/filesystem)
 # add_subdirectory(source/utilities/commandline_colors)
-# add_subdirectory(source/utilities/csv_utils)
+add_subdirectory(source/utilities/csv_utils)
 add_subdirectory(source/utilities/textfile_utils)
 add_subdirectory(source/utilities/misc_utils)
 

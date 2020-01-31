@@ -19,4 +19,6 @@
  - "switchRows(size_t r0, size_t r1), void switchColumns(size_t c0, size_t c1)" should have const arguments
  - "getColumnVector, getRowVector" should return matrices
  - Quaternion needs to be normalized
-    
+
+
+ - Remove all "utilities"/"utils" suffixes from utilities files

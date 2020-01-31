@@ -4,8 +4,6 @@
 #include <vector>
 
 #include <gtest/gtest.h>
-#include <iostream>
-#include <string>
 
 #include "arl/utilities/filesystem_utils.h"
 #include "arl/utilities/logging.h"
@@ -24,7 +22,7 @@ protected:
 
 TEST_F(TextfileUtilsTest, BasicTestReadWrite)
 {
-    const std::string file_path = "/Users/danielpihlquist/programming_projects/arl/build";
+    /*const std::string file_path = "/Users/danielpihlquist/programming_projects/arl/build";
     const std::string file_name = "test_file.txt";
 
     std::vector<std::string> lines_to_write = {
@@ -39,7 +37,7 @@ TEST_F(TextfileUtilsTest, BasicTestReadWrite)
     for (size_t k = 0; k < read_lines.size(); k++)
     {
         ASSERT_EQ(read_lines[k], lines_to_write[k]);
-    }
+    }*/
 }
 
 TEST_F(TextfileUtilsTest, ExtractFileNameAndPath)

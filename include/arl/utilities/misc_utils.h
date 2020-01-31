@@ -26,55 +26,6 @@ enum class Month
     Dec
 };
 
-/*std::string monthEnumToString(const Month m)
-{
-    std::string s;
-    switch (m)
-    {
-        case Month::Jan:
-            s = "Jan";
-            break;
-        case Month::Feb:
-            s = "Feb";
-            break;
-        case Month::Mar:
-            s = "Mar";
-            break;
-        case Month::Apr:
-            s = "Apr";
-            break;
-        case Month::May:
-            s = "May";
-            break;
-        case Month::Jun:
-            s = "Jun";
-            break;
-        case Month::Jul:
-            s = "Jul";
-            break;
-        case Month::Aug:
-            s = "Aug";
-            break;
-        case Month::Sep:
-            s = "Sep";
-            break;
-        case Month::Oct:
-            s = "Oct";
-            break;
-        case Month::Nov:
-            s = "Nov";
-            break;
-        case Month::Dec:
-            s = "Dec";
-            break;
-        default:
-            EXIT() << "Invalid month!";
-            break;
-    }
-
-    return s;
-}*/
-
 struct Time
 {
     int year;
@@ -83,10 +34,15 @@ struct Time
     int hour;
     int minute;
     int second;
+
+    std::string toString() const;
 };
 
-std::string getTimeNow();
-void printStringLines(std::vector<std::string> string_lines);
+std::string monthEnumToString(const Month m);
+
+Time getTimeNow();
+
+void printStringLines(const std::vector<std::string>& string_lines);
 
 template <typename T> void printVectorOfVectors(std::vector<std::vector<T>> data)
 {

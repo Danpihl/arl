@@ -14,7 +14,14 @@ namespace arl
 {
 bool fileExists(const std::string& path)
 {
-    return boost::filesystem::exists(path);
+    if (access(path.c_str(), F_OK) != -1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 std::vector<std::string> getFileListFromDir(std::string dir)
