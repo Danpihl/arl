@@ -11,7 +11,8 @@ set(UTILS_TEST_FILES test_string_utils.cpp
                      test_textfile_utils.cpp
                      test_filesystem_utils.cpp
                      test_misc_utils.cpp
-                     test_csv_utils.cpp)
+                     test_csv_utils.cpp
+                     test_algorithm.cpp)
 set(UTILS_SOURCE_FILES ${CMAKE_SOURCE_DIR}/source/utilities/string_utils/string_utils.cpp
                        ${CMAKE_SOURCE_DIR}/source/utilities/filesystem/filesystem_utils.cpp
                        ${CMAKE_SOURCE_DIR}/source/utilities/textfile_utils/textfile_utils.cpp
