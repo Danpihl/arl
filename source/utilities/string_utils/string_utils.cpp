@@ -8,6 +8,103 @@
 
 namespace arl
 {
+std::vector<std::pair<std::string, std::string>> splitSeparatorList(
+    const std::vector<std::string>& string_list,
+    const std::string& separator,
+    std::function<std::string(std::string)> key_function,
+    std::function<std::string(std::string)> val_function)
+{
+    std::vector<std::pair<std::string, std::string>> pv;
+
+    for (size_t k = 0; k < string_list.size(); k++)
+    {
+        const std::string current_string = string_list[k];
+        const size_t idx_of_first = current_string.find(separator);
+        ASSERT(idx_of_first != current_string.npos)
+            << "No separator found in string " << current_string;
+
+        const std::string key = current_string.substr(0, idx_of_first);
+        const std::string val =
+            current_string.substr(idx_of_first + 1, current_string.length() - idx_of_first - 1);
+
+        const std::string key_mod = key_function == NULL ? key : key_function(key);
+        const std::string val_mod = val_function == NULL ? val : val_function(val);
+
+        std::pair<std::string, std::string> p(key_mod, val_mod);
+        pv.push_back(p);
+    }
+
+    return pv;
+}
+
+std::string stripLeft(const std::string& s, const char char_to_strip)
+{
+    if (s.length() == 0)
+    {
+        return "";
+    }
+    else
+    {
+        size_t idx = 0;
+        while ((idx < s.length()) && (s[idx] == char_to_strip))
+        {
+            idx++;
+        }
+        return s.substr(idx, s.length() - idx);
+    }
+}
+
+std::string stripRight(const std::string& s, const char char_to_strip)
+{
+    if (s.length() == 0)
+    {
+        return "";
+    }
+    else
+    {
+        int idx = s.length() - 1;
+        while ((idx >= 0) && (s[idx] == char_to_strip))
+        {
+            idx--;
+        }
+        return s.substr(0, idx + 1);
+    }
+}
+
+std::string stripLeftRight(const std::string& s, const char char_to_strip)
+{
+    if (s.length() == 0)
+    {
+        return "";
+    }
+    else
+    {
+        int right_idx = s.length() - 1, left_idx = 0;
+
+        while ((right_idx >= 0) && (s[right_idx] == char_to_strip))
+        {
+            right_idx--;
+        }
+
+        if (right_idx < 0)
+        {
+            return "";
+        }
+
+        while ((static_cast<size_t>(left_idx) < s.length()) && (s[left_idx] == char_to_strip))
+        {
+            left_idx++;
+        }
+
+        if (static_cast<size_t>(right_idx) == (s.length() - 1) && (left_idx == 0))
+        {
+            return s;
+        }
+
+        return s.substr(left_idx, right_idx - left_idx + 1);
+    }
+}
+
 std::vector<size_t> findSubStringIndices(const std::string& str, const std::string& sub_str)
 {
     ASSERT(sub_str.length() > 0) << "Can not find empty substring!";

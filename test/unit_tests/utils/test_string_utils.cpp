@@ -154,4 +154,202 @@ TEST_F(StringUtilsTest, TestSortStringVector)
     }
 }
 
+TEST_F(StringUtilsTest, TestStripLeft)
+{
+    const std::vector<std::string> v_test = {
+        ",,,HEEJ",
+        "",
+        ",",
+        ",,,",
+        "AB,,,,,",
+        ",,,.",
+        ".",
+        "..",
+        "...",
+    };
+
+    const std::vector<std::string> v_exp = {
+        "HEEJ",
+        "",
+        "",
+        "",
+        "AB,,,,,",
+        ".",
+        ".",
+        "..",
+        "...",
+    };
+    const char char_to_strip = ',';
+
+    for (size_t k = 0; k < v_test.size(); k++)
+    {
+        const std::string s_act = stripLeft(v_test[k], char_to_strip);
+        ASSERT_EQ(v_exp[k], s_act);
+    }
+}
+
+TEST_F(StringUtilsTest, TestStripRight)
+{
+    const std::vector<std::string> v_test = {
+        "HEEJ,,,",
+        "",
+        ",",
+        ",,,",
+        ",,,,,AB",
+        ".,,,",
+        ".",
+        "..",
+        "...",
+    };
+
+    const std::vector<std::string> v_exp = {
+        "HEEJ",
+        "",
+        "",
+        "",
+        ",,,,,AB",
+        ".",
+        ".",
+        "..",
+        "...",
+    };
+    const char char_to_strip = ',';
+
+    for (size_t k = 0; k < v_test.size(); k++)
+    {
+        const std::string s_act = stripRight(v_test[k], char_to_strip);
+        ASSERT_EQ(v_exp[k], s_act);
+    }
+}
+
+TEST_F(StringUtilsTest, TestStripLeftRight)
+{
+    const std::vector<std::string> v_test = {",,.,,HEEJ,,,",
+                                             "",
+                                             ",",
+                                             ",,",
+                                             ".",
+                                             "..",
+                                             "...",
+                                             ",,,",
+                                             ",,,,,AB",
+                                             "AB,,,,,",
+                                             ".,,,",
+                                             ",,,.",
+                                             ".,,,.",
+                                             ",,,.,,"};
+
+    const std::vector<std::string> v_exp = {
+        ".,,HEEJ", "", "", "", ".", "..", "...", "", "AB", "AB", ".", ".", ".,,,.", "."};
+    const char char_to_strip = ',';
+
+    for (size_t k = 0; k < v_test.size(); k++)
+    {
+        const std::string s_act = stripLeftRight(v_test[k], char_to_strip);
+        ASSERT_EQ(v_exp[k], s_act);
+    }
+}
+
+TEST_F(StringUtilsTest, TestSplitSeparatorList)
+{
+    const std::vector<std::string> list = {"aaa:frea",
+                                           "qqqq:fmaero",
+                                           "2q45t:gw4534q",
+                                           "favbt:fre",
+                                           "gh5wj:jht",
+                                           "gw546t:5rfd",
+                                           ":mfoiaer",
+                                           "gtrer:"};
+
+    std::vector<std::pair<std::string, std::string>> list_exp = {{"aaa", "frea"},
+                                                                 {"qqqq", "fmaero"},
+                                                                 {"2q45t", "gw4534q"},
+                                                                 {"favbt", "fre"},
+                                                                 {"gh5wj", "jht"},
+                                                                 {"gw546t", "5rfd"},
+                                                                 {"", "mfoiaer"},
+                                                                 {"gtrer", ""}};
+
+    std::vector<std::pair<std::string, std::string>> res = splitSeparatorList(list, ":", 0, 0);
+
+    for (size_t k = 0; k < res.size(); k++)
+    {
+        const std::string key = res[k].first;
+        const std::string val = res[k].second;
+
+        ASSERT_EQ(key, list_exp[k].first);
+        ASSERT_EQ(val, list_exp[k].second);
+    }
+}
+
+TEST_F(StringUtilsTest, TestSplitSeparatorListWithFunction)
+{
+    const std::vector<std::string> list = {"aaa:frea",
+                                           "qqqq:fmaero",
+                                           "2q45t:gw4534q",
+                                           "favbt:fre",
+                                           "gh5wj:jht",
+                                           "gw546t:5rfd",
+                                           ":mfoiaer",
+                                           "gtrer:"};
+
+    std::vector<std::pair<std::string, std::string>> list_exp = {{"aaaKEY", "freaVAL"},
+                                                                 {"qqqqKEY", "fmaeroVAL"},
+                                                                 {"2q45tKEY", "gw4534qVAL"},
+                                                                 {"favbtKEY", "freVAL"},
+                                                                 {"gh5wjKEY", "jhtVAL"},
+                                                                 {"gw546tKEY", "5rfdVAL"},
+                                                                 {"KEY", "mfoiaerVAL"},
+                                                                 {"gtrerKEY", "VAL"}};
+
+    auto f_key = [](std::string s) -> std::string { return s + "KEY"; };
+    auto f_val = [](std::string s) -> std::string { return s + "VAL"; };
+    std::vector<std::pair<std::string, std::string>> res =
+        splitSeparatorList(list, ":", f_key, f_val);
+
+    for (size_t k = 0; k < res.size(); k++)
+    {
+        const std::string key = res[k].first;
+        const std::string val = res[k].second;
+
+        ASSERT_EQ(key, list_exp[k].first);
+        ASSERT_EQ(val, list_exp[k].second);
+    }
+}
+
+TEST_F(StringUtilsTest, TestSplitSeparatorListTemplated)
+{
+    const std::vector<std::string> list = {"53.5434:42",
+                                           "6.23:5276",
+                                           "6.56:345",
+                                           "0.234:44",
+                                           "6.324:794",
+                                           "0.43242:123",
+                                           "0.2345:746",
+                                           "0.634:97"};
+
+    std::vector<std::pair<float, int>> list_exp = {{53.5434f, 42},
+                                                   {6.23f, 5276},
+                                                   {6.56f, 345},
+                                                   {0.234f, 44},
+                                                   {6.324f, 794},
+                                                   {0.43242f, 123},
+                                                   {0.2345f, 746},
+                                                   {0.634f, 97}};
+
+    auto f_key = [](std::string s) -> float { return std::stof(s); };
+    auto f_val = [](std::string s) -> int { return std::stoi(s); };
+    std::vector<std::pair<float, int>> res =
+        splitSeparatorListGeneral<float, int>(list, ":", f_key, f_val);
+
+    for (size_t k = 0; k < res.size(); k++)
+    {
+        const auto key = res[k].first;
+        const auto val = res[k].second;
+
+        ASSERT_EQ(key, list_exp[k].first);
+        ASSERT_EQ(val, list_exp[k].second);
+    }
+}
+
 }  // namespace arl
