@@ -115,6 +115,16 @@ public:
     LUMatrixPair<T> lu() const;
     QRMatrixPair<T> qr() const;
     SVDMatrixTriplet<T> svd() const;
+
+    T max() const;
+    T min() const;
+    Matrix<T> minAlongCols() const;
+    Matrix<T> minAlongRows() const;
+    Matrix<T> maxAlongCols() const;
+    Matrix<T> maxAlongRows() const;
+    T sum() const;
+    Matrix<T> sumAlongRows() const;
+    Matrix<T> sumAlongCols() const;
 };
 }  // namespace arl
 

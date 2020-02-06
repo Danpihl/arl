@@ -1254,6 +1254,187 @@ template <typename T> Vector<T> Matrix<T>::toVector() const
     return vres;
 }
 
+template <typename T> T Matrix<T>::max() const
+{
+    ASSERT_MAT_VALID_INTERNAL();
+
+    T max_val = data_[0];
+    for (size_t c = 1; c < num_cols_; c++)
+    {
+        max_val = std::max(max_val, data_[c]);
+    }
+
+    for (size_t r = 1; r < num_rows_; r++)
+    {
+        T max_val_internal = data_[r * num_cols_];
+        for (size_t c = 1; c < num_cols_; c++)
+        {
+            max_val_internal = std::max(max_val_internal, data_[r * num_cols_ + c]);
+        }
+        max_val = std::max(max_val, max_val_internal);
+    }
+
+    return max_val;
+}
+
+template <typename T> T Matrix<T>::min() const
+{
+    ASSERT_MAT_VALID_INTERNAL();
+
+    T min_val = data_[0];
+    for (size_t c = 1; c < num_cols_; c++)
+    {
+        min_val = std::min(min_val, data_[c]);
+    }
+
+    for (size_t r = 1; r < num_rows_; r++)
+    {
+        T min_val_internal = data_[r * num_cols_];
+        for (size_t c = 1; c < num_cols_; c++)
+        {
+            min_val_internal = std::min(min_val_internal, data_[r * num_cols_ + c]);
+        }
+        min_val = std::min(min_val, min_val_internal);
+    }
+
+    return min_val;
+}
+
+template <typename T> Matrix<T> Matrix<T>::minAlongCols() const
+{
+    // Creates a vector with same number of elements as "num_cols_",
+    // and each element in the vector is the min value of its corresponding column
+    ASSERT_MAT_VALID_INTERNAL();
+    Matrix<T> mres(1, num_cols_);
+
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        mres(0, c) = data_[c];
+    }
+
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        for (size_t r = 1; r < num_rows_; r++)
+        {
+            mres(0, c) = std::min(mres(0, c), data_[r * num_cols_ + c]);
+        }
+    }
+
+    return mres;
+}
+
+template <typename T> Matrix<T> Matrix<T>::minAlongRows() const
+{
+    // Creates a vector with same number of elements as "num_rows_",
+    // and each element in the vector is the min value of its corresponding row
+    ASSERT_MAT_VALID_INTERNAL();
+    Matrix<T> mres(num_rows_, 1);
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        mres(r, 0) = data_[r * num_cols_];
+    }
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 1; c < num_cols_; c++)
+        {
+            mres(r, 0) = std::min(mres(r, 0), data_[r * num_cols_ + c]);
+        }
+    }
+
+    return mres;
+}
+
+template <typename T> Matrix<T> Matrix<T>::maxAlongCols() const
+{
+    // Creates a vector with same number of elements as "num_cols_",
+    // and each element in the vector is the max value of its corresponding column
+    ASSERT_MAT_VALID_INTERNAL();
+    Matrix<T> mres(1, num_cols_);
+
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        mres(0, c) = data_[c];
+    }
+
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        for (size_t r = 1; r < num_rows_; r++)
+        {
+            mres(0, c) = std::max(mres(0, c), data_[r * num_cols_ + c]);
+        }
+    }
+
+    return mres;
+}
+
+template <typename T> Matrix<T> Matrix<T>::maxAlongRows() const
+{
+    // Creates a vector with same number of elements as "num_rows_",
+    // and each element in the vector is the min value of its corresponding row
+    ASSERT_MAT_VALID_INTERNAL();
+    Matrix<T> mres(num_rows_, 1);
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        mres(r, 0) = data_[r * num_cols_];
+    }
+
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 1; c < num_cols_; c++)
+        {
+            mres(r, 0) = std::max(mres(r, 0), data_[r * num_cols_ + c]);
+        }
+    }
+
+    return mres;
+}
+
+template <typename T> T Matrix<T>::sum() const
+{
+    T s = 0.0;
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            s = s + data_[r * num_cols_ + c];
+        }
+    }
+    return s;
+}
+
+template <typename T> Matrix<T> Matrix<T>::sumAlongRows() const
+{
+    Matrix<T> mres(num_rows_, 1);
+    for (size_t r = 0; r < num_rows_; r++)
+    {
+        T s = 0.0;
+        for (size_t c = 0; c < num_cols_; c++)
+        {
+            s = s + data_[r * num_cols_ + c];
+        }
+        mres(r, 0) = s;
+    }
+    return mres;
+}
+
+template <typename T> Matrix<T> Matrix<T>::sumAlongCols() const
+{
+    Matrix<T> mres(1, num_cols_);
+    for (size_t c = 0; c < num_cols_; c++)
+    {
+        T s = 0.0;
+        for (size_t r = 0; r < num_rows_; r++)
+        {
+            s = s + data_[r * num_cols_ + c];
+        }
+        mres(0, c) = s;
+    }
+    return mres;
+}
+
 template <typename T>
 Matrix<T> uniqueMatrix(const size_t rows, const size_t cols, const T offset = 0.0)
 {

@@ -97,42 +97,6 @@ Matrix<T> concatenateHorizontally(const std::initializer_list<Matrix<T>>& init_l
     return mres;
 }
 
-/*template <typename T> T max(const Matrix<T>& m_in)
-{
-    assert(m_in.size() > 0);
-    T max_val = vin[0];
-    for (size_t k = 1; k < vin.size(); k++)
-    {
-        max_val = std::max(vin[k], max_val);
-    }
-
-    return max_val;
-}*/
-
-/*template <typename T> T max(const Vector<T>& vin)
-{
-    assert(vin.size() > 0);
-    T max_val = vin[0];
-    for (size_t k = 1; k < vin.size(); k++)
-    {
-        max_val = std::max(vin[k], max_val);
-    }
-
-    return max_val;
-}
-
-template <typename T> T min(const Vector<T>& vin)
-{
-    assert(vin.size() > 0);
-    T min_val = vin[0];
-    for (size_t k = 1; k < vin.size(); k++)
-    {
-        min_val = std::min(vin[k], min_val);
-    }
-
-    return min_val;
-}*/
-
 template <typename T> Matrix<T> log10(const Matrix<T>& m_in)
 {
     assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));

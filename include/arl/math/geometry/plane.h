@@ -74,6 +74,22 @@ template <typename T> Point3D<T> Plane<T>::lineIntersection(const Line3D<T>& lin
     return line.eval(t);
 }
 
+template <typename T> Line3D<T> Plane<T>::projectLineOntoPlane(const Line3D<T>& line) const
+{
+    const Vec3D<T> line_vector = line.v;
+    const Vec3D<T> plane_normal_vector(a, b, c);
+    const T angle_between_vectors = line_vector.angleBetweenVectors();
+    if (std::fabs(angle_between_vectors) < 1e-8)
+    {
+        LOG_WARNING() << "Line and plane normal vector almost parallel, degenerate case!";
+    }
+    const Point3D<T> p0 = line.p;
+    const Point3D<T> p1 = line.p + line.v.normalized();
+    const Point3D<T> pp0 = closestPointOnPlaneFromPoint(p0);
+    const Point3D<T> pp1 = closestPointOnPlaneFromPoint(p1);
+    return lineFromTwoPoints(pp0, pp1);
+}
+
 template <typename T> Point3D<T> Plane<T>::closestPointOnPlaneFromPoint(const Point3D<T>& p) const
 {
     T distance_from_plane = pointDistanceFromPlane(p);
@@ -116,7 +132,6 @@ template <typename T> T Plane<T>::pointDistanceFromPlane(const Point3D<T>& p) co
 // Circle3D<T> circle) const {} template <typename T> Circle3D<T> Plane<T>::sphereIntersection(const
 // Sphere<T>& sphere) const {} template <typename T> std::pair<Point3D<T>, Vec3D<T>>
 // Plane<T>::projectPointAndVectorOntoPlane(const Point3D<T>& point, const Vec3D<T>& vec) const {}
-// template <typename T> Line3D<T> Plane<T>::projectLineOntoPlane(const Line3D<T> line) const {}
 // template <typename T> Plane<T> Plane<T>::planeIntersection(const Plane<T>& plane) const {}
 template <typename T> Plane<T> Plane<T>::translatePlane(const Vec3D<T>& vec) const
 {

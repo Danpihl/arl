@@ -810,5 +810,38 @@ TEST_F(VectorTest, RoundAndCast)
     ASSERT_VECTOR_EQ_VECTOR(v_exp, v2);
 }
 
+TEST_F(VectorTest, VectorMin)
+{
+    const double eps = 1e-8;
+
+    const Vectord vec = {4, 1, 6, 3, 2, 5, 0.5, 2, 5, 1};
+
+    const double min_vec_act = vec.min();
+    const double min_vec_exp = 0.5;
+    ASSERT_NEAR(min_vec_exp, min_vec_act, eps);
+}
+
+TEST_F(VectorTest, VectorMax)
+{
+    const double eps = 1e-8;
+
+    const Vectord vec = {4, 1, 6, 3, 2, 5, 0.5, 11.3, 5, 1};
+
+    const double max_vec_act = vec.max();
+    const double max_vec_exp = 11.3;
+    ASSERT_NEAR(max_vec_exp, max_vec_act, eps);
+}
+
+TEST_F(VectorTest, VectorSum)
+{
+    const double eps = 1e-8;
+
+    const Vectord vec = {4, 1, 6, 3, 2, 5, 0.5, 11.3, 5, 1};
+
+    const double sum_vec_act = vec.sum();
+    const double sum_vec_exp = 38.8;
+    ASSERT_NEAR(sum_vec_exp, sum_vec_act, eps);
+}
+
 }  // namespace
 }  // namespace arl

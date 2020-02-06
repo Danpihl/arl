@@ -64,6 +64,10 @@ public:
     T* end() const;
     Vector<size_t> findIndicesOf(const T& item_to_find) const;
     template <typename Y> Vector<T>& operator=(const Vector<Y>& rhs);
+
+    T max() const;
+    T min() const;
+    T sum() const;
 };
 }  // namespace arl
 

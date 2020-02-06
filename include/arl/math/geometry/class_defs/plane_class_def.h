@@ -33,7 +33,7 @@ template <typename T> struct Plane
     Circle3D<T> sphereIntersection(const Sphere<T>& sphere) const;
     std::pair<Point3D<T>, Vec3D<T>> projectPointAndVectorOntoPlane(const Point3D<T>& point,
                                                                    const Vec3D<T>& vec) const;
-    Line3D<T> projectLineOntoPlane(const Line3D<T> line) const;
+    Line3D<T> projectLineOntoPlane(const Line3D<T>& line) const;
     Plane<T> planeIntersection(const Plane<T>& plane) const;
     Plane<T> translatePlane(const Vec3D<T>& vec) const;
 };

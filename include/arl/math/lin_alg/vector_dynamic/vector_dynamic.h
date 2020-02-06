@@ -1020,6 +1020,45 @@ template <typename T> T* Vector<T>::end() const
     return &data_[vector_length_];
 }
 
+template <typename T> T Vector<T>::min() const
+{
+    ASSERT_VEC_VALID_INTERNAL();
+    T min_val = data_[0];
+
+    for (size_t k = 1; k < vector_length_; k++)
+    {
+        min_val = std::min(data_[k], min_val);
+    }
+
+    return min_val;
+}
+
+template <typename T> T Vector<T>::max() const
+{
+    ASSERT_VEC_VALID_INTERNAL();
+    T max_val = data_[0];
+
+    for (size_t k = 1; k < vector_length_; k++)
+    {
+        max_val = std::max(data_[k], max_val);
+    }
+
+    return max_val;
+}
+
+template <typename T> T Vector<T>::sum() const
+{
+    ASSERT_VEC_VALID_INTERNAL();
+    T s = 0.0;
+
+    for (size_t k = 0; k < vector_length_; k++)
+    {
+        s = s + data_[k];
+    }
+
+    return s;
+}
+
 }  // namespace arl
 
 #endif
