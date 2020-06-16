@@ -447,6 +447,21 @@ template <typename T> T* Vector<T>::getDataPointer() const
     return data_;
 }
 
+template <typename T> void Vector<T>::setInternalData(T* const input_ptr, const size_t num_elements)
+{
+    if (input_ptr == nullptr)
+    {
+        is_allocated_ = false;
+    }
+    else
+    {
+        is_allocated_ = true;
+    }
+
+    data_ = input_ptr;
+    vector_length_ = num_elements;
+}
+
 template <typename T> Vector<T> Vector<T>::sorted() const
 {
     Vector<T> v(*this);

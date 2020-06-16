@@ -15,14 +15,15 @@ namespace arl
 // - Concatenate matrices horizontally
 // - Math functions for matrices
 
-template <typename T> Vector<T> linspace0(const T x0, const T x1, const size_t num_values);
+template <typename T>
+Vector<T> linspaceFromPointsAndCount(const T x0, const T x1, const size_t num_values);
 
 template <typename T>
 std::pair<Matrix<T>, Matrix<T>> meshGrid(
     const T x0, const T x1, const T y0, const T y1, const size_t xn, const size_t yn)
 {
-    const Vector<T> x_vec = linspace0(x0, x1, xn);
-    const Vector<T> y_vec = linspace0(y0, y1, yn);
+    const Vector<T> x_vec = linspaceFromPointsAndCount(x0, x1, xn);
+    const Vector<T> y_vec = linspaceFromPointsAndCount(y0, y1, yn);
 
     Matrix<T> x_mat(yn, xn), y_mat(yn, xn);
     for (size_t r = 0; r < yn; r++)
@@ -254,7 +255,88 @@ template <typename T> Matrix<T> sqrt(const Matrix<T>& m_in)
     return m;
 }
 
-template <typename T> Matrix<T> linspace0ColMat(const T x0, const T x1, const size_t num_values)
+template <typename T> T max(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    T max_val = m_in(0, 0);
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            max_val = std::max(max_val, m_in(r, c));
+        }
+    }
+
+    return max_val;
+}
+
+template <typename T> T min(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    T min_val = m_in(0, 0);
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            min_val = std::min(min_val, m_in(r, c));
+        }
+    }
+
+    return min_val;
+}
+
+template <typename T> T maxAbs(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    T max_val = m_in(0, 0);
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            max_val = std::max(max_val, std::abs(m_in(r, c)));
+        }
+    }
+
+    return max_val;
+}
+
+template <typename T> T minAbs(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    T min_val = m_in(0, 0);
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            min_val = std::min(min_val, std::fabs(m_in(r, c)));
+        }
+    }
+
+    return min_val;
+}
+
+template <typename T> Matrix<T> abs(const Matrix<T>& m_in)
+{
+    assert((m_in.rows() > 0) && (m_in.cols() > 0) && (m_in.isAllocated()));
+    Matrix<T> m(m_in.rows(), m_in.cols());
+
+    for (size_t r = 0; r < m_in.rows(); r++)
+    {
+        for (size_t c = 0; c < m_in.cols(); c++)
+        {
+            m(r, c) = std::fabs(m_in(r, c));
+        }
+    }
+
+    return m;
+}
+
+template <typename T>
+Matrix<T> linspaceFromPointsAndCountColMat(const T x0, const T x1, const size_t num_values)
 {
     assert(num_values > 0);
     Matrix<T> m(num_values, 1);
@@ -270,7 +352,8 @@ template <typename T> Matrix<T> linspace0ColMat(const T x0, const T x1, const si
     return m;
 }
 
-template <typename T> Matrix<T> linspace1ColMat(const T x0, const T dx, const size_t num_values)
+template <typename T>
+Matrix<T> linspaceFromPointIncAndCountColMat(const T x0, const T dx, const size_t num_values)
 {
     assert(num_values > 0);
     Matrix<T> m(num_values, 1);
@@ -285,14 +368,132 @@ template <typename T> Matrix<T> linspace1ColMat(const T x0, const T dx, const si
     return m;
 }
 
-template <typename T> Matrix<T> linspace2ColMat(const T x0, const T x1, const T dx)
+template <typename T> Matrix<T> linspaceFromPointsAndIncColMat(const T x0, const T x1, const T dx)
 {
     assert(dx > 0);
     assert(x1 > x0);
 
     const size_t num_values = (x1 - x0) / dx;
 
-    return linspace0ColMat(x0, x1, num_values);
+    return linspaceFromPointsAndCountColMat(x0, x1, num_values);
+}
+
+template <typename U> size_t totalNumRowsInternal(const U& m)
+{
+    return m.rows();
+}
+
+template <typename U, typename... Us> size_t totalNumRowsInternal(const U& m, const Us&... matrices)
+{
+    return totalNumRowsInternal(matrices...) + m.rows();
+}
+
+template <typename... Us> size_t totalNumRows(const Us&... matrices)
+{
+    return totalNumRowsInternal(matrices...);
+}
+
+template <typename U> size_t totalNumColsInternal(const U& m)
+{
+    return m.cols();
+}
+
+template <typename U, typename... Us> size_t totalNumColsInternal(const U& m, const Us&... matrices)
+{
+    return totalNumColsInternal(matrices...) + m.cols();
+}
+
+template <typename... Us> size_t totalNumCols(const Us&... matrices)
+{
+    return totalNumColsInternal(matrices...);
+}
+
+template <typename T, typename U>
+void hCatMatricesInternal(size_t col_idx, Matrix<T>& m_res, const U& mat)
+{
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r, c + col_idx) = mat(r, c);
+        }
+    }
+}
+
+template <typename T, typename U, typename... Us>
+void hCatMatricesInternal(size_t col_idx, Matrix<T>& m_res, const U& mat, const Us&... matrices)
+{
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r, c + col_idx) = mat(r, c);
+        }
+    }
+
+    hCatMatricesInternal(col_idx + mat.cols(), m_res, matrices...);
+}
+
+template <typename U, typename... Us>
+Matrix<typename U::data_type> hCatMatrices(const U& mat, const Us&... matrices)
+{
+    Matrix<typename U::data_type> m_res(mat.rows(), totalNumCols(matrices...) + mat.cols());
+
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r, c) = mat(r, c);
+        }
+    }
+
+    hCatMatricesInternal(mat.cols(), m_res, matrices...);
+
+    return m_res;
+}
+
+template <typename T, typename U>
+void vCatMatricesInternal(size_t row_idx, Matrix<T>& m_res, const U& mat)
+{
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r + row_idx, c) = mat(r, c);
+        }
+    }
+}
+
+template <typename T, typename U, typename... Us>
+void vCatMatricesInternal(size_t row_idx, Matrix<T>& m_res, const U& mat, const Us&... matrices)
+{
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r + row_idx, c) = mat(r, c);
+        }
+    }
+
+    vCatMatricesInternal(row_idx + mat.rows(), m_res, matrices...);
+}
+
+template <typename U, typename... Us>
+Matrix<typename U::data_type> vCatMatrices(const U& mat, const Us&... matrices)
+{
+    Matrix<typename U::data_type> m_res(totalNumRows(matrices...) + mat.rows(), mat.cols());
+
+    for (size_t r = 0; r < mat.rows(); r++)
+    {
+        for (size_t c = 0; c < mat.cols(); c++)
+        {
+            m_res(r, c) = mat(r, c);
+        }
+    }
+
+    vCatMatricesInternal(mat.rows(), m_res, matrices...);
+
+    return m_res;
 }
 
 }  // namespace arl

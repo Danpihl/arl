@@ -91,6 +91,16 @@ template <typename T> T Vec2D<T>::angleBetweenVectors(const Vec2D<T>& v) const
 
 // Non class functions
 
+template <typename T> bool operator==(const Vec2D<T>& v0, const Vec2D<T>& v1)
+{
+    return (v0.x == v1.x) && (v0.y == v1.y);
+}
+
+template <typename T> bool operator!=(const Vec2D<T>& v0, const Vec2D<T>& v1)
+{
+    return !(v0 == v1);
+}
+
 template <typename T> Vec2D<T> operator*(const T f, const Vec2D<T>& v)
 {
     return Vec2D<T>(f * v.x, f * v.y);

@@ -92,6 +92,16 @@ template <typename T> T Vec3D<T>::angleBetweenVectors(const Vec3D<T>& v) const
 
 // Non class functions
 
+template <typename T> bool operator==(const Vec3D<T>& v0, const Vec3D<T>& v1)
+{
+    return (v0.x == v1.x) && (v0.y == v1.y) && (v0.z == v1.z);
+}
+
+template <typename T> bool operator!=(const Vec3D<T>& v0, const Vec3D<T>& v1)
+{
+    return !(v0 == v1);
+}
+
 template <typename T> Vec3D<T> operator*(const T f, const Vec3D<T>& v)
 {
     return Vec3D<T>(f * v.x, f * v.y, f * v.z);

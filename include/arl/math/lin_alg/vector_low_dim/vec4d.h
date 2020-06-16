@@ -84,6 +84,16 @@ template <typename T> T Vec4D<T>::angleBetweenVectors(const Vec4D<T>& v) const
 
 // Non class functions
 
+template <typename T> bool operator==(const Vec4D<T>& v0, const Vec4D<T>& v1)
+{
+    return (v0.x == v1.x) && (v0.y == v1.y) && (v0.z == v1.z) && (v0.w == v1.w);
+}
+
+template <typename T> bool operator!=(const Vec4D<T>& v0, const Vec4D<T>& v1)
+{
+    return !(v0 == v1);
+}
+
 template <typename T> Vec4D<T> operator*(const T f, const Vec4D<T>& v)
 {
     return Vec4D<T>(f * v.x, f * v.y, f * v.z, f * v.w);

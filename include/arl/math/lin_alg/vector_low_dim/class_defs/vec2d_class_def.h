@@ -34,6 +34,31 @@ template <typename T> struct Vec2D
     bool areAllNan() const;
     bool isAnyNan() const;
 };
+
+template <typename T> struct VecXY
+{
+    T x;
+    T y;
+    VecXY() = default;
+    VecXY(const T x_, const T y_) : x(x_), y(y_) {}
+};
+
+template <typename T> struct VecXZ
+{
+    T x;
+    T z;
+    VecXZ() = default;
+    VecXZ(const T x_, const T z_) : x(x_), z(z_) {}
+};
+
+template <typename T> struct VecYZ
+{
+    T y;
+    T z;
+    VecYZ() = default;
+    VecYZ(const T y_, const T z_) : y(y_), z(z_) {}
+};
+
 }  // namespace arl
 
 #endif
