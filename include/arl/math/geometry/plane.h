@@ -5,8 +5,9 @@
 #include <cmath>
 #include <utility>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/plane_class_def.h"
+#include "arl/math/geometry/line_3d.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

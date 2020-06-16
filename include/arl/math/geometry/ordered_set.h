@@ -1,12 +1,11 @@
-
 #ifndef ORDERED_SET_H_
 #define ORDERED_SET_H_
 
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/ordered_set_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

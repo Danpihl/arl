@@ -1,6 +1,8 @@
 #ifndef POSE_CLASS_H_
 #define POSE_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> class PoseSE3

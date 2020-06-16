@@ -4,27 +4,48 @@
 #include <initializer_list>
 #include <iostream>
 
-#include "arl/math/lin_alg/matrix_fixed/matrix_fixed_class_def.h"
+#include "arl/math/misc/forward_decl.h"
 
 namespace arl
 {
+template <size_t R, size_t C, typename T> class MatrixFixed
+{
+private:
+    T data_[R * C];
+    const size_t num_rows_;
+    const size_t num_cols_;
+
+public:
+    MatrixFixed();
+    MatrixFixed(const MatrixFixed<R, C, T>& mf);
+    MatrixFixed<R, C, T>(const std::initializer_list<std::initializer_list<T>>& il);
+    MatrixFixed<R, C, T>& operator=(const MatrixFixed<R, C, T>& m);
+
+    void switchRows(const size_t r0, const size_t r1);
+    void switchCols(const size_t c0, const size_t c1);
+
+    T* getDataPointer() const;
+    size_t rows() const;
+    size_t cols() const;
+
+    T& operator()(const size_t r, const size_t c);
+    const T& operator()(const size_t r, const size_t c) const;
+};
+
 template <size_t R, size_t C, typename T>
-constexpr MatrixFixed<R, C, T>::MatrixFixed() : num_rows_(R), num_cols_(C)
+MatrixFixed<R, C, T>::MatrixFixed() : num_rows_(R), num_cols_(C)
 {
     static_assert(R > 0, "Number of rows can't be 0!");
     static_assert(C > 0, "Number of columns can't be 0!");
-
-    static_assert(R < 1001, "You probably don't want to have more than 1000 rows...");
-    static_assert(C < 1001, "You probably don't want to have more than 1000 columns...");
 }
 
-template <size_t R, size_t C, typename T> constexpr size_t MatrixFixed<R, C, T>::rows() const
+template <size_t R, size_t C, typename T> size_t MatrixFixed<R, C, T>::rows() const
 {
-    return R;
+    return num_rows_;
 }
-template <size_t R, size_t C, typename T> constexpr size_t MatrixFixed<R, C, T>::cols() const
+template <size_t R, size_t C, typename T> size_t MatrixFixed<R, C, T>::cols() const
 {
-    return C;
+    return num_cols_;
 }
 
 template <size_t R, size_t C, typename T>

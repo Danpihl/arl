@@ -5,8 +5,8 @@
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/polygon_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec2d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

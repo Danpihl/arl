@@ -1,11 +1,11 @@
-
 #ifndef ROLL_PITCH_YAW_H_
 #define ROLL_PITCH_YAW_H_
 
 #include <cmath>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
+#include "arl/math/transformations/class_defs/roll_pitch_yaw_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -18,31 +18,6 @@ template <typename T> RollPitchYaw<T>::RollPitchYaw(const T roll_, const T pitch
 }
 
 template <typename T> RollPitchYaw<T>::RollPitchYaw() {}
-
-template <typename T> Quaternion<T> RollPitchYaw<T>::toQuaternion() const
-{
-    T cy = std::cos(yaw * 0.5);
-    T sy = std::sin(yaw * 0.5);
-    T cp = std::cos(pitch * 0.5);
-    T sp = std::sin(pitch * 0.5);
-    T cr = std::cos(roll * 0.5);
-    T sr = std::sin(roll * 0.5);
-
-    Quaternion<T> q;
-
-    q.w = cy * cp * cr + sy * sp * sr;
-    q.x = cy * cp * sr - sy * sp * cr;
-    q.y = sy * cp * sr + cy * sp * cr;
-    q.z = sy * cp * cr - cy * sp * sr;
-
-    return q;
-}
-
-template <typename T> AxisAngle<T> RollPitchYaw<T>::toAxisAngle() const
-{
-    Quaternion<T> q = toQuaternion();
-    return q.toAxisAngle();
-}
 
 template <typename T> Matrix<T> rotationMatrixFromYaw(const T yaw)
 {

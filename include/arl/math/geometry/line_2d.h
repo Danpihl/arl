@@ -1,12 +1,11 @@
-
 #ifndef LINE_2D_H_
 #define LINE_2D_H_
 
 #include <cmath>
 #include <utility>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/line_2d_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec2d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

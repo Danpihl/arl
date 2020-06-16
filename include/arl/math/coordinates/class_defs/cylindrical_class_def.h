@@ -1,21 +1,24 @@
 #ifndef CYLINDRICAL_CLASS_H_
 #define CYLINDRICAL_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
-template <typename T> struct CylindricalCoord
+template <typename T> struct CylindricalVec
 {
     T r;
     T z;
     T phi;
 
-    CylindricalCoord(const T r_, const T z_, const T phi_);
-    CylindricalCoord();
+    CylindricalVec(const T r_, const T z_, const T phi_);
+    CylindricalVec();
 
-    SphericalCoord<T> toSphericalCoord() const;
+    SphericalVec<T> toSphericalVec() const;
     Vec3D<T> toVec3D() const;
 };
 
+template <typename T> using CylindricalPoint = CylindricalVec<T>;
 }  // namespace arl
 
 #endif

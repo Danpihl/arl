@@ -1,6 +1,8 @@
 #ifndef POLYGON_CLASS_H_
 #define POLYGON_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> class PolygonNVertices2D

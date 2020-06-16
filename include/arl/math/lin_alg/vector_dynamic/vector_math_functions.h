@@ -1,4 +1,3 @@
-
 #ifndef VECTOR_MATH_FUNCTIONS_H_
 #define VECTOR_MATH_FUNCTIONS_H_
 
@@ -7,7 +6,7 @@
 #include <cstdlib>
 #include <utility>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_dynamic/vector_dynamic.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -91,43 +90,6 @@ template <typename T> T max(const Vector<T>& vin)
     }
 
     return max_val;
-}
-
-template <typename T> Vector<T> abs(const Vector<T>& vin)
-{
-    assert(vin.size() > 0);
-    Vector<T> vout(vin.size());
-
-    for (size_t k = 0; k < vin.size(); k++)
-    {
-        vout(k) = std::fabs(vin(k));
-    }
-
-    return vout;
-}
-
-template <typename T> T maxAbs(const Vector<T>& vin)
-{
-    assert(vin.size() > 0);
-    T max_val = std::fabs(vin(0));
-    for (size_t k = 1; k < vin.size(); k++)
-    {
-        max_val = std::max(std::fabs(vin(k)), max_val);
-    }
-
-    return max_val;
-}
-
-template <typename T> T minAbs(const Vector<T>& vin)
-{
-    assert(vin.size() > 0);
-    T min_val = std::fabs(vin(0));
-    for (size_t k = 1; k < vin.size(); k++)
-    {
-        min_val = std::min(std::fabs(vin(k)), min_val);
-    }
-
-    return min_val;
 }
 
 template <typename T> T min(const Vector<T>& vin)
@@ -214,8 +176,7 @@ template <typename T> Vector<T> sin(const Vector<T>& vin)
     return v;
 }
 
-template <typename T>
-Vector<T> linspaceFromPointsAndCount(const T x0, const T x1, const size_t num_values)
+template <typename T> Vector<T> linspace0(const T x0, const T x1, const size_t num_values)
 {
     assert(num_values > 0);
     Vector<T> v(num_values);
@@ -231,8 +192,7 @@ Vector<T> linspaceFromPointsAndCount(const T x0, const T x1, const size_t num_va
     return v;
 }
 
-template <typename T>
-Vector<T> linspaceFromPointIncAndCount(const T x0, const T dx, const size_t num_values)
+template <typename T> Vector<T> linspace1(const T x0, const T dx, const size_t num_values)
 {
     assert(num_values > 0);
     Vector<T> v(num_values);
@@ -247,14 +207,14 @@ Vector<T> linspaceFromPointIncAndCount(const T x0, const T dx, const size_t num_
     return v;
 }
 
-template <typename T> Vector<T> linspaceFromPointsAndInc(const T x0, const T x1, const T dx)
+template <typename T> Vector<T> linspace2(const T x0, const T x1, const T dx)
 {
     assert(dx > 0);
     assert(x1 > x0);
 
     const size_t num_values = (x1 - x0) / dx;
 
-    return linspaceFromPointsAndCount(x0, x1, num_values);
+    return linspace0(x0, x1, num_values);
 }
 
 template <typename T> T sum(const Vector<T>& vin)

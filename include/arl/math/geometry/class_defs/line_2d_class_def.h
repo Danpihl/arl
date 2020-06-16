@@ -1,6 +1,8 @@
 #ifndef LINE_2D_CLASS_H_
 #define LINE_2D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct HomogeneousLine2D
@@ -37,10 +39,7 @@ template <typename T> struct HomogeneousLine2D
 
 template <typename T> struct ParametricLine2D
 {
-    // Point on line
     Point2D<T> p;
-
-    // Vector in line direction
     Vec2D<T> v;
 
     ParametricLine2D(const T px_, const T py_, const T vx_, const T vy_);

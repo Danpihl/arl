@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_dynamic/class_defs/vector_dynamic_class_def.h"
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 
@@ -33,38 +33,6 @@ template <typename T> Vector<T>::Vector(const Vector<T>& v) : is_allocated_(true
     {
         data_[k] = v(k);
     }
-}
-
-template <typename T> Vector<T>::Vector(Vector<T>&& v)
-{
-    ASSERT(v.isAllocated()) << "Input vector not allocated!";
-    data_ = v.getDataPointer();
-    vector_length_ = v.size();
-    is_allocated_ = true;
-
-    v.setInternalData(nullptr, 0);
-}
-
-template <typename T> Vector<T>& Vector<T>::operator=(Vector<T>&& v)
-{
-    if (this != &v)
-    {
-        ASSERT(v.isAllocated()) << "Input vector not allocated before assignment!";
-
-        if (is_allocated_)
-        {
-            delete[] data_;
-        }
-
-        vector_length_ = v.size();
-        is_allocated_ = true;
-
-        data_ = v.getDataPointer();
-
-        v.setInternalData(nullptr, 0);
-    }
-
-    return *this;
 }
 
 template <typename T> Vector<T>::~Vector()
@@ -187,85 +155,6 @@ template <typename T> Vector<T>::Vector(const std::vector<T>& v)
 }
 
 // Vector functions
-
-template <typename T> Vector<T>&& Vector<T>::move()
-{
-    return std::move(*this);
-}
-
-template <typename T> void Vector<T>::pushBack(const T& new_value)
-{
-    if (is_allocated_)
-    {
-        T* tmp_ptr;
-        DATA_ALLOCATION(tmp_ptr, vector_length_ + 1, T, "Vector");
-        for (size_t k = 0; k < vector_length_; k++)
-        {
-            tmp_ptr[k] = data_[k];
-        }
-        vector_length_ = vector_length_ + 1;
-        tmp_ptr[vector_length_ - 1] = new_value;
-
-        delete[] data_;
-        data_ = tmp_ptr;
-    }
-    else
-    {
-        DATA_ALLOCATION(data_, 1, T, "Vector");
-        is_allocated_ = true;
-        vector_length_ = 1;
-        data_[0] = new_value;
-    }
-}
-
-template <typename T> void Vector<T>::pushFront(const T& new_value)
-{
-    if (is_allocated_)
-    {
-        T* tmp_ptr;
-        DATA_ALLOCATION(tmp_ptr, vector_length_ + 1, T, "Vector");
-        for (size_t k = 0; k < vector_length_; k++)
-        {
-            tmp_ptr[k + 1] = data_[k];
-        }
-        vector_length_ = vector_length_ + 1;
-        tmp_ptr[0] = new_value;
-
-        delete[] data_;
-        data_ = tmp_ptr;
-    }
-    else
-    {
-        DATA_ALLOCATION(data_, 1, T, "Vector");
-        is_allocated_ = true;
-        vector_length_ = 1;
-        data_[0] = new_value;
-    }
-}
-
-template <typename T> void Vector<T>::insertAtIndex(const T& new_value, const size_t idx)
-{
-    ASSERT(is_allocated_) << "Vector not allocated!";
-    ASSERT(idx < vector_length_);
-
-    T* tmp_ptr;
-    DATA_ALLOCATION(tmp_ptr, vector_length_ + 1, T, "Vector");
-
-    for (size_t k = 0; k < idx; k++)
-    {
-        tmp_ptr[k] = data_[k];
-    }
-    tmp_ptr[idx] = new_value;
-    for (size_t k = idx; k < vector_length_; k++)
-    {
-        tmp_ptr[k + 1] = data_[k];
-    }
-
-    vector_length_ = vector_length_ + 1;
-
-    delete[] data_;
-    data_ = tmp_ptr;
-}
 
 template <typename T> T& Vector<T>::operator()(const size_t idx)
 {
@@ -445,21 +334,6 @@ template <typename T> size_t Vector<T>::endIndex() const
 template <typename T> T* Vector<T>::getDataPointer() const
 {
     return data_;
-}
-
-template <typename T> void Vector<T>::setInternalData(T* const input_ptr, const size_t num_elements)
-{
-    if (input_ptr == nullptr)
-    {
-        is_allocated_ = false;
-    }
-    else
-    {
-        is_allocated_ = true;
-    }
-
-    data_ = input_ptr;
-    vector_length_ = num_elements;
 }
 
 template <typename T> Vector<T> Vector<T>::sorted() const
@@ -889,6 +763,8 @@ template <typename T> Vector<bool> operator>=(const T s, const Vector<T>& v)
     return v_res;
 }
 
+//
+
 template <typename T> Vector<T> operator&(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
@@ -1023,7 +899,7 @@ template <typename T> Vector<bool> operator!(const Vector<T>& v)
     return v_res;
 }
 
-template <typename T> void fillVectorWithArray(Vector<T>& v, const T* a)
+template <typename T> void fillVectorWithArray(arl::Vector<T>& v, const T* a)
 {
     assert(v.isAllocated() && "You must allocate your vector before filling it!");
     for (size_t k = 0; k < v.size(); k++)

@@ -1,6 +1,8 @@
 #ifndef RECTANGLE_CLASS_H_
 #define RECTANGLE_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Rect2D

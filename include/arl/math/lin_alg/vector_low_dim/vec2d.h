@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec2d_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -21,16 +21,6 @@ template <typename T> Vec2D<T>::Vec2D(const T v_array[2])
 {
     x = v_array[0];
     y = v_array[1];
-}
-
-template <typename T> ComplexCoord<T> Vec2D<T>::toComplex() const
-{
-    return ComplexCoord<T>(x, y);
-}
-
-template <typename T> PolarCoord<T> Vec2D<T>::toPolar() const
-{
-    return PolarCoord<T>(std::sqrt(x * x + y * y), std::atan2(y, x));
 }
 
 template <typename T> T Vec2D<T>::angle() const
@@ -100,16 +90,6 @@ template <typename T> T Vec2D<T>::angleBetweenVectors(const Vec2D<T>& v) const
 }
 
 // Non class functions
-
-template <typename T> bool operator==(const Vec2D<T>& v0, const Vec2D<T>& v1)
-{
-    return (v0.x == v1.x) && (v0.y == v1.y);
-}
-
-template <typename T> bool operator!=(const Vec2D<T>& v0, const Vec2D<T>& v1)
-{
-    return !(v0 == v1);
-}
 
 template <typename T> Vec2D<T> operator*(const T f, const Vec2D<T>& v)
 {

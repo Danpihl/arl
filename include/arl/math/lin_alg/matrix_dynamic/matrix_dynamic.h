@@ -10,8 +10,9 @@
 #include <Eigen/SVD>
 #include <cmath>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/class_defs/matrix_dynamic_class_def.h"
 #include "arl/math/misc/math_macros.h"
+#include "arl/math/structures.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -84,45 +85,6 @@ template <typename T> Matrix<T>::Matrix(const T a[3][3])
             data_[r * 3 + c] = a[r][c];
         }
     }
-}
-
-template <typename T> Matrix<T>::Matrix(Matrix<T>&& m)
-{
-    ASSERT(m.isAllocated()) << "Input matrix not allocated!";
-    data_ = m.getDataPointer();
-    num_rows_ = m.rows();
-    num_cols_ = m.cols();
-
-    is_allocated_ = true;
-    m.setInternalData(nullptr, 0, 0);
-}
-
-template <typename T> Matrix<T>&& Matrix<T>::move()
-{
-    return std::move(*this);
-}
-
-template <typename T> Matrix<T>& Matrix<T>::operator=(Matrix<T>&& m)
-{
-    if (this != &m)
-    {
-        ASSERT(m.isAllocated()) << "Input matrix not allocated before assignment!";
-
-        if (is_allocated_)
-        {
-            delete[] data_;
-        }
-
-        num_rows_ = m.rows();
-        num_cols_ = m.cols();
-        is_allocated_ = true;
-
-        data_ = m.getDataPointer();
-
-        m.setInternalData(nullptr, 0, 0);
-    }
-
-    return *this;
 }
 
 template <typename T> Matrix<T> rotationMatrixX(const T angle)
@@ -345,23 +307,6 @@ template <typename T> void Matrix<T>::switchColumns(size_t c0, size_t c1)
     }
 }
 
-template <typename T>
-void Matrix<T>::setInternalData(T* const input_ptr, const size_t num_rows, const size_t num_cols)
-{
-    if (input_ptr == nullptr)
-    {
-        is_allocated_ = false;
-    }
-    else
-    {
-        is_allocated_ = true;
-    }
-
-    data_ = input_ptr;
-    num_rows_ = num_rows;
-    num_cols_ = num_cols;
-}
-
 template <typename T> T* Matrix<T>::getDataPointer() const
 {
     return data_;
@@ -469,7 +414,7 @@ template <typename T> Vector<T> Matrix<T>::solve(const Vector<T>& b) const
     Eigen::MatrixXd em(num_rows_, num_cols_);
     Eigen::VectorXd eb(num_rows_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     for (size_t r = 0; r < num_rows_; r++)
     {
@@ -496,11 +441,11 @@ template <typename T> Matrix<T> Matrix<T>::inverse() const
 
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     Eigen::MatrixXd eminv = em.inverse();
 
-    EIGENMAT_TO_ARLMAT(eminv, minv);
+    EIGENMAT_TO_AGLMAT(eminv, minv);
 
     return minv;
 }
@@ -513,11 +458,11 @@ template <typename T> void Matrix<T>::invert()
 
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     Eigen::MatrixXd eminv = em.inverse();
 
-    EIGENMAT_TO_ARLMAT(eminv, (*this));
+    EIGENMAT_TO_AGLMAT(eminv, (*this));
 }
 
 template <typename T> T Matrix<T>::det() const
@@ -527,7 +472,7 @@ template <typename T> T Matrix<T>::det() const
 
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     return em.determinant();
 }
@@ -538,7 +483,7 @@ template <typename T> T Matrix<T>::norm() const
 
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     return em.norm();
 }
@@ -548,7 +493,7 @@ template <typename T> LUMatrixPair<T> Matrix<T>::lu() const
     // Not working
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     Eigen::FullPivLU<Eigen::MatrixXd> lu_solver(em);
 
@@ -557,8 +502,8 @@ template <typename T> LUMatrixPair<T> Matrix<T>::lu() const
 
     LUMatrixPair<T> lu_pair(num_rows_, num_cols_);
 
-    EIGENMAT_TO_ARLMAT(el_mat, lu_pair.l);
-    EIGENMAT_TO_ARLMAT(eu_mat, lu_pair.u);
+    EIGENMAT_TO_AGLMAT(el_mat, lu_pair.l);
+    EIGENMAT_TO_AGLMAT(eu_mat, lu_pair.u);
 
     return lu_pair;
 }
@@ -568,7 +513,7 @@ template <typename T> QRMatrixPair<T> Matrix<T>::qr() const
     // Not working
     Eigen::MatrixXd em(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), em);
+    AGLMAT_TO_EIGENMAT((*this), em);
 
     Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr_solver(num_rows_, num_cols_);
     qr_solver.compute(em);
@@ -578,8 +523,8 @@ template <typename T> QRMatrixPair<T> Matrix<T>::qr() const
 
     QRMatrixPair<T> qr_pair(num_rows_, num_cols_);
 
-    EIGENMAT_TO_ARLMAT(eq_mat, qr_pair.q);
-    EIGENMAT_TO_ARLMAT(er_mat, qr_pair.r);
+    EIGENMAT_TO_AGLMAT(eq_mat, qr_pair.q);
+    EIGENMAT_TO_AGLMAT(er_mat, qr_pair.r);
 
     return qr_pair;
 }
@@ -590,7 +535,7 @@ template <typename T> SVDMatrixTriplet<T> Matrix<T>::svd() const
 
     Eigen::MatrixXd eigen_mat(num_rows_, num_cols_);
 
-    ARLMAT_TO_EIGENMAT((*this), eigen_mat);
+    AGLMAT_TO_EIGENMAT((*this), eigen_mat);
 
     Eigen::JacobiSVD<Eigen::MatrixXd> svd_of_mat(eigen_mat,
                                                  Eigen::ComputeFullU | Eigen::ComputeFullV);
@@ -599,8 +544,8 @@ template <typename T> SVDMatrixTriplet<T> Matrix<T>::svd() const
     const Eigen::VectorXd s_vec = svd_of_mat.singularValues();
     const Eigen::MatrixXd v_mat = svd_of_mat.matrixV();
 
-    EIGENMAT_TO_ARLMAT(u_mat, svd_triplet.u);
-    EIGENMAT_TO_ARLMAT(v_mat, svd_triplet.v);
+    EIGENMAT_TO_AGLMAT(u_mat, svd_triplet.u);
+    EIGENMAT_TO_AGLMAT(v_mat, svd_triplet.v);
 
     for (size_t r = 0; r < num_rows_; r++)
     {
@@ -1198,7 +1143,7 @@ template <typename T> Matrix<T> filledMatrix(const size_t rows, const size_t col
     return filled_matrix;
 }
 
-template <typename T> void fillMatrixWithArrayRowMajor(Matrix<T>& m, const T* a)
+template <typename T> void fillMatrixWithArrayRowMajor(arl::Matrix<T>& m, const T* a)
 {
     assert(m.isAllocated() && "You must allocate your matrix before filling it!");
     for (size_t r = 0; r < m.rows(); r++)
@@ -1210,7 +1155,7 @@ template <typename T> void fillMatrixWithArrayRowMajor(Matrix<T>& m, const T* a)
     }
 }
 
-template <typename T> void fillMatrixWithArrayColMajor(Matrix<T>& m, const T* a)
+template <typename T> void fillMatrixWithArrayColMajor(arl::Matrix<T>& m, const T* a)
 {
     assert(m.isAllocated() && "You must allocate your matrix before filling it!");
     for (size_t r = 0; r < m.rows(); r++)

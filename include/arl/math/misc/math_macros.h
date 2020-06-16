@@ -16,7 +16,7 @@ namespace arl
         exit(-1);                                                                                 \
     }
 
-#define ARLMAT_TO_EIGENMAT(agl_mat, eigen_mat)                       \
+#define AGLMAT_TO_EIGENMAT(agl_mat, eigen_mat)                       \
     {                                                                \
         ASSERT(agl_mat.isAllocated()) << "Agl mat not allocated!";   \
         ASSERT(static_cast<int>(agl_mat.rows()) == eigen_mat.rows()) \
@@ -32,7 +32,7 @@ namespace arl
         }                                                            \
     }
 
-#define EIGENMAT_TO_ARLMAT(eigen_mat, agl_mat)                         \
+#define EIGENMAT_TO_AGLMAT(eigen_mat, agl_mat)                         \
     {                                                                  \
         assert(agl_mat.isAllocated() && "Agl mat not allocated!");     \
         assert(static_cast<int>(agl_mat.rows()) == eigen_mat.rows() && \

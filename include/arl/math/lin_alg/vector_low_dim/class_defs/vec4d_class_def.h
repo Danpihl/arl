@@ -1,6 +1,8 @@
 #ifndef VEC4D_CLASS_H_
 #define VEC4D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Vec4D

@@ -1,7 +1,6 @@
 #ifndef NEW_MATRIX_FUNCTIONS_H_
 #define NEW_MATRIX_FUNCTIONS_H_
 
-#include "arl/math/math_core.h"
 #include "arl/math/matrix_vector/matrix_vector_headers.h"
 
 namespace arl

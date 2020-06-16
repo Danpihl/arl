@@ -1,6 +1,8 @@
 #ifndef VEC2D_CLASS_H_
 #define VEC2D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Vec2D
@@ -13,8 +15,8 @@ template <typename T> struct Vec2D
     Vec2D(const T v_array[2]);
     Vector<T> toVector() const;
 
-    ComplexCoord<T> toComplex() const;
-    PolarCoord<T> toPolar() const;
+    Complex<T> toComplex() const;
+    PolarVec<T> toPolar() const;
 
     Vec2D<T> normalized() const;
     Vec2D<T> vectorBetweenPoints(const Point2D<T>& end_point) const;
@@ -32,31 +34,6 @@ template <typename T> struct Vec2D
     bool areAllNan() const;
     bool isAnyNan() const;
 };
-
-template <typename T> struct VecXY
-{
-    T x;
-    T y;
-    VecXY() = default;
-    VecXY(const T x_, const T y_) : x(x_), y(y_) {}
-};
-
-template <typename T> struct VecXZ
-{
-    T x;
-    T z;
-    VecXZ() = default;
-    VecXZ(const T x_, const T z_) : x(x_), z(z_) {}
-};
-
-template <typename T> struct VecYZ
-{
-    T y;
-    T z;
-    VecYZ() = default;
-    VecYZ(const T y_, const T z_) : y(y_), z(z_) {}
-};
-
 }  // namespace arl
 
 #endif

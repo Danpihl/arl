@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec3d_class_def.h"
 #include "arl/utilities/logging.h"
 
 // TODO:
@@ -28,30 +28,6 @@ template <typename T> Vec3D<T>::Vec3D(const T v_array[3])
     x = v_array[0];
     y = v_array[1];
     z = v_array[2];
-}
-
-template <typename T> CylindricalCoord<T> Vec3D<T>::toCylindricalVec() const
-{
-    T phi;
-    if (x == 0.0 && y == 0.0)
-    {
-        phi = 0.0;
-    }
-    else
-    {
-        phi = std::atan2(y, x);
-    }
-
-    return CylindricalCoord<T>(std::sqrt(x * x + y * y), z, phi);
-}
-
-template <typename T> SphericalCoord<T> Vec3D<T>::toSphericalCoord() const
-{
-    SphericalCoord<T> sv;
-    sv.r = std::sqrt(x * x + y * y + z * z);
-    sv.phi = std::acos(z / sv.r);
-    sv.theta = std::atan2(y, x);
-    return sv;
 }
 
 ///////////////////////////
@@ -115,16 +91,6 @@ template <typename T> T Vec3D<T>::angleBetweenVectors(const Vec3D<T>& v) const
 }
 
 // Non class functions
-
-template <typename T> bool operator==(const Vec3D<T>& v0, const Vec3D<T>& v1)
-{
-    return (v0.x == v1.x) && (v0.y == v1.y) && (v0.z == v1.z);
-}
-
-template <typename T> bool operator!=(const Vec3D<T>& v0, const Vec3D<T>& v1)
-{
-    return !(v0 == v1);
-}
 
 template <typename T> Vec3D<T> operator*(const T f, const Vec3D<T>& v)
 {

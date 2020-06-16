@@ -1,85 +1,77 @@
+
 #ifndef COMPLEX_H_
 #define COMPLEX_H_
 
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/coordinates/class_defs/complex_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec2d.h"
 #include "arl/utilities/logging.h"
 
 // Reference: https://github.com/N1ckK/MandelbrotZoom/blob/master/complex.h
 
 namespace arl
 {
-template <typename T> ComplexCoord<T>::ComplexCoord() {}
-template <typename T> ComplexCoord<T>::ComplexCoord(const T real_, const T imag_)
+template <typename T> Complex<T>::Complex() {}
+template <typename T> Complex<T>::Complex(const T real_, const T imag_)
 {
     real = real_;
     imag = imag_;
 }
 
-template <typename T> PolarCoord<T> ComplexCoord<T>::toPolar() const
-{
-    return PolarCoord<T>(abs(), std::atan2(imag, real));
-}
-
-template <typename T> T ComplexCoord<T>::abs() const
+template <typename T> T Complex<T>::abs() const
 {
     return std::sqrt(real * real + imag * imag);
 }
 
-template <typename T> ComplexCoord<T> ComplexCoord<T>::conjugate() const
+template <typename T> Complex<T> Complex<T>::conjugate() const
 {
-    return ComplexCoord<T>(real, -imag);
+    return Complex<T>(real, -imag);
 }
 
-template <typename T> Vec2D<T> ComplexCoord<T>::toVec2D() const
+template <typename T> Vec2D<T> Complex<T>::toVec2D() const
 {
     return Vec2D<T>(real, imag);
 }
 
-template <typename T> ComplexCoord<T> ComplexCoord<T>::inv() const
+template <typename T> Complex<T> Complex<T>::inv() const
 {
-    return ComplexCoord<T>(real / (real * real + imag * imag), -imag / (real * real + imag * imag));
+    return Complex<T>(real / (real * real + imag * imag), -imag / (real * real + imag * imag));
 }
 
 // Non class methods
 
-template <typename T> ComplexCoord<T> operator*(const ComplexCoord<T>& c, const T f)
+template <typename T> Complex<T> operator*(const Complex<T>& c, const T f)
 {
-    return ComplexCoord<T>(f * c.real, f * c.imag);
+    return Complex<T>(f * c.real, f * c.imag);
 }
 
-template <typename T> ComplexCoord<T> operator*(const T f, const ComplexCoord<T>& c)
+template <typename T> Complex<T> operator*(const T f, const Complex<T>& c)
 {
-    return ComplexCoord<T>(f * c.real, f * c.imag);
+    return Complex<T>(f * c.real, f * c.imag);
 }
 
-template <typename T>
-ComplexCoord<T> operator*(const ComplexCoord<T>& c0, const ComplexCoord<T>& c1)
+template <typename T> Complex<T> operator*(const Complex<T>& c0, const Complex<T>& c1)
 {
-    return ComplexCoord<T>(c0.real * c1.real - c0.imag * c1.imag,
-                           c0.real * c1.imag + c0.imag * c1.real);
+    return Complex<T>(c0.real * c1.real - c0.imag * c1.imag, c0.real * c1.imag + c0.imag * c1.real);
 }
 
-template <typename T>
-ComplexCoord<T> operator+(const ComplexCoord<T>& c0, const ComplexCoord<T>& c1)
+template <typename T> Complex<T> operator+(const Complex<T>& c0, const Complex<T>& c1)
 {
-    return ComplexCoord<T>(c0.real + c1.real, c0.imag + c1.imag);
+    return Complex<T>(c0.real + c1.real, c0.imag + c1.imag);
 }
 
-template <typename T>
-ComplexCoord<T> operator-(const ComplexCoord<T>& c0, const ComplexCoord<T>& c1)
+template <typename T> Complex<T> operator-(const Complex<T>& c0, const Complex<T>& c1)
 {
-    return ComplexCoord<T>(c0.real - c1.real, c0.imag - c1.imag);
+    return Complex<T>(c0.real - c1.real, c0.imag - c1.imag);
 }
 
-template <typename T> T pow(const ComplexCoord<T>& c, int n)
+template <typename T> T pow(const Complex<T>& c, int n)
 {
     if (n == 0)
     {
-        return ComplexCoord<T>(1.0, 0.0);
+        return Complex<T>(1.0, 0.0);
     }
     else if (n < 0)
     {
@@ -95,18 +87,17 @@ template <typename T> T pow(const ComplexCoord<T>& c, int n)
     }
 }
 
-template <typename T>
-ComplexCoord<T> operator/(const ComplexCoord<T>& c0, const ComplexCoord<T>& c1)
+template <typename T> Complex<T> operator/(const Complex<T>& c0, const Complex<T>& c1)
 {
     return c0 * c1.inv();
 }
 
-template <typename T> ComplexCoord<T> operator/(const ComplexCoord<T>& c, const T f)
+template <typename T> Complex<T> operator/(const Complex<T>& c, const T f)
 {
-    return ComplexCoord<T>(c.real / f, c.imag / f);
+    return Complex<T>(c.real / f, c.imag / f);
 }
 
-template <typename T> ComplexCoord<T> operator/(const T f, const ComplexCoord<T>& c)
+template <typename T> Complex<T> operator/(const T f, const Complex<T>& c)
 {
     return f * c.inv();
 }
