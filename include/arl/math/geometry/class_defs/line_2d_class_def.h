@@ -1,6 +1,8 @@
 #ifndef LINE_2D_CLASS_H_
 #define LINE_2D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct HomogeneousLine2D

@@ -16,6 +16,12 @@ struct EndIndex
     }
 };
 
+inline EndIndex operator-(const EndIndex& end_idx, const int offset)
+{
+    return EndIndex(end_idx.offset - offset);
+}
+
+#define End EndIndex()
 }  // namespace arl
 
 #endif

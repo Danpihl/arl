@@ -1,11 +1,12 @@
+
 #ifndef COMPLEX_H_
 #define COMPLEX_H_
 
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/coordinates/class_defs/complex_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec2d.h"
 #include "arl/utilities/logging.h"
 
 // Reference: https://github.com/N1ckK/MandelbrotZoom/blob/master/complex.h
@@ -17,11 +18,6 @@ template <typename T> ComplexCoord<T>::ComplexCoord(const T real_, const T imag_
 {
     real = real_;
     imag = imag_;
-}
-
-template <typename T> PolarCoord<T> ComplexCoord<T>::toPolar() const
-{
-    return PolarCoord<T>(abs(), std::atan2(imag, real));
 }
 
 template <typename T> T ComplexCoord<T>::abs() const

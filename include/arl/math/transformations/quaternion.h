@@ -1,11 +1,11 @@
-
 #ifndef QUATERNION_H_
 #define QUATERNION_H_
 
 #include <cmath>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
+#include "arl/math/transformations/class_defs/quaternion_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -19,43 +19,6 @@ template <typename T> Quaternion<T>::Quaternion(const T w_, const T x_, const T 
 }
 
 template <typename T> Quaternion<T>::Quaternion() {}
-
-template <typename T> RollPitchYaw<T> Quaternion<T>::toRollPitchYaw() const
-{
-    RollPitchYaw<T> rpy;
-    // Roll (x-axis rotation)
-    T sinr_cosp = 2.0 * (w * x + y * z);
-    T cosr_cosp = 1.0 - 2.0 * (x * x + y * y);
-    rpy.roll = std::atan2(sinr_cosp, cosr_cosp);
-
-    // Pitch (y-axis rotation)
-    T sinp = 2.0 * (w * y - z * x);
-    if (std::fabs(sinp) >= 1)
-    {
-        rpy.pitch = std::copysign(M_PI / 2.0, sinp);  // Use 90 degrees if out of range
-    }
-    else
-    {
-        rpy.pitch = std::asin(sinp);
-    }
-
-    // Yaw (z-axis rotation)
-    T siny_cosp = 2.0 * (w * z + x * y);
-    T cosy_cosp = 1.0 - 2.0 * (y * y + z * z);
-    rpy.yaw = std::atan2(siny_cosp, cosy_cosp);
-    return rpy;
-}
-
-template <typename T> AxisAngle<T> Quaternion<T>::toAxisAngle() const
-{
-    AxisAngle<T> axis_angle;
-    axis_angle.phi = 2.0 * std::acos(w);
-    axis_angle.x = x / std::sqrt(1 - w * w);
-    axis_angle.y = y / std::sqrt(1 - w * w);
-    axis_angle.z = z / std::sqrt(1 - w * w);
-
-    return axis_angle;
-}
 
 template <typename T> Matrix<T> Quaternion<T>::toRotationMatrix() const
 {

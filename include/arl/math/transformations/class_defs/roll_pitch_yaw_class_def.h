@@ -1,6 +1,8 @@
 #ifndef ROLL_PITCH_YAW_CLASS_H_
 #define ROLL_PITCH_YAW_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct RollPitchYaw

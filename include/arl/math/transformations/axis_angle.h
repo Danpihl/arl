@@ -1,9 +1,9 @@
-
 #ifndef AXIS_ANGLE_H_
 #define AXIS_ANGLE_H_
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
+#include "arl/math/transformations/class_defs/axis_angle_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -88,23 +88,6 @@ template <typename T> Matrix<T> AxisAngle<T>::toRotationMatrix() const
         (1.0 - std::cos(normalized_axis_angle.phi)) * k_matrix * k_matrix;
 
     return rotation_matrix;
-}
-
-template <typename T> Quaternion<T> AxisAngle<T>::toQuaternion() const
-{
-    Vec3D<T> v = Vec3D<T>(x, y, z).normalized();
-    Quaternion<T> q;
-    q.x = v.x * std::sin(phi / 2.0);
-    q.y = v.y * std::sin(phi / 2.0);
-    q.z = v.z * std::sin(phi / 2.0);
-    q.w = std::cos(phi / 2.0);
-    return q;
-}
-
-template <typename T> RollPitchYaw<T> AxisAngle<T>::toRollPitchYaw() const
-{
-    const Quaternion<T> q = toQuaternion();
-    return q.toRollPitchYaw();
 }
 
 // Non class methods

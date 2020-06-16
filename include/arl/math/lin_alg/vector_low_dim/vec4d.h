@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec3d_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

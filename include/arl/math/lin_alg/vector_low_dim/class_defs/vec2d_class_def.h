@@ -1,6 +1,8 @@
 #ifndef VEC2D_CLASS_H_
 #define VEC2D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Vec2D
@@ -13,7 +15,7 @@ template <typename T> struct Vec2D
     Vec2D(const T v_array[2]);
     Vector<T> toVector() const;
 
-    ComplexCoord<T> toComplex() const;
+    ComplexCoord<T> toComplexCoord() const;
     PolarCoord<T> toPolar() const;
 
     Vec2D<T> normalized() const;

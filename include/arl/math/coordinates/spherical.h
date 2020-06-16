@@ -4,8 +4,8 @@
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/coordinates/class_defs/cylindrical_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -18,11 +18,6 @@ template <typename T> SphericalCoord<T>::SphericalCoord(const T r_, const T phi_
 }
 
 template <typename T> SphericalCoord<T>::SphericalCoord() {}
-
-template <typename T> CylindricalCoord<T> SphericalCoord<T>::toCylindricalVec() const
-{
-    return CylindricalCoord<T>(r * std::sin(theta), r * std::cos(theta), phi);
-}
 
 template <typename T> Vec3D<T> SphericalCoord<T>::toVec3D() const
 {

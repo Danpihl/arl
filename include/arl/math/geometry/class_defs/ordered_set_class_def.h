@@ -1,6 +1,8 @@
 #ifndef ORDERED_SET_CLASS_H_
 #define ORDERED_SET_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> class OrderedSet3D

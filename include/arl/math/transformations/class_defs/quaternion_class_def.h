@@ -1,6 +1,8 @@
 #ifndef QUATERNION_CLASS_H_
 #define QUATERNION_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Quaternion

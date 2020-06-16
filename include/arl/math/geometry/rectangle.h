@@ -4,8 +4,7 @@
 
 #include <cmath>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/rectangle_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

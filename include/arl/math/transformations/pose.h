@@ -1,12 +1,12 @@
-
 #ifndef POSE_H
 #define POSE_H
 
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
+#include "arl/math/transformations/class_defs/pose_class_def.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

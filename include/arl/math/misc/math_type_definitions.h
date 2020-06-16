@@ -1,7 +1,7 @@
 #ifndef MATH_TYPE_DEFINITIONS_H_
 #define MATH_TYPE_DEFINITIONS_H_
 
-#include "arl/math/math_core.h"
+#include "arl/math/misc/forward_decl.h"
 
 namespace arl
 {
@@ -38,15 +38,15 @@ typedef PoseSE3<float> PoseSE3f;
 typedef AxisAngle<float> AxisAnglef;
 typedef Circle2D<float> Circle2Df;
 typedef Circle3D<float> Circle3Df;
-typedef ComplexCoord<float> Complexf;
+typedef ComplexCoord<float> ComplexCoordf;
 typedef HomogeneousLine2D<float> HomogeneousLine2Df;
 typedef ParametricLine2D<float> ParametricLine2Df;
 typedef Line3D<float> Line3Df;
 typedef OrderedSet2D<float> OrderedSet2Df;
 typedef Plane<float> Planef;
-typedef PolarCoord<float> PolarVecf;
+typedef PolarCoord<float> PolarCoordf;
 typedef SphericalCoord<float> SphericalCoordf;
-typedef CylindricalCoord<float> CylindricalVecf;
+typedef CylindricalCoord<float> CylindricalCoordf;
 typedef Quaternion<float> Quaternionf;
 typedef Rect2D<float> Rect2Df;
 typedef RollPitchYaw<float> RollPitchYawf;

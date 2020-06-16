@@ -5,11 +5,16 @@
 #include <cmath>
 #include <cstdarg>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
+#include "arl/math/lin_alg/vector_dynamic/vector_dynamic.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
 {
+// TODO:
+// - Concatenate matrices horizontally
+// - Math functions for matrices
+
 template <typename T>
 Vector<T> linspaceFromPointsAndCount(const T x0, const T x1, const size_t num_values);
 
@@ -373,20 +378,17 @@ template <typename T> Matrix<T> linspaceFromPointsAndIncColMat(const T x0, const
     return linspaceFromPointsAndCountColMat(x0, x1, num_values);
 }
 
-//////////////////
-
 template <typename U> size_t totalNumRowsInternal(const U& m)
 {
     return m.rows();
 }
 
-template <typename U, typename ...Us> size_t totalNumRowsInternal(const U& m, const Us&... matrices)
+template <typename U, typename... Us> size_t totalNumRowsInternal(const U& m, const Us&... matrices)
 {
-
     return totalNumRowsInternal(matrices...) + m.rows();
 }
 
-template <typename ...Us> size_t totalNumRows(const Us&... matrices)
+template <typename... Us> size_t totalNumRows(const Us&... matrices)
 {
     return totalNumRowsInternal(matrices...);
 }
@@ -396,38 +398,34 @@ template <typename U> size_t totalNumColsInternal(const U& m)
     return m.cols();
 }
 
-template <typename U, typename ...Us> size_t totalNumColsInternal(const U& m, const Us&... matrices)
+template <typename U, typename... Us> size_t totalNumColsInternal(const U& m, const Us&... matrices)
 {
-
     return totalNumColsInternal(matrices...) + m.cols();
 }
 
-template <typename ...Us> size_t totalNumCols(const Us&... matrices)
+template <typename... Us> size_t totalNumCols(const Us&... matrices)
 {
     return totalNumColsInternal(matrices...);
 }
 
-template <typename T, typename U> void hCatMatricesInternal(size_t col_idx,
-                                                            Matrix<T> &m_res,
-                                                            const U& mat)
+template <typename T, typename U>
+void hCatMatricesInternal(size_t col_idx, Matrix<T>& m_res, const U& mat)
 {
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r, c + col_idx) = mat(r, c);
         }
     }
 }
 
-template <typename T, typename U, typename ...Us> void hCatMatricesInternal(size_t col_idx,
-                                                                            Matrix<T> &m_res,
-                                                                            const U& mat,
-                                                                            const Us&... matrices)
+template <typename T, typename U, typename... Us>
+void hCatMatricesInternal(size_t col_idx, Matrix<T>& m_res, const U& mat, const Us&... matrices)
 {
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r, c + col_idx) = mat(r, c);
         }
@@ -436,13 +434,14 @@ template <typename T, typename U, typename ...Us> void hCatMatricesInternal(size
     hCatMatricesInternal(col_idx + mat.cols(), m_res, matrices...);
 }
 
-template <typename U, typename ...Us> Matrix<typename U::data_type> hCatMatrices(const U& mat, const Us&... matrices)
+template <typename U, typename... Us>
+Matrix<typename U::data_type> hCatMatrices(const U& mat, const Us&... matrices)
 {
     Matrix<typename U::data_type> m_res(mat.rows(), totalNumCols(matrices...) + mat.cols());
 
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r, c) = mat(r, c);
         }
@@ -453,27 +452,24 @@ template <typename U, typename ...Us> Matrix<typename U::data_type> hCatMatrices
     return m_res;
 }
 
-template <typename T, typename U> void vCatMatricesInternal(size_t row_idx,
-                                                            Matrix<T> &m_res,
-                                                            const U& mat)
+template <typename T, typename U>
+void vCatMatricesInternal(size_t row_idx, Matrix<T>& m_res, const U& mat)
 {
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r + row_idx, c) = mat(r, c);
         }
     }
 }
 
-template <typename T, typename U, typename ...Us> void vCatMatricesInternal(size_t row_idx,
-                                                                            Matrix<T> &m_res,
-                                                                            const U& mat,
-                                                                            const Us&... matrices)
+template <typename T, typename U, typename... Us>
+void vCatMatricesInternal(size_t row_idx, Matrix<T>& m_res, const U& mat, const Us&... matrices)
 {
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r + row_idx, c) = mat(r, c);
         }
@@ -482,14 +478,14 @@ template <typename T, typename U, typename ...Us> void vCatMatricesInternal(size
     vCatMatricesInternal(row_idx + mat.rows(), m_res, matrices...);
 }
 
-template <typename U, typename ...Us> Matrix<typename U::data_type> vCatMatrices(const U& mat,
-                                                                                            const Us&... matrices)
+template <typename U, typename... Us>
+Matrix<typename U::data_type> vCatMatrices(const U& mat, const Us&... matrices)
 {
     Matrix<typename U::data_type> m_res(totalNumRows(matrices...) + mat.rows(), mat.cols());
 
-    for(size_t r = 0; r < mat.rows(); r++)
+    for (size_t r = 0; r < mat.rows(); r++)
     {
-        for(size_t c = 0; c < mat.cols(); c++)
+        for (size_t c = 0; c < mat.cols(); c++)
         {
             m_res(r, c) = mat(r, c);
         }
@@ -499,10 +495,6 @@ template <typename U, typename ...Us> Matrix<typename U::data_type> vCatMatrices
 
     return m_res;
 }
-
-// #define hCatFixedMatrices(...) hCatMatricesInternal<numRows(__VA_ARGS__), totalNumCols(__VA_ARGS__)>(__VA_ARGS__)
-// #define vCatFixedMatrices(...) vCatMatricesInternal<totalNumRows(__VA_ARGS__), numCols(__VA_ARGS__)>(__VA_ARGS__)
-
 
 }  // namespace arl
 

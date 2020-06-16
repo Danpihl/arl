@@ -1,7 +1,9 @@
 #ifndef VECTOR_FIXED_H_
 #define VECTOR_FIXED_H_
 
-#include "arl/math/math_core.h"
+#include <stdlib.h>
+
+#include "arl/math/misc/forward_decl.h"
 
 namespace arl
 {

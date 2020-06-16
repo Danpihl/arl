@@ -3,6 +3,8 @@
 
 #include <utility>
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Sphere

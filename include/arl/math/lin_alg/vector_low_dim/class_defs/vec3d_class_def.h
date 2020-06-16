@@ -1,6 +1,8 @@
 #ifndef VEC3D_CLASS_H_
 #define VEC3D_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct Vec3D
@@ -14,7 +16,7 @@ template <typename T> struct Vec3D
     Vec3D(const T v_array[3]);
     Vector<T> toVector() const;
 
-    CylindricalCoord<T> toCylindricalVec() const;
+    CylindricalCoord<T> toCylindricalCoord() const;
     SphericalCoord<T> toSphericalCoord() const;
 
     Vec3D<T> normalized() const;

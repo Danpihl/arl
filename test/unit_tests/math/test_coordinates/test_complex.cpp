@@ -118,7 +118,7 @@ TEST_F(ComplexTest, PolarToComplex)
         const double imag = r * std::sin(phi);
 
         const PolarCoordd pv(r, phi);
-        const ComplexCoordd c = pv.toComplex();
+        const ComplexCoordd c = pv.toComplexCoord();
 
         ASSERT_NEAR(c.real, real, eps);
         ASSERT_NEAR(c.imag, imag, eps);
@@ -143,7 +143,7 @@ TEST_F(ComplexTest, PolarToComplexBackAndForth)
         const double r = static_cast<double>(k) * 3.0 + 10.0;
 
         const PolarCoordd pv_expected(r, phi);
-        const ComplexCoordd c = pv_expected.toComplex();
+        const ComplexCoordd c = pv_expected.toComplexCoord();
 
         const PolarCoordd pv_actual = c.toPolar();
 

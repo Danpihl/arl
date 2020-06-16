@@ -1,6 +1,8 @@
 #ifndef CYLINDRICAL_CLASS_H_
 #define CYLINDRICAL_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct CylindricalCoord
@@ -16,6 +18,7 @@ template <typename T> struct CylindricalCoord
     Vec3D<T> toVec3D() const;
 };
 
+template <typename T> using CylindricalPoint = CylindricalCoord<T>;
 }  // namespace arl
 
 #endif

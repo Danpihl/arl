@@ -1,12 +1,12 @@
-
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
 #include <cmath>
 #include <vector>
 
-#include "arl/math/lin_alg.h"
-#include "arl/math/math_core.h"
+#include "arl/math/geometry/class_defs/sphere_class_def.h"
+#include "arl/math/geometry/line_3d.h"
+#include "arl/math/lin_alg/vector_low_dim/vec3d.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
@@ -16,6 +16,7 @@ template <typename T> Sphere<T>::Sphere(const T radius_, const Point3D<T>& cente
     radius = radius_;
     center = center_;
 }
+
 template <typename T> Sphere<T>::Sphere() {}
 
 template <typename T> bool Sphere<T>::doesLineIntersect(const Line3D<T>& line) const

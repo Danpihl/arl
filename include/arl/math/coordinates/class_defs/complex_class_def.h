@@ -1,6 +1,8 @@
 #ifndef COMPLEX_CLASS_H_
 #define COMPLEX_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct ComplexCoord

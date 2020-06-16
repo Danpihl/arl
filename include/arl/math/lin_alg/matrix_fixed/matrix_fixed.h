@@ -1,6 +1,8 @@
 #ifndef MATRIX_FIXED_H_
 #define MATRIX_FIXED_H_
 
+#include <stdlib.h>
+
 #include <initializer_list>
 #include <iostream>
 
@@ -13,9 +15,6 @@ constexpr MatrixFixed<R, C, T>::MatrixFixed() : num_rows_(R), num_cols_(C)
 {
     static_assert(R > 0, "Number of rows can't be 0!");
     static_assert(C > 0, "Number of columns can't be 0!");
-
-    static_assert(R < 1001, "You probably don't want to have more than 1000 rows...");
-    static_assert(C < 1001, "You probably don't want to have more than 1000 columns...");
 }
 
 template <size_t R, size_t C, typename T> constexpr size_t MatrixFixed<R, C, T>::rows() const

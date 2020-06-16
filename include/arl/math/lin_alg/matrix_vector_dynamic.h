@@ -6,10 +6,12 @@
 
 #include "arl/math/lin_alg/matrix_dynamic/matrix_dynamic.h"
 #include "arl/math/lin_alg/vector_dynamic/vector_dynamic.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec2d_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec3d_class_def.h"
+#include "arl/math/lin_alg/vector_low_dim/class_defs/vec4d_class_def.h"
 #include "arl/math/lin_alg/vector_low_dim/vec2d.h"
 #include "arl/math/lin_alg/vector_low_dim/vec3d.h"
 #include "arl/math/lin_alg/vector_low_dim/vec4d.h"
-#include "arl/math/math_core.h"
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 
@@ -465,6 +467,24 @@ template <typename T> Matrix<T> Vector<T>::toRowVectorMat() const
 
 // Vec234D
 
+template <typename T> Vector<T> Vec2D<T>::toVector() const
+{
+    const Vector<T> v({x, y});
+    return v;
+}
+
+template <typename T> Vector<T> Vec3D<T>::toVector() const
+{
+    const Vector<T> v({x, y, z});
+    return v;
+}
+
+template <typename T> Vector<T> Vec4D<T>::toVector() const
+{
+    const Vector<T> v({x, y, z, w});
+    return v;
+}
+
 template <typename T> Matrix<T> Vec2D<T>::outerProduct(const Vec2D<T>& v) const
 {
     Vector<T> vv0 = toVector();
@@ -510,25 +530,17 @@ template <typename T> Matrix<T> Vec4D<T>::outerProduct(const Vec4D<T>& v) const
     Vector<T> vv0 = toVector();
     Vector<T> vv1 = v.toVector();
 
+    /*vv0(0) = x;
+    vv0(1) = y;
+    vv0(2) = z;
+    vv0(3) = w;
+
+    vv1(0) = v.x;
+    vv1(1) = v.y;
+    vv1(2) = v.z;
+    vv1(3) = v.w;*/
+
     return vv0.outerProduct(vv1);
-}
-
-template <typename T> Vector<T> Vec2D<T>::toVector() const
-{
-    const Vector<T> v({x, y});
-    return v;
-}
-
-template <typename T> Vector<T> Vec3D<T>::toVector() const
-{
-    const Vector<T> v({x, y, z});
-    return v;
-}
-
-template <typename T> Vector<T> Vec4D<T>::toVector() const
-{
-    const Vector<T> v({x, y, z, w});
-    return v;
 }
 
 template <typename T> Matrix<T> Vec3D<T>::toCrossProductMatrix() const

@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_dynamic/class_defs/vector_dynamic_class_def.h"
 #include "arl/math/misc/math_macros.h"
 #include "arl/utilities/logging.h"
 
@@ -889,6 +889,8 @@ template <typename T> Vector<bool> operator>=(const T s, const Vector<T>& v)
     return v_res;
 }
 
+//
+
 template <typename T> Vector<T> operator&(const Vector<T>& v0, const Vector<T>& v1)
 {
     assert(v0.size() == v1.size());
@@ -1023,7 +1025,7 @@ template <typename T> Vector<bool> operator!(const Vector<T>& v)
     return v_res;
 }
 
-template <typename T> void fillVectorWithArray(Vector<T>& v, const T* a)
+template <typename T> void fillVectorWithArray(arl::Vector<T>& v, const T* a)
 {
     assert(v.isAllocated() && "You must allocate your vector before filling it!");
     for (size_t k = 0; k < v.size(); k++)

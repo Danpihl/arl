@@ -1,5 +1,7 @@
-#ifndef LINE_3D_CLASS_H_
-#define LINE_3D_CLASS_H_
+#ifndef LINE_3D_CLASS_
+#define LINE_3D_CLASS_
+
+#include "arl/math/misc/forward_decl.h"
 
 namespace arl
 {
@@ -7,7 +9,6 @@ template <typename T> struct Line3D
 {
     // Point on line
     Point3D<T> p;
-
     // Vector in line direction
     Vec3D<T> v;
 

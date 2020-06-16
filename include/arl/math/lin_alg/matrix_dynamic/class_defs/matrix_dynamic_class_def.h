@@ -1,6 +1,8 @@
 #ifndef MATRIX_DYNAMIC_CLASS_H_
 #define MATRIX_DYNAMIC_CLASS_H_
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <typename T> struct QRMatrixPair

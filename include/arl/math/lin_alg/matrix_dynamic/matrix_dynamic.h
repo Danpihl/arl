@@ -10,8 +10,9 @@
 #include <Eigen/SVD>
 #include <cmath>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/matrix_dynamic/class_defs/matrix_dynamic_class_def.h"
 #include "arl/math/misc/math_macros.h"
+#include "arl/math/structures.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

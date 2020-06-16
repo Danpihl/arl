@@ -1,4 +1,3 @@
-
 #ifndef VECTOR_MATH_FUNCTIONS_H_
 #define VECTOR_MATH_FUNCTIONS_H_
 
@@ -7,7 +6,7 @@
 #include <cstdlib>
 #include <utility>
 
-#include "arl/math/math_core.h"
+#include "arl/math/lin_alg/vector_dynamic/vector_dynamic.h"
 #include "arl/utilities/logging.h"
 
 namespace arl
