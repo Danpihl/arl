@@ -1,13 +1,13 @@
+#include <gtest/gtest.h>
+
 #include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
-
-#include "arl/math/math.h"
-#include "test/unit_tests/math/math_test_utils.h"
 #include "../test_data/test_data_rotations.h"
+#include "arl/math.h"
+#include "test/unit_tests/math/math_test_utils.h"
 
 // https://www.andre-gaschler.com/rotationconverter/
 

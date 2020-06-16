@@ -1,11 +1,11 @@
+#include <gtest/gtest.h>
+
 #include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
-
-#include "arl/math/math.h"
+#include "arl/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
 
 namespace arl
@@ -61,5 +61,5 @@ TEST_F(ParametricLine2DTest, Initialization)
     std::cout << "Hello" << std::endl;
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

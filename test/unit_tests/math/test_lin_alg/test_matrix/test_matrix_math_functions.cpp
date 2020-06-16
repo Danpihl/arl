@@ -1,11 +1,11 @@
+#include <gtest/gtest.h>
+
 #include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
-
-#include "arl/math/math.h"
+#include "arl/math.h"
 // #include "arl/math/new_functions.h"
 #include "test/unit_tests/math/math_test_utils.h"
 
@@ -136,8 +136,11 @@ TEST_F(GeneralMatrixMathFunctionsTest, HorizontalConcatenationMatrix)
 {
     Matrix<int> m0 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     Matrix<int> m1 = {{10, 20, 30, 40}, {40, 50, 60, 70}, {70, 80, 90, 10}};
-    Matrix<int> m2 = {{100, 200, 300, 400, 500}, {400, 500, 600, 700, 800}, {700, 800, 900, 100, 200}};
-    Matrix<int> m3 = {{1000, 2000, 3000, 4000, 5000, 6000}, {4000, 5000, 6000, 7000, 8000, 9000}, {7000, 8000, 9000, 1000, 2000, 3000}};
+    Matrix<int> m2 = {
+        {100, 200, 300, 400, 500}, {400, 500, 600, 700, 800}, {700, 800, 900, 100, 200}};
+    Matrix<int> m3 = {{1000, 2000, 3000, 4000, 5000, 6000},
+                      {4000, 5000, 6000, 7000, 8000, 9000},
+                      {7000, 8000, 9000, 1000, 2000, 3000}};
 
     auto m_res = hCatMatrices(m0, m1, m2, m3);
 
@@ -149,7 +152,8 @@ TEST_F(GeneralMatrixMathFunctionsTest, VerticalConcatenationMatrix)
 {
     Matrix<int> m0 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     Matrix<int> m1 = {{10, 20, 30}, {40, 50, 60}, {70, 80, 90}, {40, 30, 70}};
-    Matrix<int> m2 = {{100, 200, 300}, {400, 500, 600}, {700, 800, 900}, {400, 100, 600}, {900, 500, 200}};
+    Matrix<int> m2 = {
+        {100, 200, 300}, {400, 500, 600}, {700, 800, 900}, {400, 100, 600}, {900, 500, 200}};
     Matrix<int> m3 = {{1000, 2000, 3000},
                       {4000, 5000, 6000},
                       {7000, 8000, 9000},
@@ -161,7 +165,6 @@ TEST_F(GeneralMatrixMathFunctionsTest, VerticalConcatenationMatrix)
 
     ASSERT_EQ(m0.rows() + m1.rows() + m2.rows() + m3.rows(), m_res.rows());
     ASSERT_EQ(m0.cols(), m_res.cols());
-    
 }
 
 }  // namespace

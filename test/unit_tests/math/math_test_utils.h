@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "arl/math/math.h"
+#include "arl/math.h"
 
 // clang-format off
 

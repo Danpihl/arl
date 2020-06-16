@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include "arl/math/math.h"
+#include "arl/math.h"
 #include "arl/utilities/logging.h"
 
 namespace arl

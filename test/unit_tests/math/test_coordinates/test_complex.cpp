@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "arl/math/math.h"
+#include "arl/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
 
 namespace arl

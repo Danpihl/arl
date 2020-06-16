@@ -1,11 +1,11 @@
+#include <gtest/gtest.h>
+
 #include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
-
-#include "arl/math/math.h"
+#include "arl/math.h"
 #include "test/unit_tests/math/math_test_utils.h"
 
 namespace arl
@@ -119,5 +119,5 @@ TEST_F(Line3DTest, LineNormalVector)
     // ASSERT_NEAR(p1_actual.z, p1_expected.z, eps);
 }
 
-} // namespace
-} // namespace arl
+}  // namespace
+}  // namespace arl

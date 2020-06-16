@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "arl/math.h"
 #include "arl/math/general_matrix_math_functions.h"
-#include "arl/math/math.h"
 #include "arl/math/matrix_fixed.h"
 #include "arl/math/matrix_vector_fixed.h"
 #include "arl/math/new_functions.h"
