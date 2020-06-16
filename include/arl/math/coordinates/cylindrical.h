@@ -10,16 +10,16 @@
 
 namespace arl
 {
-template <typename T> CylindricalVec<T>::CylindricalVec(const T r_, const T z_, const T phi_)
+template <typename T> CylindricalCoord<T>::CylindricalCoord(const T r_, const T z_, const T phi_)
 {
     r = r_;
     z = z_;
     phi = phi_;
 }
 
-template <typename T> CylindricalVec<T>::CylindricalVec() {}
+template <typename T> CylindricalCoord<T>::CylindricalCoord() {}
 
-template <typename T> Vec3D<T> CylindricalVec<T>::toVec3D() const
+template <typename T> Vec3D<T> CylindricalCoord<T>::toVec3D() const
 {
     return Vec3D<T>(r * std::cos(phi), r * std::sin(phi), z);
 }

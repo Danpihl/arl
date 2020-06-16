@@ -10,16 +10,16 @@
 
 namespace arl
 {
-template <typename T> SphericalVec<T>::SphericalVec(const T r_, const T phi_, const T theta_)
+template <typename T> SphericalCoord<T>::SphericalCoord(const T r_, const T phi_, const T theta_)
 {
     r = r_;
     phi = phi_;
     theta = theta_;
 }
 
-template <typename T> SphericalVec<T>::SphericalVec() {}
+template <typename T> SphericalCoord<T>::SphericalCoord() {}
 
-template <typename T> Vec3D<T> SphericalVec<T>::toVec3D() const
+template <typename T> Vec3D<T> SphericalCoord<T>::toVec3D() const
 {
     return r * Vec3D<T>(std::sin(theta) * std::cos(phi),
                         std::sin(theta) * std::sin(phi),

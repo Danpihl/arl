@@ -18,6 +18,7 @@ public:
     Vector();
     Vector(const size_t vector_length);
     Vector(const Vector<T>& v);
+    Vector(Vector<T>&& v);
     template <typename Y> Vector(const Vector<Y>& v);
 
     Vec2D<T> toVec2D() const;
@@ -29,7 +30,10 @@ public:
 
     ~Vector();
 
+    Vector<T>&& move();
+
     Vector<T>& operator=(const Vector<T>& v);
+    Vector<T>& operator=(Vector<T>&& v);
     T& operator()(const size_t idx);
     const T& operator()(const size_t idx) const;
     T& operator()(const EndIndex& end_idx);
@@ -47,6 +51,12 @@ public:
     void resize(const size_t vector_length);
     size_t endIndex() const;
     T* getDataPointer() const;
+
+    void pushBack(const T& new_value);
+    void pushFront(const T& new_value);
+    void insertAtIndex(const T& new_value, const size_t idx);
+
+    void setInternalData(T* const input_ptr, const size_t num_elements);
 
     void sort();
     Vector<T> sorted() const;

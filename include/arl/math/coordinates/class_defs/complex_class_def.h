@@ -5,17 +5,17 @@
 
 namespace arl
 {
-template <typename T> struct Complex
+template <typename T> struct ComplexCoord
 {
     T real;
     T imag;
 
-    Complex(const T real_, const T imag_);
-    Complex();
+    ComplexCoord(const T real_, const T imag_);
+    ComplexCoord();
 
-    PolarVec<T> toPolar() const;
-    Complex<T> conjugate() const;
-    Complex<T> inv() const;
+    PolarCoord<T> toPolar() const;
+    ComplexCoord<T> conjugate() const;
+    ComplexCoord<T> inv() const;
     Vec2D<T> toVec2D() const;
     T abs() const;
 };

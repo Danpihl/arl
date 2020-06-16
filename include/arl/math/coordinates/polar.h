@@ -10,16 +10,16 @@
 
 namespace arl
 {
-// PolarVec
-template <typename T> PolarVec<T>::PolarVec(const T r_, const T phi_)
+// PolarCoord
+template <typename T> PolarCoord<T>::PolarCoord(const T r_, const T phi_)
 {
     r = r_;
     phi = phi_;
 }
 
-template <typename T> PolarVec<T>::PolarVec() {}
+template <typename T> PolarCoord<T>::PolarCoord() {}
 
-template <typename T> Vec2D<T> PolarVec<T>::toVec2D() const
+template <typename T> Vec2D<T> PolarCoord<T>::toVec2D() const
 {
     return Vec2D<T>(r * std::cos(phi), r * std::sin(phi));
 }

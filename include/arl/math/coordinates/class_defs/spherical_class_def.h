@@ -5,21 +5,21 @@
 
 namespace arl
 {
-template <typename T> struct SphericalVec
+template <typename T> struct SphericalCoord
 {
     // phi for azimuth, theta for inclination
     T r;
     T phi;
     T theta;
 
-    SphericalVec(const T r_, const T phi_, const T theta_);
-    SphericalVec();
+    SphericalCoord(const T r_, const T phi_, const T theta_);
+    SphericalCoord();
 
-    CylindricalVec<T> toCylindricalVec() const;
+    CylindricalCoord<T> toCylindricalCoord() const;
     Vec3D<T> toVec3D() const;
 };
 
-template <typename T> using SphericalPoint = SphericalVec<T>;
+template <typename T> using SphericalPoint = SphericalCoord<T>;
 }  // namespace arl
 
 #endif

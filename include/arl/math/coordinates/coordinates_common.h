@@ -13,24 +13,24 @@
 
 namespace arl
 {
-template <typename T> PolarVec<T> Complex<T>::toPolar() const
+template <typename T> PolarCoord<T> ComplexCoord<T>::toPolar() const
 {
-    return PolarVec<T>(abs(), std::atan2(imag, real));
+    return PolarCoord<T>(abs(), std::atan2(imag, real));
 }
 
-template <typename T> Complex<T> PolarVec<T>::toComplex() const
+template <typename T> ComplexCoord<T> PolarCoord<T>::toComplexCoord() const
 {
-    return Complex<T>(r * std::cos(phi), r * std::sin(phi));
+    return ComplexCoord<T>(r * std::cos(phi), r * std::sin(phi));
 }
 
-template <typename T> CylindricalVec<T> SphericalVec<T>::toCylindricalVec() const
+template <typename T> CylindricalCoord<T> SphericalCoord<T>::toCylindricalCoord() const
 {
-    return CylindricalVec<T>(r * std::sin(theta), r * std::cos(theta), phi);
+    return CylindricalCoord<T>(r * std::sin(theta), r * std::cos(theta), phi);
 }
 
-template <typename T> SphericalVec<T> CylindricalVec<T>::toSphericalVec() const
+template <typename T> SphericalCoord<T> CylindricalCoord<T>::toSphericalCoord() const
 {
-    SphericalVec<T> sv;
+    SphericalCoord<T> sv;
 
     sv.r = std::sqrt(r * r + z * z);
     sv.theta = std::atan2(r, z);
@@ -39,17 +39,17 @@ template <typename T> SphericalVec<T> CylindricalVec<T>::toSphericalVec() const
     return sv;
 }
 
-template <typename T> Complex<T> Vec2D<T>::toComplex() const
+template <typename T> ComplexCoord<T> Vec2D<T>::toComplexCoord() const
 {
-    return Complex<T>(x, y);
+    return ComplexCoord<T>(x, y);
 }
 
-template <typename T> PolarVec<T> Vec2D<T>::toPolar() const
+template <typename T> PolarCoord<T> Vec2D<T>::toPolar() const
 {
-    return PolarVec<T>(std::sqrt(x * x + y * y), std::atan2(y, x));
+    return PolarCoord<T>(std::sqrt(x * x + y * y), std::atan2(y, x));
 }
 
-template <typename T> CylindricalVec<T> Vec3D<T>::toCylindricalVec() const
+template <typename T> CylindricalCoord<T> Vec3D<T>::toCylindricalCoord() const
 {
     T phi;
     if (x == 0.0 && y == 0.0)
@@ -61,12 +61,12 @@ template <typename T> CylindricalVec<T> Vec3D<T>::toCylindricalVec() const
         phi = std::atan2(y, x);
     }
 
-    return CylindricalVec<T>(std::sqrt(x * x + y * y), z, phi);
+    return CylindricalCoord<T>(std::sqrt(x * x + y * y), z, phi);
 }
 
-template <typename T> SphericalVec<T> Vec3D<T>::toSphericalVec() const
+template <typename T> SphericalCoord<T> Vec3D<T>::toSphericalCoord() const
 {
-    SphericalVec<T> sv;
+    SphericalCoord<T> sv;
     sv.r = std::sqrt(x * x + y * y + z * z);
     sv.phi = std::acos(z / sv.r);
     sv.theta = std::atan2(y, x);

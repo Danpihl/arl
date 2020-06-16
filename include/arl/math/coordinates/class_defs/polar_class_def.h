@@ -5,19 +5,19 @@
 
 namespace arl
 {
-template <typename T> struct PolarVec
+template <typename T> struct PolarCoord
 {
     T r;
     T phi;
 
-    PolarVec(const T r_, const T phi_);
-    PolarVec();
+    PolarCoord(const T r_, const T phi_);
+    PolarCoord();
 
-    Complex<T> toComplex() const;
+    ComplexCoord<T> toComplexCoord() const;
     Vec2D<T> toVec2D() const;
 };
 
-template <typename T> using PolarPoint = PolarVec<T>;
+template <typename T> using PolarPoint = PolarCoord<T>;
 
 }  // namespace arl
 

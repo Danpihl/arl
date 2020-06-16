@@ -5,20 +5,20 @@
 
 namespace arl
 {
-template <typename T> struct CylindricalVec
+template <typename T> struct CylindricalCoord
 {
     T r;
     T z;
     T phi;
 
-    CylindricalVec(const T r_, const T z_, const T phi_);
-    CylindricalVec();
+    CylindricalCoord(const T r_, const T z_, const T phi_);
+    CylindricalCoord();
 
-    SphericalVec<T> toSphericalVec() const;
+    SphericalCoord<T> toSphericalCoord() const;
     Vec3D<T> toVec3D() const;
 };
 
-template <typename T> using CylindricalPoint = CylindricalVec<T>;
+template <typename T> using CylindricalPoint = CylindricalCoord<T>;
 }  // namespace arl
 
 #endif

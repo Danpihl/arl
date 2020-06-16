@@ -16,8 +16,8 @@ template <typename T> struct Vec3D
     Vec3D(const T v_array[3]);
     Vector<T> toVector() const;
 
-    CylindricalVec<T> toCylindricalVec() const;
-    SphericalVec<T> toSphericalVec() const;
+    CylindricalCoord<T> toCylindricalCoord() const;
+    SphericalCoord<T> toSphericalCoord() const;
 
     Vec3D<T> normalized() const;
     Vec3D<T> vectorBetweenPoints(const Point3D<T>& end_point) const;

@@ -10,10 +10,10 @@ template <typename T> struct Vec4D;
 template <typename T> class Vector;
 template <typename T> class Matrix;
 
-template <typename T> struct Complex;
-template <typename T> struct PolarVec;
-template <typename T> struct CylindricalVec;
-template <typename T> struct SphericalVec;
+template <typename T> struct ComplexCoord;
+template <typename T> struct PolarCoord;
+template <typename T> struct CylindricalCoord;
+template <typename T> struct SphericalCoord;
 
 template <typename T> class Circle3D;
 template <typename T> struct Circle2D;

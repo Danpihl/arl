@@ -15,8 +15,8 @@ template <typename T> struct Vec2D
     Vec2D(const T v_array[2]);
     Vector<T> toVector() const;
 
-    Complex<T> toComplex() const;
-    PolarVec<T> toPolar() const;
+    ComplexCoord<T> toComplexCoord() const;
+    PolarCoord<T> toPolar() const;
 
     Vec2D<T> normalized() const;
     Vec2D<T> vectorBetweenPoints(const Point2D<T>& end_point) const;
