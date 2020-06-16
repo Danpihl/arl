@@ -44,8 +44,14 @@ public:
     Matrix(const Matrix<T>& m);
     Matrix(const std::vector<std::vector<T>>& vm);
     Matrix(const std::initializer_list<std::initializer_list<T>>& il);
+    Matrix(Matrix<T>&& m);
     Matrix(const T a[3][3]);
     ~Matrix();
+
+    Matrix<T>&& move();
+
+    typedef T data_type;
+
     T& operator()(const size_t r, const size_t c);
     const T& operator()(const size_t r, const size_t c) const;
     T& operator()(const size_t idx);
@@ -60,6 +66,7 @@ public:
     T& operator()(const size_t r, const EndIndex& col_end_idx);
     const T& operator()(const size_t r, const EndIndex& col_end_idx) const;
     Matrix<T>& operator=(const Matrix<T>& m);
+    Matrix<T>& operator=(Matrix<T>&& m);
 
     void removeRowAtIndex(const size_t row_idx);
     void removeRowsAtIndices(const IndexSpan& idx_span);
@@ -88,6 +95,7 @@ public:
     void switchRows(size_t r0, size_t r1);
     void switchColumns(size_t c0, size_t c1);
     T* getDataPointer() const;
+    void setInternalData(T* const input_ptr, const size_t num_rows, const size_t num_cols);
     Matrix<T> getTranspose() const;
     void transpose();
 
