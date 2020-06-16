@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <utility>
 
+#include "arl/math/misc/forward_decl.h"
+
 namespace arl
 {
 template <size_t R, size_t C, typename T> class MatrixFixed
@@ -31,6 +33,6 @@ public:
     T& operator()(const size_t r, const size_t c);
     const T& operator()(const size_t r, const size_t c) const;
 };
-}
+}  // namespace arl
 
 #endif

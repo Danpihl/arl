@@ -1,51 +1,29 @@
 #ifndef MATRIX_FIXED_H_
 #define MATRIX_FIXED_H_
 
+#include <stdlib.h>
+
 #include <initializer_list>
 #include <iostream>
 
-#include "arl/math/misc/forward_decl.h"
+#include "arl/math/lin_alg/matrix_fixed/matrix_fixed_class_def.h"
 
 namespace arl
 {
-template <size_t R, size_t C, typename T> class MatrixFixed
-{
-private:
-    T data_[R * C];
-    const size_t num_rows_;
-    const size_t num_cols_;
-
-public:
-    MatrixFixed();
-    MatrixFixed(const MatrixFixed<R, C, T>& mf);
-    MatrixFixed<R, C, T>(const std::initializer_list<std::initializer_list<T>>& il);
-    MatrixFixed<R, C, T>& operator=(const MatrixFixed<R, C, T>& m);
-
-    void switchRows(const size_t r0, const size_t r1);
-    void switchCols(const size_t c0, const size_t c1);
-
-    T* getDataPointer() const;
-    size_t rows() const;
-    size_t cols() const;
-
-    T& operator()(const size_t r, const size_t c);
-    const T& operator()(const size_t r, const size_t c) const;
-};
-
 template <size_t R, size_t C, typename T>
-MatrixFixed<R, C, T>::MatrixFixed() : num_rows_(R), num_cols_(C)
+constexpr MatrixFixed<R, C, T>::MatrixFixed() : num_rows_(R), num_cols_(C)
 {
     static_assert(R > 0, "Number of rows can't be 0!");
     static_assert(C > 0, "Number of columns can't be 0!");
 }
 
-template <size_t R, size_t C, typename T> size_t MatrixFixed<R, C, T>::rows() const
+template <size_t R, size_t C, typename T> constexpr size_t MatrixFixed<R, C, T>::rows() const
 {
-    return num_rows_;
+    return R;
 }
-template <size_t R, size_t C, typename T> size_t MatrixFixed<R, C, T>::cols() const
+template <size_t R, size_t C, typename T> constexpr size_t MatrixFixed<R, C, T>::cols() const
 {
-    return num_cols_;
+    return C;
 }
 
 template <size_t R, size_t C, typename T>
