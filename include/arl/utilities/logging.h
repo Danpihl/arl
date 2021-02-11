@@ -2,6 +2,7 @@
 #define NEW_LOGGING_H_
 
 #include <sys/time.h>
+
 #include <chrono>
 #include <csignal>
 #include <functional>
@@ -168,6 +169,23 @@ inline size_t getThreadId()
     return std::hash<std::thread::id>{}(std::this_thread::get_id());
 }
 
+inline std::string loggingGetTime()
+{
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char time_c_str[100];
+    sprintf(time_c_str,
+            "%d_%02d_%02d__%02d_%02d_%02d",
+            tm.tm_year + 1900,
+            tm.tm_mon + 1,
+            tm.tm_mday,
+            tm.tm_hour,
+            tm.tm_min,
+            tm.tm_sec);
+    const std::string time_str(time_c_str);
+    return time_str;
+}
+
 // Global variables
 
 inline std::mutex& _Var_thread_mutex()
@@ -288,9 +306,9 @@ inline std::string getPreString(const MessageSeverity msg_severity,
     const std::string severity_string = "[ " + getSeverityString(msg_severity) + " ]";
     const std::string thread_id_string =
         getShowThreadId() ? "[ 0x" + decNumberAsHexString(getThreadId()) + " ]" : "";
-
-    return severity_color + severity_string + thread_id_string + file_string + func_string +
-           line_number_string + ": " + reset_color;
+    const std::string time_string = "[ " + loggingGetTime() + " ]";
+    return severity_color + severity_string + time_string + thread_id_string + file_string +
+           func_string + line_number_string + ": " + reset_color;
 }
 
 class Log
